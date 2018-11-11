@@ -1,5 +1,7 @@
 package edu.JIT.model;
 
+import java.util.List;
+
 public class Company {
 	
 	private String companyName;
@@ -8,4 +10,5 @@ public class Company {
 	private List<UserAccount> alumni;
 	private List<UserAccount> faculty;
 	private List<UserAccount> currentStudents;
+	
 }

@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 
 import edu.JIT.model.UserAccount;
 
-
 @Repository
 public interface UserAccountDao {
 	

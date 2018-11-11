@@ -9,8 +9,7 @@ public class UserAccount {
 	private String email;
 	private Long royalID;
 	private List<String> roles;
-	//private List<String> company;
+	private List<String> company;
 	private String userAddress;
-	
-	
+		
 }

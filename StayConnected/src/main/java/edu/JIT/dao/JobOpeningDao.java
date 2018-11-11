@@ -12,4 +12,6 @@ public interface JobOpeningDao {
 	public JobOpening postJobOpening(JobOpening newJob);
 	public List<JobOpening> getAllJobOpenings();
 	public JobOpening getJobOpening(int jobID);
+	public boolean removeJobOpening(int jobID);
+	
 }
