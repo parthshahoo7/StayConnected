@@ -1,6 +1,6 @@
 package edu.JIT.model;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class UserAccount {
 	
@@ -8,8 +8,101 @@ public class UserAccount {
 	private String lastName;
 	private String email;
 	private Long royalID;
-	private List<String> roles;
-	private List<String> company;
+	private ArrayList<String> roles;
+	private ArrayList<String> company;
 	private String userAddress;
+	private ArrayList<Skill> skill;
+	private ArrayList<JobHistory> workExperience;
+	
+	public UserAccount() {
+		super();
+	}
+
+	public UserAccount(String firstName, String lastName, String email, Long royalID, ArrayList<String> roles,
+			ArrayList<String> company, String userAddress, ArrayList<Skill> skill,
+			ArrayList<JobHistory> workExperience) {
+		super();
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.royalID = royalID;
+		this.roles = roles;
+		this.company = company;
+		this.userAddress = userAddress;
+		this.skill = skill;
+		this.workExperience = workExperience;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public Long getRoyalID() {
+		return royalID;
+	}
+
+	public void setRoyalID(Long royalID) {
+		this.royalID = royalID;
+	}
+
+	public ArrayList<String> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(ArrayList<String> roles) {
+		this.roles = roles;
+	}
+
+	public ArrayList<String> getCompany() {
+		return company;
+	}
+
+	public void setCompany(ArrayList<String> company) {
+		this.company = company;
+	}
+
+	public String getUserAddress() {
+		return userAddress;
+	}
+
+	public void setUserAddress(String userAddress) {
+		this.userAddress = userAddress;
+	}
+
+	public ArrayList<Skill> getSkill() {
+		return skill;
+	}
+
+	public void setSkill(ArrayList<Skill> skill) {
+		this.skill = skill;
+	}
+
+	public ArrayList<JobHistory> getWorkExperience() {
+		return workExperience;
+	}
+
+	public void setWorkExperience(ArrayList<JobHistory> workExperience) {
+		this.workExperience = workExperience;
+	}
 		
 }
