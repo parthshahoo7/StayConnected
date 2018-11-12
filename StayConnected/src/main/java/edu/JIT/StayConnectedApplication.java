@@ -1,4 +1,4 @@
-package edu.JIT.package;
+package edu.JIT;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
