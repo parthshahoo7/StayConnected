@@ -111,17 +111,28 @@ public class UserAccountDaoImpl implements UserAccountDao {
 
 	@Override
 	public ArrayList<String> getRoles() {
-		String SQL = "SELECT * from stayconnected.skills;";
-		List<String> skillresults;
-		ArrayList<String> skills = new ArrayList<String>();
+		String SQL = "SELECT * from stayconnected.roles;";
+		List<String> roleresults;
+		ArrayList<String> roles = new ArrayList<String>();
+		roleresults = jdbcTemplate.query(SQL, new edu.JIT.mapper.roleMapper());
+		for(int i=0; i<roleresults.size(); i++) {
+			roles.add(roleresults.get(i));
+		}
 		
-		return null;
+		return roles;
 	}
 
 	@Override
 	public List<String> getSkills() {
-		// TODO Auto-generated method stub
-		return null;
+		String SQL = "SELECT * from stayconnected.skills;";
+		List<String> skillresults;
+		ArrayList<String> skills = new ArrayList<String>();
+		skillresults = jdbcTemplate.query(SQL, new edu.JIT.mapper.skillMapper());
+		for(int i=0; i<skillresults.size(); i++) {
+			skills.add(skillresults.get(i));
+		}
+		
+		return skills;
 	}
 
 }
