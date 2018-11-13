@@ -1,6 +1,7 @@
 package edu.JIT.dao;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -106,6 +107,20 @@ public class UserAccountDaoImpl implements UserAccountDao {
 	public int update(RegistrationForm webAccount) {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	@Override
+	public ArrayList<String> getRoles() {
+		String SQL = "SELECT * from stayconnected.skills;";
+		List<String> skillresults;
+		ArrayList<String> skills = new ArrayList<String>();
+		return null;
+	}
+
+	@Override
+	public List<String> getSkills() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

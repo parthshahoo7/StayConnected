@@ -20,6 +20,10 @@ public interface UserAccountDao {
 
 	public int update(RegistrationForm webAccount);
 
+	public List<String> getRoles();
+
+	public List<String> getSkills();
+
 	/*
 	 * public List<UserAccount> getAllAlumni();
 	 * 

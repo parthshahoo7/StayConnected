@@ -22,6 +22,8 @@ public class AccountController {
 	@GetMapping("/registration")
 	public String registration(RegistrationForm accountForm, Model model) {
 		model.addAttribute("newUser" , accountForm);
+		model.addAttribute("roles" , dao.getRoles());
+		model.addAttribute("skills" , dao.getSkills());
 		return "registration"; 
 	}
 	
