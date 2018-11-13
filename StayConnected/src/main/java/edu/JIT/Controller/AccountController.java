@@ -32,4 +32,6 @@ public class AccountController {
 		dao.createNewAccount(accountForm);
 		return "activateAccount";
 	}
+	
+	
 }

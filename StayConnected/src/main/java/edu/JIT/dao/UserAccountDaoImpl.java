@@ -114,6 +114,7 @@ public class UserAccountDaoImpl implements UserAccountDao {
 		String SQL = "SELECT * from stayconnected.skills;";
 		List<String> skillresults;
 		ArrayList<String> skills = new ArrayList<String>();
+		
 		return null;
 	}
 
