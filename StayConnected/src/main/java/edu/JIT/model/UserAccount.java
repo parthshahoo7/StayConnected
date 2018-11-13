@@ -3,29 +3,31 @@ package edu.JIT.model;
 import java.util.ArrayList;
 
 public class UserAccount {
-	
+
 	private String firstName;
 	private String lastName;
 	private String email;
-	private Long royalID;
+	private String royalID;
+	private String phoneNumber;
 	private ArrayList<String> roles;
 	private ArrayList<String> company;
 	private String userAddress;
 	private ArrayList<Skill> skill;
 	private ArrayList<JobHistory> workExperience;
-	
+
 	public UserAccount() {
 		super();
 	}
 
-	public UserAccount(String firstName, String lastName, String email, Long royalID, ArrayList<String> roles,
-			ArrayList<String> company, String userAddress, ArrayList<Skill> skill,
+	public UserAccount(String firstName, String lastName, String email, String royalID, String phoneNumber,
+			ArrayList<String> roles, ArrayList<String> company, String userAddress, ArrayList<Skill> skill,
 			ArrayList<JobHistory> workExperience) {
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
 		this.royalID = royalID;
+		this.phoneNumber = phoneNumber;
 		this.roles = roles;
 		this.company = company;
 		this.userAddress = userAddress;
@@ -57,11 +59,11 @@ public class UserAccount {
 		this.email = email;
 	}
 
-	public Long getRoyalID() {
+	public String getRoyalID() {
 		return royalID;
 	}
 
-	public void setRoyalID(Long royalID) {
+	public void setRoyalID(String royalID) {
 		this.royalID = royalID;
 	}
 
@@ -104,5 +106,13 @@ public class UserAccount {
 	public void setWorkExperience(ArrayList<JobHistory> workExperience) {
 		this.workExperience = workExperience;
 	}
-		
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+
 }
