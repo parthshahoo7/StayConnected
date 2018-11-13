@@ -65,7 +65,12 @@
 					</ul>
 				</td></tr>
 				
-				<div th:if="hasJob">
+				<tr> 
+					<td> 
+						<button onclick="showJobHistory()">Click here to add your job</button>
+					</td>
+				</tr>
+				<div id="jobhistory">
 					<tr>
 						<td>
 							<ul>
@@ -74,6 +79,26 @@
 									<label> Company Name</label>
 								</li>
 							
+								<li> 
+									<input type="text" th:field="*{account.workExperience[0].position}" />
+									<label> Position</label>
+								</li>
+								
+								<li> 
+									<input type="text" th:field="*{account.workExperience[0].startDate}" />
+									<label> Start Date</label>
+								</li>
+								
+								<li> 
+									<input type="text" th:field="*{account.workExperience[0].endDate}" />
+									<label> End Date</label>
+								</li>
+								
+								<li> 
+									<label> Currently Employed?</label>
+									<input type="radio" value="true" th:field="*{account.workExperience[0].currentlyEmployed}"/>Yes <br>
+									<input type="radio" value="false" th:field="*{account.workExperience[0].currentlyEmployed}" /> No <br>
+								</li>
 							</ul>
 						</td>
 					
@@ -87,5 +112,17 @@
 				</tr>
 			</table>
 		</form>
+		
+<script>
+function showJobHistory() {
+    var x = document.getElementById("jobhistory");
+    if (x.style.display === "none") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
+</script>
+		
 </body>
 </html>
