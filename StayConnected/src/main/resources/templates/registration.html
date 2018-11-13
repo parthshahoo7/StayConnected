@@ -1,0 +1,88 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+      
+<head>
+<meta charset="UTF-8">
+<title>Registration Page</title>
+</head>
+
+<body>
+	<form action="#" th:action="@{/creatingNewAccount}" th:object="${newUser}" method="post">
+		<p th:if="${passwordError}" class="error">Passwords do not match!</p>
+		<table>
+			<tr> 
+				<td>Royal ID</td>
+				<td><input type="text" required="required" th:field="*{royalID}" /></td>
+			</tr>
+			<tr> 
+				<td>First Name</td>
+				<td><input type="text" required="required" th:field="*{firstName}" /></td>
+			</tr>
+			<tr> 
+				<td>Last Name</td>
+				<td><input type="text" required="required" th:field="*{lastName}" /></td>
+			</tr>
+			<tr>
+				<td>Email</td>
+				<td><input type="text" required="required" th:field="*{email}" /></td>
+			</tr>
+			<tr>
+				<td>Address</td>
+				<td><input type="text" required="required" th:field="*{userAddress}" /></td>
+			</tr>
+			<tr>
+				<td>Password</td>
+				<td><input type="password" required="required" th:field="*{password}" /></td>
+			</tr>
+		 	<tr>
+				<td>Re-type Password</td>
+				<td><input type="password" required="required" th:field="*{registrationPassword}" /></td>
+			</tr>
+			<tr><td>
+				<h3>User Role?</h3>
+				<ul>
+					<li th:each="aType : ${userTypes}">
+						<input type="checkbox" th:field="*{role}" th:value="${aType}" />
+						<label th:for="${#ids.prev('role')}" th:text="${aType}">Type</label>
+					</li>
+				</ul>
+			</td></tr>
+			<tr>
+				<td>Company Name</td>
+				<td><input type="text" th:field="*{newUser.workExperience.companyName}" /></td>
+			</tr>
+			<tr>
+				<td>Position</td>
+				<td><input type="text" th:field="*{newUser.workExperience.position}" /></td>
+			</tr>
+			<tr>
+				<td>Start Date</td>
+				<td><input type="date" th:field="*{newUser.workExperience.startDate}" /></td>
+			</tr>
+			<tr>
+				<td>End Date</td>
+				<td><input type="date" th:field="*{newUser.workExperience.endDate}" /></td>
+			</tr>
+			<tr>
+				<td>Currently Employed at Company?</td>
+				<td><input type="checkbox" th:field="*{newUser.workExperience.currentlyEmployed}" /></td>
+			</tr>
+			<tr><td>
+				<h3>Skills</h3>
+				<ul>
+					<li th:each="aSkill : ${allSkills}">
+						<input type="checkbox" th:field="*{skill}" th:value="${aSkill}" />
+						<label th:for="${#ids.prev('skill')}" th:text="${aSkill}">Skill</label>
+					</li>
+				</ul>
+			</td></tr>
+			<tr>
+				<td><button type="submit">Submit</button></td> 
+			</tr>
+		</table>
+	</form>
+</body>
+</html>
