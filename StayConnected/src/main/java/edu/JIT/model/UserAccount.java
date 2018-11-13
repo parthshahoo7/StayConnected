@@ -17,6 +17,10 @@ public class UserAccount {
 
 	public UserAccount() {
 		super();
+		workExperience = new ArrayList<JobHistory>();
+		skill = new ArrayList<Skill>();
+		company = new ArrayList<String>();
+		roles = new ArrayList<String>();
 	}
 
 	public UserAccount(String firstName, String lastName, String email, String royalID, String phoneNumber,
