@@ -19,12 +19,12 @@ public class AccountController {
 	
 	@GetMapping("/registration")
 	public String registration(RegistrationForm accountForm, Model model) {
-		model.addAttribute("accountForm" , accountForm);
+		model.addAttribute("newUser" , accountForm);
 		return "registration"; }
 	
 	@PostMapping("/registration")
 	public String addAccount( @Valid RegistrationForm accountForm, BindingResult result, Model model) {
 		dao.createNewAccount(accountForm);
-		return "activateActivate";
+		return "activateAccount";
 	}
 }
