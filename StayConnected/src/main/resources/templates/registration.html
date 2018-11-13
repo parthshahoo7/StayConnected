@@ -42,7 +42,7 @@
 				<td><input type="password" required="required" th:field="*{registrationPassword}" /></td>
 			</tr>
 			<tr><td>
-				<h3>User Role?</h3>
+				<h3>User Role</h3>
 				<ul>
 					<li th:each="aType : ${userTypes}">
 						<input type="checkbox" th:field="*{role}" th:value="${aType}" />

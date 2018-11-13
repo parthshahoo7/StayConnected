@@ -2,12 +2,12 @@ package edu.JIT.model;
 
 public class Skill {
 	
-	private String skillName;
+	private int skillID;
 	private String proficiency;
 	
-	public Skill(String skillName, String proficiency) {
+	public Skill(int skillID, String proficiency) {
 		super();
-		this.skillName = skillName;
+		this.skillID = skillID;
 		this.proficiency = proficiency;
 	}
 
@@ -15,12 +15,12 @@ public class Skill {
 		super();
 	}
 
-	public String getSkillName() {
-		return skillName;
+	public int getSkillID() {
+		return skillID;
 	}
 
-	public void setSkillName(String skillName) {
-		this.skillName = skillName;
+	public void setSkillID(int skillID) {
+		this.skillID = skillID;
 	}
 
 	public String getProficiency() {

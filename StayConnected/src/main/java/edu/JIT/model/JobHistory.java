@@ -6,14 +6,17 @@ public class JobHistory {
 	
 	private String companyName;
 	private String position;
+	private String address;
 	private Date startDate;
 	private Date endDate;
 	private boolean currentlyEmployed;
 	
-	public JobHistory(String companyName, String position, Date startDate, Date endDate, boolean currentlyEmployed) {
+	public JobHistory(String companyName, String position, String address, Date startDate, Date endDate,
+			boolean currentlyEmployed) {
 		super();
 		this.companyName = companyName;
 		this.position = position;
+		this.address = address;
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.currentlyEmployed = currentlyEmployed;
@@ -61,6 +64,14 @@ public class JobHistory {
 
 	public void setCurrentlyEmployed(boolean currentlyEmployed) {
 		this.currentlyEmployed = currentlyEmployed;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
 	}
 	
 }

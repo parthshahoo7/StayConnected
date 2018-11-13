@@ -12,7 +12,7 @@ public interface UserAccountDao {
 
 	public UserAccount createNewAccount(RegistrationForm account);
 
-	public UserAccount getAccountByRoyalID(Long royalID);
+	public UserAccount getAccountByRoyalID(String royalID);
 
 	public List<UserAccount> getAllAccounts();
 

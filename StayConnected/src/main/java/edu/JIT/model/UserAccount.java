@@ -9,9 +9,9 @@ public class UserAccount {
 	private String email;
 	private String royalID;
 	private String phoneNumber;
+	private String userAddress;
 	private ArrayList<String> roles;
 	private ArrayList<String> company;
-	private String userAddress;
 	private ArrayList<Skill> skill;
 	private ArrayList<JobHistory> workExperience;
 
