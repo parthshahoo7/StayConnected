@@ -9,6 +9,7 @@ public class RegistrationForm {
 	
 	public RegistrationForm() {
 		super();
+		account=new UserAccount();
 	}
 
 	public RegistrationForm(UserAccount account, String password, String confirmPassword, String specialCode) {

@@ -2,6 +2,7 @@ package edu.JIT.model;
 
 import java.util.ArrayList;
 
+
 public class UserAccount {
 
 	private String firstName;
@@ -119,4 +120,10 @@ public class UserAccount {
 		this.phoneNumber = phoneNumber;
 	}
 
+	public void addSkills(Skill skill) {
+		this.skill.add(skill);
+	}
+	public void clearSkills() {
+		this.skill.clear();
+	}
 }

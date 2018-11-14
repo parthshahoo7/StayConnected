@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import edu.JIT.model.RegistrationForm;
+import edu.JIT.model.Skill;
 import edu.JIT.model.UserAccount;
 
 @Repository
@@ -22,7 +23,7 @@ public interface UserAccountDao {
 
 	public List<String> getRoles();
 
-	public List<String> getSkills();
+	public List<Skill> getSkills();
 
 	/*
 	 * public List<UserAccount> getAllAlumni();

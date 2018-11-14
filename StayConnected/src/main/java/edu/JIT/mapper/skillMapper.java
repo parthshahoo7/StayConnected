@@ -5,9 +5,14 @@ import java.sql.SQLException;
 
 import org.springframework.jdbc.core.RowMapper;
 
-public class skillMapper implements RowMapper<String> {
+import edu.JIT.model.Skill;
+
+public class skillMapper implements RowMapper<Skill> {
 	@Override
-	public String mapRow(ResultSet rs, int rowNum) throws SQLException {
-		return rs.getString("skill");
+	public Skill mapRow(ResultSet rs, int rowNum) throws SQLException {
+		Skill skill=new Skill();
+		skill.setSkillID(rs.getInt("skillid"));
+		skill.setSkillName(rs.getString("skillName"));		
+		return skill;
 	}
 }

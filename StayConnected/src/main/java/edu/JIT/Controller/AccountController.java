@@ -1,37 +1,99 @@
 package edu.JIT.Controller;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import edu.JIT.model.UserAccount;
+import edu.JIT.validator.Validation;
 import edu.JIT.dao.UserAccountDao;
 import edu.JIT.model.RegistrationForm;
+import edu.JIT.model.Skill;
 
 @Controller
 public class AccountController {
 
 	@Autowired
 	UserAccountDao dao;
-	
+
+	@Autowired
+	private Validation validation;
+
 	@GetMapping("/registration")
 	public String registration(RegistrationForm accountForm, Model model) {
-		model.addAttribute("newUser" , accountForm);
-		model.addAttribute("roles" , dao.getRoles());
-		model.addAttribute("skills" , dao.getSkills());
-		return "registration"; 
+		model.addAttribute("accountForm", accountForm);
+		model.addAttribute("roles", dao.getRoles());
+		model.addAttribute("skills", dao.getSkills());
+		return "registration";
 	}
-	
-	@PostMapping("/registration")
-	public String addAccount( @Valid RegistrationForm accountForm, BindingResult result, Model model) {
-		dao.createNewAccount(accountForm);
-		return "activateAccount";
+
+	@PostMapping(value = "/registration")
+	public String addAccount(@RequestParam(value = "ski", required = false) int[] ski,
+			@Valid RegistrationForm accountForm, final BindingResult result, Model model) {
+		validation.validate(accountForm, result);
+		if (result.hasErrors()) {
+			System.out.println(result.getFieldError());
+			model.addAttribute("accountForm", accountForm);
+			model.addAttribute("roles", dao.getRoles());
+			model.addAttribute("skills", dao.getSkills());
+			return "registration";
+		} else {
+
+			ArrayList<Skill> skills = (ArrayList<Skill>) dao.getSkills();
+			if (ski != null) {
+				Skill skill = null;
+
+				for (int i = 0; i < ski.length; i++) {
+					System.out.println("ski value:" + i + "-" + ski[i]);
+					for (int j = 0; j < skills.size(); j++) {
+						if (skills.get(j).getSkillID() == ski[i]) {
+							skill = new Skill();
+							skill.setSkillName(skills.get(j).getSkillName());
+							skill.setSkillID(skills.get(j).getSkillID());
+							accountForm.getAccount().addSkills(skill);
+						}
+					}
+				}
+			}
+			String rawPassword = accountForm.getPassword();
+			accountForm.setPassword(encodePassword(accountForm.getPassword()));
+			dao.createNewAccount(accountForm);
+			System.out.println("UserName & Password:" + accountForm.getAccount().getRoyalID() + "-" + rawPassword);
+			autologin(accountForm);
+			return "redirect:/activateAccount";
+		}
 	}
-	
-	
+
+	private String encodePassword(String rawPassword) {
+		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		String encryptedPassword = passwordEncoder.encode(rawPassword);
+		return encryptedPassword;
+	}
+
+// =====================Auto Login Feature============================================
+	private void autologin(RegistrationForm accountForm) {
+		Authentication auth = new UsernamePasswordAuthenticationToken(accountForm.getAccount().getRoyalID(), null,
+				getGrantedAuthorities(accountForm));
+		SecurityContextHolder.getContext().setAuthentication(auth);
+	}
+
+	private Collection<? extends GrantedAuthority> getGrantedAuthorities(RegistrationForm accountForm) {
+		// TODO Auto-generated method stub
+		return AuthorityUtils
+				.createAuthorityList(accountForm.getAccount().getRoles().stream().toArray(size -> new String[size]));
+	}
 }

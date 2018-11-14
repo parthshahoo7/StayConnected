@@ -15,7 +15,10 @@ import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
+import edu.JIT.mapper.roleMapper;
+import edu.JIT.mapper.skillMapper;
 import edu.JIT.model.RegistrationForm;
+import edu.JIT.model.Skill;
 import edu.JIT.model.UserAccount;
 
 @Repository
@@ -44,7 +47,7 @@ public class UserAccountDaoImpl implements UserAccountDao {
 			jdbcTemplate.update(sql, account.getAccount().getRoyalID(), account.getAccount().getFirstName(),
 					account.getAccount().getLastName(), account.getAccount().getEmail(),
 					account.getAccount().getUserAddress(), account.getAccount().getPhoneNumber());
-			String sql1 = "insert into stayconnected.jobHistory(position,companyName,address,startDate,endDate,currentlyEmployed,RID) values(?,?,?,?,?,?,?)";
+			String sql1 = "insert into stayconnected.jobHistory(position,companyName,address,startDate,endDate,currentlyemplyed,RID) values(?,?,?,?,?,?,?)";
 			for (int i = 0; i < account.getAccount().getWorkExperience().size(); i++) {
 				jdbcTemplate.update(sql1, account.getAccount().getWorkExperience().get(i).getPosition(),
 						account.getAccount().getWorkExperience().get(i).getCompanyName(),
@@ -54,7 +57,7 @@ public class UserAccountDaoImpl implements UserAccountDao {
 						account.getAccount().getWorkExperience().get(i).isCurrentlyEmployed(),
 						account.getAccount().getRoyalID());
 			}
-			String sql2 = "INSERT INTO stayconnected.UserSkills(RID,skillID,proficiancy) VALUES(?,?,?)";
+			String sql2 = "INSERT INTO stayconnected.UserSkills(RID,skillID,proficiency) VALUES(?,?,?)";
 			for (int i = 0; i < account.getAccount().getSkill().size(); i++) {
 				jdbcTemplate.update(sql2, account.getAccount().getRoyalID(),
 						account.getAccount().getSkill().get(i).getSkillID(),
@@ -63,11 +66,11 @@ public class UserAccountDaoImpl implements UserAccountDao {
 			String sql3 = "INSERT INTO stayconnected.Authority(RID,UserRoleID) VALUES(?,?)";
 			for (int i = 0; i < account.getAccount().getRoles().size(); i++) {
 				int userRoleId = 0;
-				if (account.getAccount().getRoles().get(i) == "ROLE_CURR") {
+				if (account.getAccount().getRoles().get(i).equalsIgnoreCase("ROLE_CURR")) {
 					userRoleId = 1;
-				} else if (account.getAccount().getRoles().get(i) == "ROLE_ALUM") {
+				} else if (account.getAccount().getRoles().get(i).equalsIgnoreCase("ROLE_ALUM")) {
 					userRoleId = 2;
-				} else if (account.getAccount().getRoles().get(i) == "ROLE_FACULTY") {
+				} else if (account.getAccount().getRoles().get(i).equalsIgnoreCase("ROLE_FACULTY")) {
 					userRoleId = 3;
 				}
 				jdbcTemplate.update(sql3, account.getAccount().getRoyalID(), userRoleId);
@@ -111,27 +114,26 @@ public class UserAccountDaoImpl implements UserAccountDao {
 
 	@Override
 	public ArrayList<String> getRoles() {
-		String SQL = "SELECT * from stayconnected.roles;";
+		String SQL = "SELECT * from stayconnected.UserRoles";
 		List<String> roleresults;
 		ArrayList<String> roles = new ArrayList<String>();
-		roleresults = jdbcTemplate.query(SQL, new edu.JIT.mapper.roleMapper());
-		for(int i=0; i<roleresults.size(); i++) {
+		roleresults = jdbcTemplate.query(SQL, new roleMapper());
+		for (int i = 0; i < roleresults.size(); i++) {
 			roles.add(roleresults.get(i));
 		}
-		
 		return roles;
 	}
 
 	@Override
-	public List<String> getSkills() {
-		String SQL = "SELECT * from stayconnected.skills;";
-		List<String> skillresults;
-		ArrayList<String> skills = new ArrayList<String>();
-		skillresults = jdbcTemplate.query(SQL, new edu.JIT.mapper.skillMapper());
-		for(int i=0; i<skillresults.size(); i++) {
+	public List<Skill> getSkills() {
+		String SQL = "SELECT * from stayconnected.skills";
+		List<Skill> skillresults;
+		ArrayList<Skill> skills = new ArrayList<Skill>();
+		skillresults = jdbcTemplate.query(SQL, new skillMapper());
+		for (int i = 0; i < skillresults.size(); i++) {
 			skills.add(skillresults.get(i));
 		}
-		
+
 		return skills;
 	}
 

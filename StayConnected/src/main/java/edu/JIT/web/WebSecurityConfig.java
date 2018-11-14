@@ -43,9 +43,9 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 		@Override
 		public void configure(AuthenticationManagerBuilder auth) throws Exception {
 			auth.jdbcAuthentication().dataSource(dataSource)
-			.passwordEncoder(passwordEncoder).usersByUsernameQuery("select email, password, true as active" + 
-			 " from account where email=?").authoritiesByUsernameQuery("select user_email , role from "
-			 		+ "authority where user_email=?");
+			.passwordEncoder(passwordEncoder).usersByUsernameQuery("select RID, password, true as active" + 
+			 " from stayconnected.UserLogin where RID=?").authoritiesByUsernameQuery("select RID , UserRoleID from "
+			 		+ "stayconnected.Authority where RID=?");
 		}	
 		
 		@Bean(name="passwordEncoder")

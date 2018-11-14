@@ -1,10 +1,18 @@
 package edu.JIT.model;
 
 public class Skill {
-	
+
 	private int skillID;
 	private String proficiency;
-	
+	private String skillName;
+
+	public Skill(int skillID, String proficiency, String skillName) {
+		super();
+		this.skillID = skillID;
+		this.proficiency = proficiency;
+		this.skillName = skillName;
+	}
+
 	public Skill(int skillID, String proficiency) {
 		super();
 		this.skillID = skillID;
@@ -30,5 +38,12 @@ public class Skill {
 	public void setProficiency(String proficiency) {
 		this.proficiency = proficiency;
 	}
-	
+
+	public String getSkillName() {
+		return skillName;
+	}
+
+	public void setSkillName(String skillName) {
+		this.skillName = skillName;
+	}
 }

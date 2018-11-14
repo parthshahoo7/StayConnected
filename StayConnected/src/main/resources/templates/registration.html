@@ -9,8 +9,8 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<form action="#" th:action="@{/creatingNewAccount}"
-		th:object="${newUser}" method="post">
+	<form action="#" th:action="@{/registration}"
+		th:object="${accountForm}" method="post">
 		<p th:if="${passwordError}" class="error">Passwords do not match!</p>
 		<table>
 			<tr>
@@ -58,9 +58,9 @@
 				<td>
 					<h3>User Roles</h3>
 					<ul>
-						<li th:each="aType : ${userTypes}"><input type="checkbox"
+						<li th:each="aType : ${roles}"><input type="checkbox"
 							th:field="*{account.roles}" th:value="${aType}" /> <label
-							th:for="${#ids.prev('role')}" th:text="${aType}"></label></li>
+							th:for="${#ids.prev('account.roles')}" th:text="${aType}"></label></li>
 					</ul>
 				</td>
 			</tr>
@@ -69,9 +69,9 @@
 				<td>
 					<h3>Skills</h3>
 					<ul>
-						<li th:each="aType : ${skills}"><input type="checkbox"
-							th:field="*{account.skills}" th:value="${aType}" /> <label
-							th:for="${#ids.prev('role')}" th:text="${aType}"></label></li>
+						<li th:each="skill : ${skills}"><input type="checkbox"
+							name="ski" th:value="${skill.skillID}" /> <label
+							th:text="${skill.skillName}"></label></li>
 					</ul>
 				</td>
 			</tr>
@@ -85,7 +85,7 @@
 			<tr>
 
 				<td>
-					<div id="jobhistory" style="display:none">
+					<div id="jobhistory" style="display: none">
 						<ul>
 							<li><input type="text"
 								th:field="*{account.workExperience[0].companyName}" /> <label>
@@ -112,12 +112,15 @@
 						</ul>
 					</div>
 				</td>
+				<td>
+					<div id="adding_CownerInp" class="col-md-12">
+						<label for="coowner">Work-Experience</label>
+					</div>
+				</td>
+				<td><input id="addButton_Cowner" type="button"
+					value="Add Co-Owner"></input></td>
 
 			</tr>
-
-
-
-
 			<tr>
 				<td><button type="submit">Submit</button></td>
 			</tr>
@@ -132,8 +135,8 @@
 			} else {
 				x.style.display = "none";
 			}
+			return false;
 		}
 	</script>
-
 </body>
 </html>
