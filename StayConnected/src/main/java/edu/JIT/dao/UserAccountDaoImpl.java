@@ -17,6 +17,7 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import edu.JIT.mapper.roleMapper;
 import edu.JIT.mapper.skillMapper;
+import edu.JIT.model.JobHistory;
 import edu.JIT.model.RegistrationForm;
 import edu.JIT.model.Skill;
 import edu.JIT.model.UserAccount;
@@ -38,47 +39,48 @@ public class UserAccountDaoImpl implements UserAccountDao {
 
 	@Override
 	public UserAccount createNewAccount(final RegistrationForm account) {
-		// TODO Auto-generated method stub
 		DefaultTransactionDefinition def = new DefaultTransactionDefinition();
 		def.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
 		TransactionStatus status = transactionManager.getTransaction(def);
 		try {
-			String sql = "insert into stayconnected.userAccount(RID,Fname,Lname,email,address,phone_number) values(?,?,?,?,?,?)";
-			jdbcTemplate.update(sql, account.getAccount().getRoyalID(), account.getAccount().getFirstName(),
+			String userAccountSQL = "insert into stayconnected.userAccount(RID,Fname,Lname,email,address,phone_number) values(?,?,?,?,?,?)";
+			jdbcTemplate.update(userAccountSQL, account.getAccount().getRoyalID(), account.getAccount().getFirstName(),
 					account.getAccount().getLastName(), account.getAccount().getEmail(),
 					account.getAccount().getUserAddress(), account.getAccount().getPhoneNumber());
-			String sql1 = "insert into stayconnected.jobHistory(position,companyName,address,startDate,endDate,currentlyemplyed,RID) values(?,?,?,?,?,?,?)";
-			for (int i = 0; i < account.getAccount().getWorkExperience().size(); i++) {
-				jdbcTemplate.update(sql1, account.getAccount().getWorkExperience().get(i).getPosition(),
-						account.getAccount().getWorkExperience().get(i).getCompanyName(),
-						account.getAccount().getWorkExperience().get(i).getAddress(),
-						account.getAccount().getWorkExperience().get(i).getStartDate(),
-						account.getAccount().getWorkExperience().get(i).getEndDate(),
-						account.getAccount().getWorkExperience().get(i).isCurrentlyEmployed(),
+			String jobHistorySQL = "insert into stayconnected.jobHistory(position,companyName,address,startDate,endDate,currentlyemplyed,RID) values(?,?,?,?,?,?,?)";
+			ArrayList<JobHistory> usersWorkExp = account.getAccount().getWorkExperience();
+			for (int i = 0; i < usersWorkExp.size(); i++) {
+				jdbcTemplate.update(jobHistorySQL, usersWorkExp.get(i).getPosition(),
+						usersWorkExp.get(i).getCompanyName(),
+						usersWorkExp.get(i).getAddress(),
+						usersWorkExp.get(i).getStartDate(),
+						usersWorkExp.get(i).getEndDate(),
+						usersWorkExp.get(i).isCurrentlyEmployed(),
 						account.getAccount().getRoyalID());
 			}
-			String sql2 = "INSERT INTO stayconnected.UserSkills(RID,skillID,proficiency) VALUES(?,?,?)";
+			String userSkillsSQL = "INSERT INTO stayconnected.UserSkills(RID,skillID,proficiency) VALUES(?,?,?)";
 			for (int i = 0; i < account.getAccount().getSkill().size(); i++) {
-				jdbcTemplate.update(sql2, account.getAccount().getRoyalID(),
+				jdbcTemplate.update(userSkillsSQL, account.getAccount().getRoyalID(),
 						account.getAccount().getSkill().get(i).getSkillID(),
 						account.getAccount().getSkill().get(i).getProficiency());
 			}
-			String sql3 = "INSERT INTO stayconnected.Authority(RID,UserRoleID) VALUES(?,?)";
-			for (int i = 0; i < account.getAccount().getRoles().size(); i++) {
+			String userAuthoritySQL = "INSERT INTO stayconnected.Authority(RID,UserRoleID) VALUES(?,?)";
+			ArrayList<String> usersRoles = account.getAccount().getRoles();
+			for (int i = 0; i < usersRoles.size(); i++) {
 				int userRoleId = 0;
-				if (account.getAccount().getRoles().get(i).equalsIgnoreCase("ROLE_CURR")) {
+				if (usersRoles.get(i).equalsIgnoreCase("ROLE_CURR")) {
 					userRoleId = 1;
-				} else if (account.getAccount().getRoles().get(i).equalsIgnoreCase("ROLE_ALUM")) {
+				} else if (usersRoles.get(i).equalsIgnoreCase("ROLE_ALUM")) {
 					userRoleId = 2;
-				} else if (account.getAccount().getRoles().get(i).equalsIgnoreCase("ROLE_FACULTY")) {
+				} else if (usersRoles.get(i).equalsIgnoreCase("ROLE_FACULTY")) {
 					userRoleId = 3;
 				}
-				jdbcTemplate.update(sql3, account.getAccount().getRoyalID(), userRoleId);
+				jdbcTemplate.update(userAuthoritySQL, account.getAccount().getRoyalID(), userRoleId);
 			}
-			String sql4 = "INSERT INTO stayconnected.UserActivation(code,expiration,RID) values(?,?,?)";
-			jdbcTemplate.update(sql4, account.getSpecialCode(), LocalDate.now(), account.getAccount().getRoyalID());
-			String sql5 = "INSERT INTO stayconnected.UserLogin(RID,password) values(?,?)";
-			jdbcTemplate.update(sql5, account.getAccount().getRoyalID(), account.getPassword());
+			String userActivationSQL = "INSERT INTO stayconnected.UserActivation(code,expiration,RID) values(?,?,?)";
+			jdbcTemplate.update(userActivationSQL, account.getSpecialCode(), LocalDate.now(), account.getAccount().getRoyalID());
+			String userLoginSQL = "INSERT INTO stayconnected.UserLogin(RID,password) values(?,?)";
+			jdbcTemplate.update(userLoginSQL, account.getAccount().getRoyalID(), account.getPassword());
 			transactionManager.commit(status);
 		} catch (DataAccessException e) {
 			System.out.println("Error in creating product record, rolling back");

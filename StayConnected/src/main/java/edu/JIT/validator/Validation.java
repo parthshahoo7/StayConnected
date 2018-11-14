@@ -24,6 +24,8 @@ public class Validation implements Validator {
 		if (webAccount.getPassword().length() < 8 || webAccount.getPassword().length() > 32)
 			errors.rejectValue("password", "Size.webAccount.password");
 		if (!webAccount.getPassword().equals(webAccount.getConfirmPassword()))
-			errors.rejectValue("confimPassword", "Diff.webAccount.confimPassword");
+			errors.rejectValue("confirmPassword", "Diff.webAccount.confimPassword");
+		if(webAccount.getAccount().getRoles().size() < 1) 
+			errors.rejectValue("account.roles", "Role.webAccount.roles");
 	}
 }

@@ -2,6 +2,7 @@ package edu.JIT.Controller;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.validation.Valid;
 
@@ -15,6 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -47,6 +49,18 @@ public class AccountController {
 		validation.validate(accountForm, result);
 		if (result.hasErrors()) {
 			System.out.println(result.getFieldError());
+			List<ObjectError> errors = result.getAllErrors();
+			for (ObjectError e : errors) {
+				if(e.getCode().equals("Size.webAccount.password")) {
+					model.addAttribute("PasswordShort", true);
+				}
+				else if(e.getCode().equals("Diff.webAccount.confimPassword")) {
+					model.addAttribute("PasswordNoMatch", true);
+				}
+				else if(e.getCode().equals("Role.webAccount.roles")) {
+					model.addAttribute("NoRole", true);
+				}
+			}
 			model.addAttribute("accountForm", accountForm);
 			model.addAttribute("roles", dao.getRoles());
 			model.addAttribute("skills", dao.getSkills());
@@ -92,7 +106,6 @@ public class AccountController {
 	}
 
 	private Collection<? extends GrantedAuthority> getGrantedAuthorities(RegistrationForm accountForm) {
-		// TODO Auto-generated method stub
 		return AuthorityUtils
 				.createAuthorityList(accountForm.getAccount().getRoles().stream().toArray(size -> new String[size]));
 	}
