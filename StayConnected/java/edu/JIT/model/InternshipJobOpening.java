@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class InternshipJobOpening extends PartTimeJobOpening {
-	
+
 	private Date endDate;
 
 	public InternshipJobOpening() {
@@ -24,5 +24,4 @@ public class InternshipJobOpening extends PartTimeJobOpening {
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
 	}
-	
 }

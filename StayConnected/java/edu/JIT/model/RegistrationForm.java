@@ -1,15 +1,15 @@
 package edu.JIT.model;
 
 public class RegistrationForm {
-	
+
 	private UserAccount account;
 	private String password;
 	private String confirmPassword;
 	private String specialCode;
-	
+
 	public RegistrationForm() {
 		super();
-		account=new UserAccount();
+		account = new UserAccount();
 	}
 
 	public RegistrationForm(UserAccount account, String password, String confirmPassword, String specialCode) {
@@ -51,5 +51,4 @@ public class RegistrationForm {
 	public void setSpecialCode(String specialCode) {
 		this.specialCode = specialCode;
 	}
-	
 }

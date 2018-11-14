@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class JobOpening {
-	
+
 	private String position;
 	private String location;
 	private Date startDate;
@@ -12,7 +12,7 @@ public class JobOpening {
 	private Company companyName;
 	private String jobDescription;
 	private ArrayList<Skill> skills;
-	
+
 	public JobOpening() {
 		super();
 	}
@@ -84,5 +84,4 @@ public class JobOpening {
 	public void setSkills(ArrayList<Skill> skills) {
 		this.skills = skills;
 	}
-
 }

@@ -3,7 +3,7 @@ package edu.JIT.model;
 import java.util.ArrayList;
 
 public class Company {
-	
+
 	private String companyName;
 	private String location;
 	private String phoneNumber;
@@ -12,7 +12,7 @@ public class Company {
 	private ArrayList<UserAccount> alumni;
 	private ArrayList<UserAccount> faculty;
 	private ArrayList<UserAccount> currentStudents;
-	
+
 	public Company() {
 		super();
 	}
@@ -94,5 +94,4 @@ public class Company {
 	public void setCurrentStudents(ArrayList<UserAccount> currentStudents) {
 		this.currentStudents = currentStudents;
 	}
-	
 }

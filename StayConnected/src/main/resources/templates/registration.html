@@ -1,63 +1,79 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
-
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:th="http://www.thymeleaf.org"
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
-
 <head>
 <meta charset="UTF-8">
 <title>Account Registration</title>
 <style>
-	p.error {
-		    color: red;
-	}
+p.error {
+	color: red;
+}
+</style>
+<style>
+.error {
+	color: red;
+	font-style: italic;
+}
 </style>
 </head>
 <body>
-	<form action="#" th:action="@{/registration}" th:object="${accountForm}" method="post">
-		<p th:if="${PasswordShort}" class="error">Password is not long enough!</p>
-		<p th:if="${PasswordNoMatch}" class="error">Passwords do not match!</p>
+	<form action="#" th:action="@{/registration}"
+		th:object="${accountForm}" method="post">
+		<p th:if="${PasswordShort}" class="error">Password is not long
+			enough!</p>
+		<p th:if="${PasswordNoMatch}" class="error">Passwords do not
+			match!</p>
 		<p th:if="${NoRole}" class="error">You must Select atleast 1 Role.</p>
 		<table>
 			<tr>
 				<td>Royal ID</td>
-				<td><input type="text" required="required" th:field="*{account.royalID}" /></td>
+				<td><input type="text" required="required"
+					th:field="*{account.royalID}" /></td>
 			</tr>
 			<tr>
 				<td>First Name</td>
-				<td><input type="text" required="required" th:field="*{account.firstName}" /></td>
+				<td><input type="text" required="required"
+					th:field="*{account.firstName}" /></td>
 			</tr>
 			<tr>
 				<td>Last Name</td>
-				<td><input type="text" required="required" th:field="*{account.lastName}" /></td>
+				<td><input type="text" required="required"
+					th:field="*{account.lastName}" /></td>
 			</tr>
 			<tr>
 				<td>Email</td>
-				<td><input type="text" required="required" th:field="*{account.email}" /></td>
+				<td><input type="text" required="required"
+					th:field="*{account.email}" /></td>
 			</tr>
 			<tr>
 				<td>Address</td>
-				<td><input type="text" required="required" th:field="*{account.userAddress}" /></td>
+				<td><input type="text" required="required"
+					th:field="*{account.userAddress}" /></td>
 			</tr>
 			<tr>
 				<td>Phone Number</td>
-				<td><input type="text" required="required" th:field="*{account.phoneNumber}" /></td>
+				<td><input type="text" required="required"
+					th:field="*{account.phoneNumber}" /></td>
 			</tr>
 			<tr>
 				<td>Password</td>
-				<td><input type="password" required="required" th:field="*{password}" /></td>
+				<td><input type="password" required="required"
+					th:field="*{password}" /></td>
 			</tr>
 			<tr>
 				<td>Re-type Password</td>
-				<td><input type="password" required="required" th:field="*{confirmPassword}" /></td>
+				<td><input type="password" required="required"
+					th:field="*{confirmPassword}" /></td>
 			</tr>
 
 			<tr>
 				<td>
 					<h3>User Roles</h3>
 					<ul>
-						<li th:each="aType : ${roles}"><input type="checkbox" th:field="*{account.roles}" th:value="${aType}" /> 
-							<label th:for="${#ids.prev('account.roles')}" th:text="${aType}"></label>
+						<li th:each="aType : ${roles}"><input type="checkbox"
+							th:field="*{account.roles}" th:value="${aType}" /> <label
+							th:for="${#ids.prev('account.roles')}" th:text="${aType}"></label>
 						</li>
 					</ul>
 				</td>
@@ -67,50 +83,41 @@
 				<td>
 					<h3>Skills</h3>
 					<ul>
-						<li th:each="skill : ${skills}"><input type="checkbox" name="ski" th:value="${skill.skillID}" /> 
-							<label th:text="${skill.skillName}"></label>
-						</li>
+						<li th:each="skill : ${skills}"><input type="checkbox"
+							name="ski" th:value="${skill.skillID}" /> <label
+							th:text="${skill.skillName}"></label></li>
 					</ul>
 				</td>
 			</tr>
 
 			<tr>
 				<td>
-					<button onclick="showJobHistory()" class="test">Click here to add your job</button>
+					<button onclick="showJobHistory();return false;" class="test">Click
+						here to add your job</button>
 				</td>
 			</tr>
 			<tr>
-
 				<td>
 					<div id="jobhistory" style="display: none">
 						<label>Work-Experience</label>
 						<ul>
-							<li>
-								<label>Company Name: </label>
-								<input type="text" th:field="*{account.workExperience[0].companyName}" /> 
-							</li>
+							<li><label>Company Name: </label> <input type="text"
+								th:field="*{account.workExperience[0].companyName}" /></li>
 
-							<li>
-								<label>Position: </label>
-								<input type="text" th:field="*{account.workExperience[0].position}" /> 
-							</li>
+							<li><label>Position: </label> <input type="text"
+								th:field="*{account.workExperience[0].position}" /></li>
 
-							<li>
-								<label>Start Date: </label>
-								<input type="text" th:field="*{account.workExperience[0].startDate}" />
-							</li>
+							<li><label>Start Date: </label> <input type="text"
+								th:field="*{account.workExperience[0].startDate}" /></li>
 
-							<li>
-								<label>End Date: </label>
-								<input type="text" th:field="*{account.workExperience[0].endDate}" /> 	
-							</li>
-							<li><label> Currently Employed at this Company?</label> 
-								<br>
-									<input type="radio" value="true" th:field="*{account.workExperience[0].currentlyEmployed}" />Yes
-								<br> 
-									<input type="radio" value="false" th:field="*{account.workExperience[0].currentlyEmployed}" /> No
-								<br>
-							</li>
+							<li><label>End Date: </label> <input type="text"
+								th:field="*{account.workExperience[0].endDate}" /></li>
+							<li><label> Currently Employed at this Company?</label> <br>
+								<input type="radio" value="true"
+								th:field="*{account.workExperience[0].currentlyEmployed}" />Yes
+								<br> <input type="radio" value="false"
+								th:field="*{account.workExperience[0].currentlyEmployed}" /> No
+								<br></li>
 						</ul>
 					</div>
 				</td>
@@ -120,7 +127,6 @@
 			</tr>
 		</table>
 	</form>
-
 	<script>
 		function showJobHistory() {
 			var x = document.getElementById("jobhistory");

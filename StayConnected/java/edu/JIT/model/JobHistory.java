@@ -1,16 +1,14 @@
 package edu.JIT.model;
 
-
-
 public class JobHistory {
-	
+
 	private String companyName;
 	private String position;
 	private String address;
 	private String startDate;
 	private String endDate;
 	private boolean currentlyEmployed;
-	
+
 	public JobHistory(String companyName, String position, String address, String startDate, String endDate,
 			boolean currentlyEmployed) {
 		super();
@@ -73,5 +71,4 @@ public class JobHistory {
 	public void setAddress(String address) {
 		this.address = address;
 	}
-	
 }

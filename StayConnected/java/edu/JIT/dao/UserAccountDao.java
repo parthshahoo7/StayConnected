@@ -24,15 +24,4 @@ public interface UserAccountDao {
 	public List<String> getRoles();
 
 	public List<Skill> getSkills();
-
-	/*
-	 * public List<UserAccount> getAllAlumni();
-	 * 
-	 * public List<UserAccount> getAllCurrentStudents();
-	 */ // We don't need this as we fetch all the data once than we can manipulate with
-		// list
-
-	// public List<UserAccount> getAllUserRoles(); //this is going in different DAO
-	// as it's functionality is different
-
 }

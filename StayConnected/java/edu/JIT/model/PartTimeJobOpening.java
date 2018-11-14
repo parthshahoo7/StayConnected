@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class PartTimeJobOpening extends JobOpening {
-	
+
 	private String hoursPerWeek;
 
 	public PartTimeJobOpening() {
@@ -24,5 +24,4 @@ public class PartTimeJobOpening extends JobOpening {
 	public void setHoursPerWeek(String hoursPerWeek) {
 		this.hoursPerWeek = hoursPerWeek;
 	}
-	
 }

@@ -3,9 +3,8 @@ package edu.JIT.Controller;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
+import java.util.Random;
 import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -20,7 +19,6 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
 import edu.JIT.validator.Validation;
 import edu.JIT.dao.UserAccountDao;
 import edu.JIT.model.RegistrationForm;
@@ -51,13 +49,11 @@ public class AccountController {
 			System.out.println(result.getFieldError());
 			List<ObjectError> errors = result.getAllErrors();
 			for (ObjectError e : errors) {
-				if(e.getCode().equals("Size.webAccount.password")) {
+				if (e.getCode().equals("Size.webAccount.password")) {
 					model.addAttribute("PasswordShort", true);
-				}
-				else if(e.getCode().equals("Diff.webAccount.confimPassword")) {
+				} else if (e.getCode().equals("Diff.webAccount.confimPassword")) {
 					model.addAttribute("PasswordNoMatch", true);
-				}
-				else if(e.getCode().equals("Role.webAccount.roles")) {
+				} else if (e.getCode().equals("Role.webAccount.roles")) {
 					model.addAttribute("NoRole", true);
 				}
 			}
@@ -70,9 +66,7 @@ public class AccountController {
 			ArrayList<Skill> skills = (ArrayList<Skill>) dao.getSkills();
 			if (ski != null) {
 				Skill skill = null;
-
-				for (int i = 0; i < ski.length; i++) {
-					System.out.println("ski value:" + i + "-" + ski[i]);
+				for (int i = 0; i < ski.length; i++) {					
 					for (int j = 0; j < skills.size(); j++) {
 						if (skills.get(j).getSkillID() == ski[i]) {
 							skill = new Skill();
@@ -85,8 +79,19 @@ public class AccountController {
 			}
 			String rawPassword = accountForm.getPassword();
 			accountForm.setPassword(encodePassword(accountForm.getPassword()));
+			int leftLimit = 97; // letter 'a'
+			int rightLimit = 122; // letter 'z'
+			int targetStringLength = 10;
+			Random random = new Random();
+			StringBuilder buffer = new StringBuilder(targetStringLength);
+			for (int i = 0; i < targetStringLength; i++) {
+				int randomLimitedInt = leftLimit + (int) (random.nextFloat() * (rightLimit - leftLimit + 1));
+				buffer.append((char) randomLimitedInt);
+			}
+			String generatedString = buffer.toString();
+			accountForm.setSpecialCode(generatedString);
 			dao.createNewAccount(accountForm);
-			System.out.println("UserName & Password:" + accountForm.getAccount().getRoyalID() + "-" + rawPassword);
+			System.out.println("RoyalID & Password:" + accountForm.getAccount().getRoyalID() + "-" + rawPassword);
 			autologin(accountForm);
 			return "redirect:/activateAccount";
 		}
