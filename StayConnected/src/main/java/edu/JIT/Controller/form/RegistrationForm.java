@@ -1,4 +1,6 @@
-package edu.JIT.model;
+package edu.JIT.Controller.form;
+
+import edu.JIT.model.accountManagement.UserAccount;
 
 public class RegistrationForm {
 

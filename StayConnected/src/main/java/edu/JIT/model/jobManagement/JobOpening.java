@@ -1,7 +1,9 @@
-package edu.JIT.model;
+package edu.JIT.model.jobManagement;
 
 import java.util.ArrayList;
 import java.util.Date;
+
+import edu.JIT.model.accountManagement.Skill;
 
 public class JobOpening {
 

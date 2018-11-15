@@ -1,11 +1,11 @@
-package edu.JIT.mapper;
+package edu.JIT.dao.mapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import org.springframework.jdbc.core.RowMapper;
 
-import edu.JIT.model.Skill;
+import edu.JIT.model.accountManagement.Skill;
 
 public class skillMapper implements RowMapper<Skill> {
 	@Override

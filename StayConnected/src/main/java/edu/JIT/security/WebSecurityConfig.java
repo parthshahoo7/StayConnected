@@ -1,4 +1,4 @@
-package edu.JIT.web;
+package edu.JIT.security;
 
 import javax.sql.DataSource;
 

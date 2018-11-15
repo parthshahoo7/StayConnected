@@ -1,4 +1,4 @@
-package edu.JIT.model;
+package edu.JIT.model.accountManagement;
 
 public class Skill {
 

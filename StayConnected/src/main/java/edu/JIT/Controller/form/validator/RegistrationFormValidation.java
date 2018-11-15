@@ -1,14 +1,14 @@
-package edu.JIT.validator;
+package edu.JIT.Controller.form.validator;
 
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import edu.JIT.model.RegistrationForm;
+import edu.JIT.Controller.form.RegistrationForm;
 
 @Component
-public class Validation implements Validator {
+public class RegistrationFormValidation implements Validator {
 
 	@Override
 	public boolean supports(Class<?> clazz) {

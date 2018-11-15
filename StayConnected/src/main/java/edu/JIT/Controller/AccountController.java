@@ -19,10 +19,11 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import edu.JIT.validator.Validation;
-import edu.JIT.dao.UserAccountDao;
-import edu.JIT.model.RegistrationForm;
-import edu.JIT.model.Skill;
+
+import edu.JIT.Controller.form.RegistrationForm;
+import edu.JIT.Controller.form.validator.RegistrationFormValidation;
+import edu.JIT.dao.daoInterfaces.UserAccountDao;
+import edu.JIT.model.accountManagement.Skill;
 
 @Controller
 public class AccountController {
@@ -31,7 +32,7 @@ public class AccountController {
 	UserAccountDao dao;
 
 	@Autowired
-	private Validation validation;
+	private RegistrationFormValidation validation;
 
 	@GetMapping("/registration")
 	public String registration(RegistrationForm accountForm, Model model) {

@@ -1,6 +1,8 @@
-package edu.JIT.model;
+package edu.JIT.model.jobManagement;
 
 import java.util.ArrayList;
+
+import edu.JIT.model.accountManagement.UserAccount;
 
 public class Company {
 

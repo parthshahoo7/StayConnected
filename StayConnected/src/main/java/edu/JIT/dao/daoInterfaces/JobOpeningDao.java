@@ -1,10 +1,10 @@
-package edu.JIT.dao;
+package edu.JIT.dao.daoInterfaces;
 
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import edu.JIT.model.JobOpening;
+import edu.JIT.model.jobManagement.JobOpening;
 
 @Repository
 public interface JobOpeningDao {

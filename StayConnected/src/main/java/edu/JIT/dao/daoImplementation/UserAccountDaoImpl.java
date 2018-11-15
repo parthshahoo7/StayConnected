@@ -1,4 +1,4 @@
-package edu.JIT.dao;
+package edu.JIT.dao.daoImplementation;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -15,12 +15,13 @@ import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
-import edu.JIT.mapper.roleMapper;
-import edu.JIT.mapper.skillMapper;
-import edu.JIT.model.JobHistory;
-import edu.JIT.model.RegistrationForm;
-import edu.JIT.model.Skill;
-import edu.JIT.model.UserAccount;
+import edu.JIT.Controller.form.RegistrationForm;
+import edu.JIT.dao.daoInterfaces.UserAccountDao;
+import edu.JIT.dao.mapper.roleMapper;
+import edu.JIT.dao.mapper.skillMapper;
+import edu.JIT.model.accountManagement.JobHistory;
+import edu.JIT.model.accountManagement.Skill;
+import edu.JIT.model.accountManagement.UserAccount;
 
 @Repository
 public class UserAccountDaoImpl implements UserAccountDao {

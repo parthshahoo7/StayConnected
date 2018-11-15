@@ -1,12 +1,12 @@
-package edu.JIT.dao;
+package edu.JIT.dao.daoInterfaces;
 
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import edu.JIT.model.RegistrationForm;
-import edu.JIT.model.Skill;
-import edu.JIT.model.UserAccount;
+import edu.JIT.Controller.form.RegistrationForm;
+import edu.JIT.model.accountManagement.Skill;
+import edu.JIT.model.accountManagement.UserAccount;
 
 @Repository
 public interface UserAccountDao {
