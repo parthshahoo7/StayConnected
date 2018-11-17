@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Browse Users</title>
+</head>
+<body>
+
+<h2> Browse Users</h2>
+
+
+<table class="">
+
+	<tr align= "center"> 
+ 	<th>First Name </th>
+ 	<th>Last Name </th>
+ 	<th>Email </th>
+ 	<th> Address</th>
+ 	<th>Phone </th>
+ 	<th> Profile </th>
+ 	
+	</tr>
+
+	<tr th:each= "user: ${systemusers}" align="center"> 
+	<td th:text="${user.firstName}"></td>
+	<td th:text="${user.lastName}"></td>
+	<td th:text="${user.email}">}</td>
+	<td th:text="${user.userAddress}">}</td>
+	<td th:text="${user.phoneNumber}">}</td>
+	<td> view profile </td>
+	</tr>
+
+</table>
+
+</body>
+</html>

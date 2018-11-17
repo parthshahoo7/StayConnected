@@ -2,6 +2,7 @@ package edu.JIT.Controller;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import javax.validation.Valid;
@@ -24,6 +25,7 @@ import edu.JIT.Controller.form.RegistrationForm;
 import edu.JIT.Controller.form.validator.RegistrationFormValidation;
 import edu.JIT.dao.daoInterfaces.UserAccountDao;
 import edu.JIT.model.accountManagement.Skill;
+import edu.JIT.model.accountManagement.UserAccount;
 
 @Controller
 public class AccountController {
@@ -97,7 +99,16 @@ public class AccountController {
 			return "redirect:/activateAccount";
 		}
 	}
-
+	
+	@GetMapping("/browseUsers")
+	public String browseUsers(Model model) {
+		ArrayList<UserAccount> users = dao.getAllAccounts();
+		Collections.sort(users, new AccountComparator());
+		model.addAttribute("systemusers" , users);
+		return "browseUsers";
+		
+	}
+	
 	private String encodePassword(String rawPassword) {
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		String encryptedPassword = passwordEncoder.encode(rawPassword);

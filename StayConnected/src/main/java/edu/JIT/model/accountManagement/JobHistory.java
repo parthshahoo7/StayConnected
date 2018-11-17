@@ -2,6 +2,7 @@ package edu.JIT.model.accountManagement;
 
 public class JobHistory {
 
+	private String rid;
 	private String companyName;
 	private String position;
 	private String address;
@@ -70,5 +71,13 @@ public class JobHistory {
 
 	public void setAddress(String address) {
 		this.address = address;
+	}
+
+	public String getRid() {
+		return rid;
+	}
+
+	public void setRid(String rid) {
+		this.rid = rid;
 	}
 }

@@ -3,9 +3,7 @@ package edu.JIT.dao.daoImplementation;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.sql.DataSource;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -14,11 +12,14 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
-
 import edu.JIT.Controller.form.RegistrationForm;
 import edu.JIT.dao.daoInterfaces.UserAccountDao;
+import edu.JIT.dao.mapper.accountMapper;
+import edu.JIT.dao.mapper.authorityMapper;
+import edu.JIT.dao.mapper.jobhistoryMapper;
 import edu.JIT.dao.mapper.roleMapper;
 import edu.JIT.dao.mapper.skillMapper;
+import edu.JIT.dao.mapper.userskillsMapper;
 import edu.JIT.model.accountManagement.JobHistory;
 import edu.JIT.model.accountManagement.Skill;
 import edu.JIT.model.accountManagement.UserAccount;
@@ -101,9 +102,59 @@ public class UserAccountDaoImpl implements UserAccountDao {
 	}
 
 	@Override
-	public List<UserAccount> getAllAccounts() {
-		// TODO Auto-generated method stub
-		return null;
+	public ArrayList<UserAccount> getAllAccounts() {
+		ArrayList<UserAccount> users = new ArrayList<UserAccount>();
+		String SQL = "SELECT * from stayconnected.useraccount;";
+		List<UserAccount> userResults;
+		userResults = jdbcTemplate.query(SQL, new accountMapper());
+		
+		SQL = "SELECT stayconnected.userskills.rid,"
+				+ "stayconnected.skills.skillname,"
+				+ "stayconnected.userskills.proficiency"
+				+ " FROM stayconnected.userskills,"
+				+ "stayconnected.skills  "
+				+ "WHERE userskills.skillid"
+				+ " = skills.skillid;";
+		
+		List<UserSkill> userskillResults;
+		userskillResults = jdbcTemplate.query(SQL, new userskillsMapper());
+		
+		SQL = "SELECT * from stayconnected.jobhistory;";
+		List<JobHistory> jobhistoryResults;
+		jobhistoryResults = jdbcTemplate.query(SQL, new jobhistoryMapper());
+		
+		SQL = "SELECT stayconnected.authority.rid , "
+				+ "stayconnected.userroles.role "
+				+ " FROM stayconnected.authority , stayconnected.userroles "
+				+ "WHERE authority.userroleid = userroles.uid;";
+		List<Authority> authorityResults;
+		authorityResults = jdbcTemplate.query(SQL, new authorityMapper());
+		
+		for(int i=0; i<userResults.size(); i++) {
+			for(int skill=0; skill<userskillResults.size(); skill++) {
+				if(userResults.get(i).getRoyalID().equals(userskillResults.get(skill).getRid())) {
+					Skill newSkill = new Skill(-1 , userskillResults.get(skill).getProficiency(),
+							userskillResults.get(skill).getSkillName());
+					userResults.get(i).addSkills(newSkill);
+				}
+			}
+			for(int history=0; history<jobhistoryResults.size(); history++) {
+				if(userResults.get(i).getRoyalID().equals(jobhistoryResults.get(history).getRid())) {
+					userResults.get(i).addWorkHistory(jobhistoryResults.get(history));
+				}
+			}
+			for(int authority=0; authority<authorityResults.size(); authority++) {
+				if(userResults.get(i).getRoyalID().equals(authorityResults.get(authority).getRid())) {
+					userResults.get(i).addRole(authorityResults.get(authority));
+				}
+			}
+		}
+		
+		for(int user=0; user < userResults.size(); user++) {
+			users.add(userResults.get(user));
+		}
+		
+		return users;
 	}
 
 	@Override
@@ -143,3 +194,4 @@ public class UserAccountDaoImpl implements UserAccountDao {
 		return skills;
 	}
 }
+

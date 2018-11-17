@@ -2,6 +2,8 @@ package edu.JIT.model.accountManagement;
 
 import java.util.ArrayList;
 
+import edu.JIT.dao.daoImplementation.Authority;
+
 
 public class UserAccount {
 
@@ -123,6 +125,15 @@ public class UserAccount {
 	public void addSkills(Skill skill) {
 		this.skill.add(skill);
 	}
+	
+	public void addWorkHistory(JobHistory job) {
+		this.workExperience.add(job);
+	}
+	
+	public void addRole(Authority authority) {
+		this.roles.add(authority.getRole());
+	}
+	
 	public void clearSkills() {
 		this.skill.clear();
 	}

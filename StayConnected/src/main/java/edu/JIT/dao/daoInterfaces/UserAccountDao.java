@@ -1,5 +1,6 @@
 package edu.JIT.dao.daoInterfaces;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
@@ -15,7 +16,7 @@ public interface UserAccountDao {
 
 	public UserAccount getAccountByRoyalID(String royalID);
 
-	public List<UserAccount> getAllAccounts();
+	public ArrayList<UserAccount> getAllAccounts();
 
 	public int deleteAccount(UserAccount account);
 
