@@ -14,6 +14,7 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 import edu.JIT.Controller.form.RegistrationForm;
 import edu.JIT.dao.daoInterfaces.UserAccountDao;
+import edu.JIT.dao.mapper.UserActivationMapper;
 import edu.JIT.dao.mapper.accountMapper;
 import edu.JIT.dao.mapper.authorityMapper;
 import edu.JIT.dao.mapper.jobhistoryMapper;
@@ -23,6 +24,7 @@ import edu.JIT.dao.mapper.userskillsMapper;
 import edu.JIT.model.accountManagement.JobHistory;
 import edu.JIT.model.accountManagement.Skill;
 import edu.JIT.model.accountManagement.UserAccount;
+import edu.JIT.model.accountManagement.UserActivation;
 
 @Repository
 public class UserAccountDaoImpl implements UserAccountDao {
@@ -93,6 +95,37 @@ public class UserAccountDaoImpl implements UserAccountDao {
 			throw e;
 		}
 		return null;
+	}
+	
+	@Override
+	public UserActivation getSpecialCodeByRoyalID(String royalID) {
+		try {
+			String SQL = "SELECT RID, code, expiration from stayconnected.UserActivation where RID = ?";
+			UserActivation userActivation = jdbcTemplate.queryForObject(SQL, new Object[] { royalID }, new UserActivationMapper());
+			return userActivation;
+		}
+		catch (DataAccessException e) {
+			System.out.println("Can't find special code");
+		}
+		return null;
+	}
+	
+	@Override
+	public boolean activateAccountByRoyalID(String royalID) {
+		DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+		def.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
+		TransactionStatus status = transactionManager.getTransaction(def);
+		try {
+			String SQL = "INSERT INTO stayconnected.AccountStatus(RID,status) values(?,?)";
+			jdbcTemplate.update(SQL, royalID, true);
+			transactionManager.commit(status);
+			return true;
+		}
+		catch (DataAccessException e) {
+			System.out.println("Can't activate Account");
+			transactionManager.rollback(status);
+			return false;
+		}
 	}
 
 	@Override

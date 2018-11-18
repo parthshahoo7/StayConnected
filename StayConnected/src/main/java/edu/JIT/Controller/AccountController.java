@@ -1,5 +1,6 @@
 package edu.JIT.Controller;
 
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -24,8 +25,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import edu.JIT.Controller.form.RegistrationForm;
 import edu.JIT.Controller.form.validator.RegistrationFormValidation;
 import edu.JIT.dao.daoInterfaces.UserAccountDao;
+import edu.JIT.model.accountManagement.MailService;
 import edu.JIT.model.accountManagement.Skill;
 import edu.JIT.model.accountManagement.UserAccount;
+import edu.JIT.model.accountManagement.UserActivation;
 
 @Controller
 public class AccountController {
@@ -35,7 +38,15 @@ public class AccountController {
 
 	@Autowired
 	private RegistrationFormValidation validation;
+	
+	@Autowired
+	private MailService mailingService;
 
+	@GetMapping("/home")
+	public String home() {
+		return "homePage";
+	}
+	
 	@GetMapping("/registration")
 	public String registration(RegistrationForm accountForm, Model model) {
 		model.addAttribute("accountForm", accountForm);
@@ -82,20 +93,12 @@ public class AccountController {
 			}
 			String rawPassword = accountForm.getPassword();
 			accountForm.setPassword(encodePassword(accountForm.getPassword()));
-			int leftLimit = 97; // letter 'a'
-			int rightLimit = 122; // letter 'z'
-			int targetStringLength = 10;
-			Random random = new Random();
-			StringBuilder buffer = new StringBuilder(targetStringLength);
-			for (int i = 0; i < targetStringLength; i++) {
-				int randomLimitedInt = leftLimit + (int) (random.nextFloat() * (rightLimit - leftLimit + 1));
-				buffer.append((char) randomLimitedInt);
-			}
-			String generatedString = buffer.toString();
-			accountForm.setSpecialCode(generatedString);
+			String generatedString = accountForm.createSpecialCode();
+			System.out.println("Special Code == " + generatedString);
 			dao.createNewAccount(accountForm);
 			System.out.println("RoyalID & Password:" + accountForm.getAccount().getRoyalID() + "-" + rawPassword);
 			autologin(accountForm);
+			mailingService.sendEmail(accountForm);
 			return "redirect:/activateAccount";
 		}
 	}
@@ -107,6 +110,39 @@ public class AccountController {
 		model.addAttribute("systemusers" , users);
 		return "browseUsers";
 		
+	}
+	
+	@GetMapping("/activateAccount")
+	public String activateAccount(Model model) {
+		UserActivation userActivation = new UserActivation();
+		model.addAttribute("userActivation", userActivation);
+		return "activateAccount";
+	}
+	
+	@PostMapping(value = "/activateAccount")
+	public String verifyAccount(@Valid UserActivation userActivation, Model model) {
+		UserActivation dbUserActivation = dao.getSpecialCodeByRoyalID((userActivation.getRoyalID()));
+		if(dbUserActivation == null) {
+			//Account cannot be found for royal id
+			model.addAttribute("NoMatchSpecialCodeOrRoyal", true);
+			return "activateAccount";
+		}
+		
+		Period intervalPeriod = Period.between(dbUserActivation.getDate(), userActivation.getDate());
+		
+		if(intervalPeriod.getDays() > 2) {
+			model.addAttribute("SpecialCodeExpired", true);
+			return "activateAccount"; 
+		}
+		else if(dbUserActivation.getRoyalID().equals(userActivation.getRoyalID()) &&
+				dbUserActivation.getSpecialCode().equals(userActivation.getSpecialCode())) {
+			dao.activateAccountByRoyalID(userActivation.getRoyalID());
+			return "homePage";
+		}
+		else { //Don't match
+			model.addAttribute("NoMatchSpecialCodeOrRoyal", true);
+			return "activateAccount";
+		}
 	}
 	
 	private String encodePassword(String rawPassword) {

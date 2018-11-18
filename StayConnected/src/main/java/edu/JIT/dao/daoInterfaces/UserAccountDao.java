@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import edu.JIT.Controller.form.RegistrationForm;
 import edu.JIT.model.accountManagement.Skill;
 import edu.JIT.model.accountManagement.UserAccount;
+import edu.JIT.model.accountManagement.UserActivation;
 
 @Repository
 public interface UserAccountDao {
@@ -25,4 +26,8 @@ public interface UserAccountDao {
 	public List<String> getRoles();
 
 	public List<Skill> getSkills();
+	
+	public UserActivation getSpecialCodeByRoyalID(String royalID);
+	
+	public boolean activateAccountByRoyalID(String royalID);
 }

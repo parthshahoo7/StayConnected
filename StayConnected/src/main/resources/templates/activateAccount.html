@@ -1,10 +1,34 @@
-<!DOCTYPE html>
-<html>
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Activate Account</title>
+<style>
+	.error {
+		color: red;
+		font-style: italic;
+	}
+</style>
 </head>
 <body>
-<h2>Activate Account Use Case Goes Here </h2>
+	<form action="#" th:action="@{/activateAccount}" th:object="${userActivation}" method="post">
+		<p th:if="${NoMatchSpecialCodeOrRoyal}" class="error">Royal ID and/or Special Code is incorrect</p>
+		<p th:if="${SpecialCodeExpired}" class="error">Your Special Code has expired, and a new code has been sent to your Email</p>		
+		<table>
+			<tr>
+				<td>Royal ID</td>
+				<td><input type="text" required="required" th:field="*{royalID}" /></td>
+			</tr>
+			<tr>
+				<td>Special Code</td>
+				<td><input type="text" required="required" th:field="*{specialCode}" /></td>
+			</tr>
+			<tr>
+				<td><button type="submit">Submit</button></td>
+			</tr>
+		</table>
+	</form>
 </body>
 </html>
