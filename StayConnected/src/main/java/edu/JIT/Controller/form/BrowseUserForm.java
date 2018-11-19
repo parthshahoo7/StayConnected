@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class BrowseUserForm {
 	private String userType;
 	private ArrayList<String> criteria;
+	
 	public String getUserType() {
 		return userType;
 	}

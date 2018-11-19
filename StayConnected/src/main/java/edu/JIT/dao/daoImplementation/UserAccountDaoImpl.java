@@ -227,4 +227,3 @@ public class UserAccountDaoImpl implements UserAccountDao {
 		return skills;
 	}
 }
-

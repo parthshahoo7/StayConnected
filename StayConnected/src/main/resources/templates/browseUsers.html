@@ -33,15 +33,17 @@
 
 </table>
 
-<form action="">
+<form action="#" th:action="@{/browseUsers}"
+		th:object="${filters}" method="post">
 	<ul>
 		<li><label> Filter by User Type</label>  </li>
-		<li><input type="radio" value="current_student"> current student </li>
-		<li><input type="radio" value="alumni"> alumni </li>
+		<li><input type="radio" value="student" th:field="*{userType}"> Current Student </li>
+		<li><input type="radio" value="alumni" th:field="*{userType}"> Alumni </li>
+		<li><input type="radio" value="All" th:field="*{userType}"> All Users </li>
 	</ul>
 	<ul>
 		 <li><label> Filter by Criteria</label>  </li>
-		<li><input type="checkbox"> Skill </li>
+		<li><input type="checkbox" value="empty" th:field="*{criteria}"> Skill </li>
 		
 	</ul>
 	<button type="submit">Apply Filters</button>

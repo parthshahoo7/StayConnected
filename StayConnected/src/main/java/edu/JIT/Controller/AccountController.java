@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import edu.JIT.Controller.form.BrowseUserForm;
 import edu.JIT.Controller.form.RegistrationForm;
 import edu.JIT.Controller.form.validator.RegistrationFormValidation;
 import edu.JIT.dao.daoInterfaces.UserAccountDao;
@@ -104,12 +105,39 @@ public class AccountController {
 	}
 	
 	@GetMapping("/browseUsers")
-	public String browseUsers(Model model) {
+	public String browseUsers(Model model, BrowseUserForm filters) {
 		ArrayList<UserAccount> users = dao.getAllAccounts();
 		Collections.sort(users, new AccountComparator());
 		model.addAttribute("systemusers" , users);
+		model.addAttribute("filters" , filters);
 		return "browseUsers";
 		
+	}
+	
+	@PostMapping("/browseUsers")
+	public String applyFilters(Model model , BrowseUserForm filters) {
+		ArrayList<UserAccount> users = dao.getAllAccounts();
+		if(filters.getUserType() == null || filters.getUserType().equals("All")) {
+			
+		}
+		else if(filters.getUserType().equals("student")) {
+			for(int i=0; i<users.size(); i++) {
+				if(users.get(i).getRoles().contains("ROLE_ALUM")) {
+					users.remove(i);
+				}
+			}
+		}
+		
+		else {
+			for(int i=0; i<users.size(); i++) {
+				if(users.get(i).getRoles().contains("ROLE_CURR")) {
+					users.remove(i);
+				}
+			}
+		}
+		model.addAttribute("systemusers" , users);
+		model.addAttribute("filters" , filters);
+		return "browseUsers";
 	}
 	
 	@GetMapping("/activateAccount")
