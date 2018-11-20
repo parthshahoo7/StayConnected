@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -79,7 +80,19 @@ public class AccountController {
 			model.addAttribute("skills", dao.getSkills());
 			return "registration";
 		} else {
-
+			String generatedString = accountForm.createSpecialCode();
+			System.out.println("Special Code == " + generatedString);
+			try {
+				mailingService.sendEmail(accountForm.getAccount().getEmail(), "StayConnected Special Code", 
+						"Your special code is: " + accountForm.getSpecialCode());
+			}
+			catch (MailException e) {
+				model.addAttribute("accountForm", accountForm);
+				model.addAttribute("roles", dao.getRoles());
+				model.addAttribute("skills", dao.getSkills());
+				model.addAttribute("EmailNotValid", true);
+				return "registration";
+			}
 			ArrayList<Skill> skills = (ArrayList<Skill>) dao.getSkills();
 			if (ski != null) {
 				Skill skill = null;
@@ -96,21 +109,27 @@ public class AccountController {
 			}
 			String rawPassword = accountForm.getPassword();
 			accountForm.setPassword(encodePassword(accountForm.getPassword()));
-			String generatedString = accountForm.createSpecialCode();
-			System.out.println("Special Code == " + generatedString);
-			dao.createNewAccount(accountForm);
-			System.out.println("RoyalID & Password:" + accountForm.getAccount().getRoyalID() + "-" + rawPassword);
 			if(principal != null && principal.getName() != null && principal.getName() != "") {
 				//Faculty making account
-				mailingService.sendEmail(accountForm.getAccount().getEmail(), "StayConnected Account Creation", 
-						"A faculty member at the University of Scranton has created an account for you on StayConnected.  "
-						+ "You can sign in using your Royal ID and this password: " + rawPassword + "The system will "
-						+ "prompt you for a special code, your code is " + accountForm.getSpecialCode());
-				return "redirect:/manageAccount";					
+				try {
+					mailingService.sendEmail(accountForm.getAccount().getEmail(), "StayConnected Account Creation", 
+							"A faculty member at the University of Scranton has created an account for you on StayConnected.  "
+							+ "You can sign in using your Royal ID and this password: " + rawPassword + "The system will "
+							+ "prompt you for a special code, your code is " + accountForm.getSpecialCode());
+					return "redirect:/manageAccount";		
+				}
+				catch (MailException e) {
+					model.addAttribute("accountForm", accountForm);
+					model.addAttribute("roles", dao.getRoles());
+					model.addAttribute("skills", dao.getSkills());
+					model.addAttribute("EmailNotValid", true);
+					return "registration";
+				}
 			}
+			dao.createNewAccount(accountForm);
+			System.out.println("RoyalID & Password:" + accountForm.getAccount().getRoyalID() + "-" + rawPassword);
+			
 			autologin(accountForm);
-			mailingService.sendEmail(accountForm.getAccount().getEmail(), "StayConnected Special Code", 
-					"Your special code is: " + accountForm.getSpecialCode());
 			return "redirect:/activateAccount";
 		}
 	}
