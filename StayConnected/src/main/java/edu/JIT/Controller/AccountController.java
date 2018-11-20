@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
+
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,8 +23,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import edu.JIT.Controller.form.BrowseUserForm;
@@ -60,7 +61,7 @@ public class AccountController {
 
 	@PostMapping(value = "/registration")
 	public String addAccount(@RequestParam(value = "ski", required = false) int[] ski,
-			@Valid RegistrationForm accountForm, final BindingResult result, Model model, Principal principal) {
+			@Valid RegistrationForm accountForm, final BindingResult result, Model model) {
 		validation.validate(accountForm, result);
 		if (result.hasErrors()) {
 			System.out.println(result.getFieldError());
@@ -100,26 +101,11 @@ public class AccountController {
 			System.out.println("Special Code == " + generatedString);
 			dao.createNewAccount(accountForm);
 			System.out.println("RoyalID & Password:" + accountForm.getAccount().getRoyalID() + "-" + rawPassword);
-			if(principal != null && principal.getName() != null && principal.getName() != "") {
-				//Faculty making account
-				mailingService.sendEmail(accountForm.getAccount().getEmail(), "StayConnected Account Creation", 
-						"A faculty member at the University of Scranton has created an account for you on StayConnected.  "
-						+ "You can sign in using your Royal ID and this password: " + rawPassword + "The system will "
-						+ "prompt you for a special code, your code is " + accountForm.getSpecialCode());
-				return "redirect:/manageAccount";					
-			}
 			autologin(accountForm);
-			mailingService.sendEmail(accountForm.getAccount().getEmail(), "StayConnected Special Code", 
-					"Your special code is: " + accountForm.getSpecialCode());
+			//mailingService.sendEmail(accountForm);
 			return "redirect:/activateAccount";
 		}
 	}
-	
-	@GetMapping("/manageAccount")
-	public String manageAccount() {
-		return "manageAccount";
-	}
-	
 	
 	@GetMapping("/browseUsers")
 	public String browseUsers(Model model, BrowseUserForm filters) {
@@ -190,9 +176,14 @@ public class AccountController {
 		}
 	}
 	
-	@RequestMapping(value="/logout", method=RequestMethod.GET) 
-	public String userLogout() {
-		return "logout";
+	@GetMapping("/updateAccount")
+	public String updateAccount(Model model , Principal user) {
+		String name;
+		if(!(user == null)) {
+			name = user.getName();
+			System.out.println(name);
+		}
+		return "updateAccount";
 	}
 	
 	private String encodePassword(String rawPassword) {
