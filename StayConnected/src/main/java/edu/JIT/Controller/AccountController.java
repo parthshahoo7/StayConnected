@@ -62,7 +62,7 @@ public class AccountController {
 
 	@PostMapping(value = "/registration")
 	public String addAccount(@RequestParam(value = "ski", required = false) int[] ski,
-			@Valid RegistrationForm accountForm, final BindingResult result, Model model) {
+			@Valid RegistrationForm accountForm, final BindingResult result, Model model , Principal principal) {
 		validation.validate(accountForm, result);
 		if (result.hasErrors()) {
 			System.out.println(result.getFieldError());
@@ -136,6 +136,18 @@ public class AccountController {
 			return "redirect:/activateAccount";
 		}
 	}
+	
+	@GetMapping("/login")
+	public String getlogin() {
+		return "login";
+	}
+	
+	@PostMapping("/login")
+	public String login() {
+		return "redirect://home";
+	}
+	
+	
 	
 	@GetMapping("/browseUsers")
 	public String browseUsers(Model model, BrowseUserForm filters) {
