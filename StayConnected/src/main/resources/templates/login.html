@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>login</title>
+</head>
+<body>
+<h2> Welcome to StayConnected, login below</h2>
+
+<form  th:action="@{/login}" method="post">
+	 <label>RoyalID </label>
+	 <input type="text" name="royalid" />
+	 <label>Password:</label>
+	 <input type="password" name="password" />
+	 <input type="submit" value="Sign In" />
+
+</form>
+
+</body>
+</html>
