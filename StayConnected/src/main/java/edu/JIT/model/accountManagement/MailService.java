@@ -6,8 +6,6 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-import edu.JIT.Controller.form.RegistrationForm;
-
 @Service
 public class MailService {
 	
@@ -18,13 +16,13 @@ public class MailService {
 		this.javaMailSender = javaMailSender;
 	}
 	
-	public void sendEmail(RegistrationForm user) throws MailException {
+	public void sendEmail(String recievingEmail, String subject, String emailBody) throws MailException {
 
 		SimpleMailMessage mail = new SimpleMailMessage();
-		mail.setTo(user.getAccount().getEmail());
+		mail.setTo(recievingEmail);
 		mail.setFrom("stayconnectedjit@yahoo.com");
-		mail.setSubject("StayConnected Special Code");
-		mail.setText("Your special code is: " + user.getSpecialCode());
+		mail.setSubject(subject);
+		mail.setText(emailBody);
 
 		javaMailSender.send(mail);
 	}
