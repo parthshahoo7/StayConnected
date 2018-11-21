@@ -6,9 +6,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
-
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
@@ -43,7 +40,7 @@ public class AccountController {
 
 	@Autowired
 	private RegistrationFormValidation validation;
-	
+
 	@Autowired
 	private MailService mailingService;
 
@@ -51,7 +48,7 @@ public class AccountController {
 	public String home() {
 		return "homePage";
 	}
-	
+
 	@GetMapping("/registration")
 	public String registration(RegistrationForm accountForm, Model model) {
 		model.addAttribute("accountForm", accountForm);
@@ -62,7 +59,7 @@ public class AccountController {
 
 	@PostMapping(value = "/registration")
 	public String addAccount(@RequestParam(value = "ski", required = false) int[] ski,
-			@Valid RegistrationForm accountForm, final BindingResult result, Model model , Principal principal) {
+			@Valid RegistrationForm accountForm, final BindingResult result, Model model, Principal principal) {
 		validation.validate(accountForm, result);
 		if (result.hasErrors()) {
 			System.out.println(result.getFieldError());
@@ -84,10 +81,9 @@ public class AccountController {
 			String generatedString = accountForm.createSpecialCode();
 			System.out.println("Special Code == " + generatedString);
 			try {
-				mailingService.sendEmail(accountForm.getAccount().getEmail(), "StayConnected Special Code", 
+				mailingService.sendEmail(accountForm.getAccount().getEmail(), "StayConnected Special Code",
 						"Your special code is: " + accountForm.getSpecialCode());
-			}
-			catch (MailException e) {
+			} catch (MailException e) {
 				model.addAttribute("accountForm", accountForm);
 				model.addAttribute("roles", dao.getRoles());
 				model.addAttribute("skills", dao.getSkills());
@@ -97,7 +93,7 @@ public class AccountController {
 			ArrayList<Skill> skills = (ArrayList<Skill>) dao.getSkills();
 			if (ski != null) {
 				Skill skill = null;
-				for (int i = 0; i < ski.length; i++) {					
+				for (int i = 0; i < ski.length; i++) {
 					for (int j = 0; j < skills.size(); j++) {
 						if (skills.get(j).getSkillID() == ski[i]) {
 							skill = new Skill();
@@ -111,16 +107,16 @@ public class AccountController {
 			String rawPassword = accountForm.getPassword();
 			accountForm.setPassword(encodePassword(accountForm.getPassword()));
 
-			if(principal != null && principal.getName() != null && principal.getName() != "") {
-				//Faculty making account
+			if (principal != null && principal.getName() != null && principal.getName() != "") {
+				// Faculty making account
 				try {
-					mailingService.sendEmail(accountForm.getAccount().getEmail(), "StayConnected Account Creation", 
+					mailingService.sendEmail(accountForm.getAccount().getEmail(), "StayConnected Account Creation",
 							"A faculty member at the University of Scranton has created an account for you on StayConnected.  "
-							+ "You can sign in using your Royal ID and this password: " + rawPassword + "The system will "
-							+ "prompt you for a special code, your code is " + accountForm.getSpecialCode());
-					return "redirect:/manageAccount";		
-				}
-				catch (MailException e) {
+									+ "You can sign in using your Royal ID and this password: " + rawPassword
+									+ "The system will " + "prompt you for a special code, your code is "
+									+ accountForm.getSpecialCode());
+					return "redirect:/manageAccount";
+				} catch (MailException e) {
 					model.addAttribute("accountForm", accountForm);
 					model.addAttribute("roles", dao.getRoles());
 					model.addAttribute("skills", dao.getSkills());
@@ -130,104 +126,88 @@ public class AccountController {
 			}
 			dao.createNewAccount(accountForm);
 			System.out.println("RoyalID & Password:" + accountForm.getAccount().getRoyalID() + "-" + rawPassword);
-			
 
 			autologin(accountForm);
 			return "redirect:/activateAccount";
 		}
 	}
-	
-	@GetMapping("/login")
-	public String getlogin() {
-		return "login";
-	}
-	
-	@PostMapping("/login")
-	public String login() {
-		return "redirect:/home";
-	}
-	
-	
-	
+
 	@GetMapping("/browseUsers")
 	public String browseUsers(Model model, BrowseUserForm filters) {
 		ArrayList<UserAccount> users = dao.getAllAccounts();
 		Collections.sort(users, new AccountComparator());
-		model.addAttribute("systemusers" , users);
-		model.addAttribute("filters" , filters);
+		model.addAttribute("systemusers", users);
+		model.addAttribute("filters", filters);
 		return "browseUsers";
-		
+
 	}
-	
+
 	@PostMapping("/browseUsers")
-	public String applyFilters(Model model , BrowseUserForm filters) {
+	public String applyFilters(Model model, BrowseUserForm filters) {
 		ArrayList<UserAccount> users = dao.getAllAccounts();
-		if(filters.getUserType() == null || filters.getUserType().equals("All")) {
-			
-		}
-		else if(filters.getUserType().equals("student")) {
-			for(int i=0; i<users.size(); i++) {
-				if(users.get(i).getRoles().contains("ROLE_ALUM")) {
+		if (filters.getUserType() == null || filters.getUserType().equals("All")) {
+
+		} else if (filters.getUserType().equals("student")) {
+			for (int i = 0; i < users.size(); i++) {
+				if (users.get(i).getRoles().contains("ROLE_ALUM")) {
 					users.remove(i);
 				}
 			}
 		}
-		
+
 		else {
-			for(int i=0; i<users.size(); i++) {
-				if(users.get(i).getRoles().contains("ROLE_CURR")) {
+			for (int i = 0; i < users.size(); i++) {
+				if (users.get(i).getRoles().contains("ROLE_CURR")) {
 					users.remove(i);
 				}
 			}
 		}
-		model.addAttribute("systemusers" , users);
-		model.addAttribute("filters" , filters);
+		model.addAttribute("systemusers", users);
+		model.addAttribute("filters", filters);
 		return "browseUsers";
 	}
-	
+
 	@GetMapping("/activateAccount")
 	public String activateAccount(Model model) {
 		UserActivation userActivation = new UserActivation();
 		model.addAttribute("userActivation", userActivation);
 		return "activateAccount";
 	}
-	
+
 	@PostMapping(value = "/activateAccount")
 	public String verifyAccount(@Valid UserActivation userActivation, Model model) {
 		UserActivation dbUserActivation = dao.getSpecialCodeByRoyalID((userActivation.getRoyalID()));
-		if(dbUserActivation == null) {
-			//Account cannot be found for royal id
+		if (dbUserActivation == null) {
+			// Account cannot be found for royal id
 			model.addAttribute("NoMatchSpecialCodeOrRoyal", true);
 			return "activateAccount";
 		}
-		
+
 		Period intervalPeriod = Period.between(dbUserActivation.getDate(), userActivation.getDate());
-		
-		if(intervalPeriod.getDays() > 2) {
+
+		if (intervalPeriod.getDays() > 2) {
 			model.addAttribute("SpecialCodeExpired", true);
-			return "activateAccount"; 
-		}
-		else if(dbUserActivation.getRoyalID().equals(userActivation.getRoyalID()) &&
-				dbUserActivation.getSpecialCode().equals(userActivation.getSpecialCode())) {
+			return "activateAccount";
+		} else if (dbUserActivation.getRoyalID().equals(userActivation.getRoyalID())
+				&& dbUserActivation.getSpecialCode().equals(userActivation.getSpecialCode())) {
 			dao.activateAccountByRoyalID(userActivation.getRoyalID());
 			return "homePage";
-		}
-		else { //Don't match
+		} else { // Don't match
 			model.addAttribute("NoMatchSpecialCodeOrRoyal", true);
 			return "activateAccount";
 		}
 	}
-	
+
 	@GetMapping("/updateAccount")
-	public String updateAccount(Model model , Principal user) {
+	public String updateAccount(Model model, Principal user) {
 		String name;
-		if(!(user == null)) {
+		if (!(user == null)) {
 			name = user.getName();
 			System.out.println(name);
 		}
 		return "updateAccount";
 	}
-	
+
 	private String encodePassword(String rawPassword) {
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		String encryptedPassword = passwordEncoder.encode(rawPassword);
