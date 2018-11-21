@@ -43,8 +43,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	public void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.jdbcAuthentication().dataSource(dataSource).passwordEncoder(passwordEncoder)
 				.usersByUsernameQuery(
-						"select RID, password, true as active" + " from stayconnected.UserLogin where RID=?")
-				.authoritiesByUsernameQuery("select RID , UserRoleID from " + "stayconnected.Authority where RID=?");
+						"select rid, password, true as active" + " from stayconnected.userLogin where rid=?")
+				.authoritiesByUsernameQuery("select rid , userroleid from " + "stayconnected.authority where rid=?");
 	}
 	/*
 	 FOR REFERENCE
