@@ -1,12 +1,57 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
 <title>Update Account</title>
 </head>
 <body>
 
-<h2> Hello user, update your account below</h2>
+<h3 th:inline="text"> Hello, [[${#httpServletRequest.remoteUser}]]! Update your account below,</h3>
+
+<form>
+
+<div>
+<label th:inline="text">  Your first name is: [[${user.firstName}]]</label>
+<div>
+new first name: <input type="text" name="firstname"> 
+</div>
+</div>
+
+<div>
+<label th:inline="text">  Your last name is: [[${user.lastName}]]</label>
+<div>
+new last name: <input type="text" name="lastname"> 
+</div>
+</div>
+
+<div>
+<label th:inline="text">  Your email is: [[${user.email}]]</label>
+<div>
+new email: <input type="text" name="email"> 
+</div>
+</div>
+
+<div>
+<label th:inline="text">  Your phone number is: [[${user.phoneNumber}]]</label>
+<div>
+new phone number: <input type="text" name="phoneNumber"> 
+</div>
+</div>
+
+<div>
+<label th:inline="text">  Your address is: [[${user.userAddress}]]</label>
+<div>
+new address: <input type="text" name="userAddress"> 
+</div>
+</div>
+
+<button type="submit" > Update</button>
+
+
+</form>
+
+
 
 
 </body>

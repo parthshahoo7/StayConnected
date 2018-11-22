@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.mail.MailException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -201,10 +202,17 @@ public class AccountController {
 	@GetMapping("/updateAccount")
 	public String updateAccount(Model model, Principal user) {
 		String name;
-		if (!(user == null)) {
-			name = user.getName();
-			System.out.println(name);
-		}
+		name = user.getName();
+		    try {
+			UserAccount loggedInUser = dao.getAccountByRoyalID(name);
+			model.addAttribute("user" , loggedInUser);
+			}
+		    
+		    catch(DataAccessException e) {
+		    	System.out.print("couldnt get user!!");
+		    }
+		    
+		
 		return "updateAccount";
 	}
 

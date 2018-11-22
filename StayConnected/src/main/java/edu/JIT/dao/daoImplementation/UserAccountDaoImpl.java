@@ -130,8 +130,12 @@ public class UserAccountDaoImpl implements UserAccountDao {
 
 	@Override
 	public UserAccount getAccountByRoyalID(String royalID) {
-		// TODO Auto-generated method stub
-		return null;
+		UserAccount user = new UserAccount();
+		String SQL = "SELECT * from stayconnected.useraccount WHERE rid= '" +
+		 royalID + "';" ;
+		
+		user = jdbcTemplate.queryForObject(SQL, new Object[] {}, new accountMapper());
+		return user;
 	}
 
 	@Override
