@@ -1,11 +1,13 @@
 package edu.JIT.dao.daoInterfaces;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
 import edu.JIT.Controller.form.RegistrationForm;
+import edu.JIT.Controller.form.UpdateAccountForm;
 import edu.JIT.model.accountManagement.Skill;
 import edu.JIT.model.accountManagement.UserAccount;
 import edu.JIT.model.accountManagement.UserActivation;
@@ -30,4 +32,6 @@ public interface UserAccountDao {
 	public UserActivation getSpecialCodeByRoyalID(String royalID);
 	
 	public boolean activateAccountByRoyalID(String royalID);
+
+	public void update(UpdateAccountForm update, Principal user);
 }

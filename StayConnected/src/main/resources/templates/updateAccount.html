@@ -46,6 +46,14 @@ new address: <input type="text" name="userAddress">
 </div>
 </div>
 
+<div>
+<label th:inline="text">  Your password is: [[${user.password}]]</label>
+<div>
+new password: <input type="password" name="newpassword"> 
+confirm new password: <input type="password" name="confirmpassword"> 
+</div>
+</div>
+
 <button type="submit" > Update</button>
 
 

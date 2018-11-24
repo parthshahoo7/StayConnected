@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import edu.JIT.Controller.form.BrowseUserForm;
 import edu.JIT.Controller.form.RegistrationForm;
+import edu.JIT.Controller.form.UpdateAccountForm;
 import edu.JIT.Controller.form.validator.RegistrationFormValidation;
 import edu.JIT.dao.daoInterfaces.UserAccountDao;
 import edu.JIT.model.accountManagement.MailService;
@@ -200,12 +201,13 @@ public class AccountController {
 	}
 
 	@GetMapping("/updateAccount")
-	public String updateAccount(Model model, Principal user) {
+	public String updateAccount(Model model, UpdateAccountForm update, Principal user) {
 		String name;
 		name = user.getName();
 		    try {
 			UserAccount loggedInUser = dao.getAccountByRoyalID(name);
 			model.addAttribute("user" , loggedInUser);
+			model.addAttribute("updateform" , update);
 			}
 		    
 		    catch(DataAccessException e) {
@@ -214,6 +216,13 @@ public class AccountController {
 		    
 		
 		return "updateAccount";
+	}
+	
+	@PostMapping("/updateAccount")
+	public String submitUpdateAccount(UpdateAccountForm update, Principal user) {
+		dao.update(update , user);
+		return "updateAccount";
+		
 	}
 
 	private String encodePassword(String rawPassword) {

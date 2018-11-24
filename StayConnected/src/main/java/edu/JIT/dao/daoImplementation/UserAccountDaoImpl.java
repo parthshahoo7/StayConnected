@@ -1,5 +1,6 @@
 package edu.JIT.dao.daoImplementation;
 
+import java.security.Principal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +14,7 @@ import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 import edu.JIT.Controller.form.RegistrationForm;
+import edu.JIT.Controller.form.UpdateAccountForm;
 import edu.JIT.dao.daoInterfaces.UserAccountDao;
 import edu.JIT.dao.mapper.UserActivationMapper;
 import edu.JIT.dao.mapper.accountMapper;
@@ -229,5 +231,36 @@ public class UserAccountDaoImpl implements UserAccountDao {
 		}
 
 		return skills;
+	}
+
+	@Override
+	public void update(UpdateAccountForm update, Principal user) {
+		String SQL;
+		if(update.getFirstName() != "") {
+			SQL = "UPDATE stayconnected.useraccount SET fname = " + update.getFirstName()  
+					+ " WHERE rid = " + user.getName();
+			jdbcTemplate.update(SQL);
+		}
+		if(update.getLastName() != "") {
+			SQL = "UPDATE stayconnected.useraccount SET lname = " + update.getLastName()  
+					+ " WHERE rid = " + user.getName();
+			jdbcTemplate.update(SQL);
+		}
+		if(update.getEmail() != "") {
+			SQL = "UPDATE stayconnected.useraccount SET email = " + update.getEmail()  
+					+ " WHERE rid = " + user.getName();
+			jdbcTemplate.update(SQL);
+		}
+		if(update.getPhoneNumber() != "") {
+			SQL = "UPDATE stayconnected.useraccount SET phone = " + update.getPhoneNumber()  
+					+ " WHERE rid = " + user.getName();
+			jdbcTemplate.update(SQL);
+		}
+		if(update.getAddress() != "") {
+			SQL = "UPDATE stayconnected.useraccount SET address = " + update.getAddress()  
+					+ " WHERE rid = " + user.getName();
+			jdbcTemplate.update(SQL);
+		}
+		
 	}
 }
