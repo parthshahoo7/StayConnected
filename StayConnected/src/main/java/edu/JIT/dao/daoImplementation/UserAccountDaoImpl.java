@@ -237,28 +237,28 @@ public class UserAccountDaoImpl implements UserAccountDao {
 	public void update(UpdateAccountForm update, Principal user) {
 		String SQL;
 		if(update.getFirstName() != "") {
-			SQL = "UPDATE stayconnected.useraccount SET fname = " + update.getFirstName()  
-					+ " WHERE rid = " + user.getName();
+			SQL = "UPDATE stayconnected.useraccount SET fname = " + "'" +update.getFirstName() + "'"  
+					+ " WHERE rid = " + "'" + user.getName() + "'";
 			jdbcTemplate.update(SQL);
 		}
 		if(update.getLastName() != "") {
-			SQL = "UPDATE stayconnected.useraccount SET lname = " + update.getLastName()  
-					+ " WHERE rid = " + user.getName();
+			SQL = "UPDATE stayconnected.useraccount SET lname = " + "'" + update.getLastName() + "'" 
+					+ " WHERE rid = " + "'" + user.getName() + "'";
 			jdbcTemplate.update(SQL);
 		}
 		if(update.getEmail() != "") {
-			SQL = "UPDATE stayconnected.useraccount SET email = " + update.getEmail()  
-					+ " WHERE rid = " + user.getName();
+			SQL = "UPDATE stayconnected.useraccount SET email = " + "'" + update.getEmail() + "'" 
+					+ " WHERE rid = " + "'" + user.getName() + "'";
 			jdbcTemplate.update(SQL);
 		}
 		if(update.getPhoneNumber() != "") {
-			SQL = "UPDATE stayconnected.useraccount SET phone = " + update.getPhoneNumber()  
-					+ " WHERE rid = " + user.getName();
+			SQL = "UPDATE stayconnected.useraccount SET phone = " + "'" + update.getPhoneNumber() + "'" 
+					+ " WHERE rid = " + "'" + user.getName() + "'";
 			jdbcTemplate.update(SQL);
 		}
 		if(update.getAddress() != "") {
-			SQL = "UPDATE stayconnected.useraccount SET address = " + update.getAddress()  
-					+ " WHERE rid = " + user.getName();
+			SQL = "UPDATE stayconnected.useraccount SET address = " + "'" + update.getAddress() + "'" 
+					+ " WHERE rid = " + "'" + user.getName() + "'";
 			jdbcTemplate.update(SQL);
 		}
 		

@@ -9,58 +9,47 @@
 
 <h3 th:inline="text"> Hello, [[${#httpServletRequest.remoteUser}]]! Update your account below,</h3>
 
-<form>
+<form action="#" th:action="@{/updateAccount}"
+		th:object="${updateform}" method="post">
 
 <div>
 <label th:inline="text">  Your first name is: [[${user.firstName}]]</label>
 <div>
-new first name: <input type="text" name="firstname"> 
+new first name: <input type="text" name="firstname" th:field="*{firstName}"> 
 </div>
 </div>
 
 <div>
 <label th:inline="text">  Your last name is: [[${user.lastName}]]</label>
 <div>
-new last name: <input type="text" name="lastname"> 
+new last name: <input type="text" name="lastname" th:field="*{lastName}"> 
 </div>
 </div>
 
 <div>
 <label th:inline="text">  Your email is: [[${user.email}]]</label>
 <div>
-new email: <input type="text" name="email"> 
+new email: <input type="text" name="email" th:field="*{email}"> 
 </div>
 </div>
 
 <div>
 <label th:inline="text">  Your phone number is: [[${user.phoneNumber}]]</label>
 <div>
-new phone number: <input type="text" name="phoneNumber"> 
+new phone number: <input type="text" name="phoneNumber" th:field="*{phoneNumber}"> 
 </div>
 </div>
 
 <div>
 <label th:inline="text">  Your address is: [[${user.userAddress}]]</label>
 <div>
-new address: <input type="text" name="userAddress"> 
+new address: <input type="text" name="userAddress" th:field="*{address}"> 
 </div>
 </div>
 
-<div>
-<label th:inline="text">  Your password is: [[${user.password}]]</label>
-<div>
-new password: <input type="password" name="newpassword"> 
-confirm new password: <input type="password" name="confirmpassword"> 
-</div>
-</div>
-
-<button type="submit" > Update</button>
-
+<button type="submit">Update</button>
 
 </form>
-
-
-
 
 </body>
 </html>

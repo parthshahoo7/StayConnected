@@ -46,7 +46,7 @@ public class AccountController {
 	@Autowired
 	private MailService mailingService;
 
-	@GetMapping("/home")
+	@GetMapping(value= {"/home" , "/"})
 	public String home() {
 		return "homePage";
 	}
@@ -221,7 +221,7 @@ public class AccountController {
 	@PostMapping("/updateAccount")
 	public String submitUpdateAccount(UpdateAccountForm update, Principal user) {
 		dao.update(update , user);
-		return "updateAccount";
+		return "redirect:/home";
 		
 	}
 
