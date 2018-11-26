@@ -42,9 +42,10 @@
 		<li><input type="radio" value="All" th:field="*{userType}"> All Users </li>
 	</ul>
 	<ul>
-		 <li><label> Filter by Criteria</label>  </li>
-		<li><input type="checkbox" value="empty" th:field="*{criteria}"> Skill </li>
-		
+		<li><label> Select skill criteria to filter by</label> </li>
+		<li th:each="skill : ${skills}"><input type="checkbox"
+			name="ski" th:value="${skill.skillID}" th:field="*{selectedSkills}" /> <label
+			th:text="${skill.skillName}"></label></li>
 	</ul>
 	<button type="submit">Apply Filters</button>
 

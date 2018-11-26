@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class BrowseUserForm {
 	private String userType;
 	private ArrayList<String> criteria;
+	private ArrayList<String> selectedSkills;
 	
 	public String getUserType() {
 		return userType;
@@ -17,5 +18,11 @@ public class BrowseUserForm {
 	}
 	public void setCriteria(ArrayList<String> criteria) {
 		this.criteria = criteria;
+	}
+	public ArrayList<String> getSelectedSkills() {
+		return selectedSkills;
+	}
+	public void setSelectedSkills(ArrayList<String> selectedSkills) {
+		this.selectedSkills = selectedSkills;
 	}
 }

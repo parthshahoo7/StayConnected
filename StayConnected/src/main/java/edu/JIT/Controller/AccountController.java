@@ -142,10 +142,16 @@ public class AccountController {
 	public String browseUsers(Model model, BrowseUserForm filters) {
 		ArrayList<UserAccount> users = dao.getAllAccounts();
 		Collections.sort(users, new AccountComparator());
+		for(int i=0;i<users.size();i++) {
+			if(users.get(i).getRoles().contains("ROLE_FACULTY") && users.get(i).getRoles().size() == 1) {
+				users.remove(i);
+			}
+		}
+		
 		model.addAttribute("systemusers", users);
 		model.addAttribute("filters", filters);
+		model.addAttribute("skills" , dao.getSkills());
 		return "browseUsers";
-
 	}
 
 	@PostMapping("/browseUsers")
@@ -168,8 +174,13 @@ public class AccountController {
 				}
 			}
 		}
+		
+		if(!filters.getSelectedSkills().isEmpty()) {
+			users = filterBySkill(filters.getSelectedSkills(), users);
+		}
 		model.addAttribute("systemusers", users);
 		model.addAttribute("filters", filters);
+		model.addAttribute("skills" , dao.getSkills());
 		return "browseUsers";
 	}
 
@@ -255,5 +266,24 @@ public class AccountController {
 	private Collection<? extends GrantedAuthority> getGrantedAuthorities(RegistrationForm accountForm) {
 		return AuthorityUtils
 				.createAuthorityList(accountForm.getAccount().getRoles().stream().toArray(size -> new String[size]));
+	}
+	
+// ======================Private Functions================================================================	
+	private ArrayList<UserAccount> filterBySkill(ArrayList<String> skills , ArrayList<UserAccount> users) {
+		for(int i=0; i<users.size(); i++) {
+			boolean hasAnySkill = false;
+			ArrayList<String> userSkillNames = new ArrayList<String>();
+			for(int k=0; k<users.get(i).getSkill().size(); k++) {
+				userSkillNames.add(users.get(i).getSkill().get(k).getSkillName());
+			}
+			for(int j=0; j<skills.size(); j++) {
+				if(userSkillNames.contains(skills.get(j))) {
+					hasAnySkill = true;
+					break;
+				}
+			}
+			if(!hasAnySkill) users.remove(users.get(i));
+		}
+		return users;
 	}
 }
