@@ -44,7 +44,7 @@
 	<ul>
 		<li><label> Select skill criteria to filter by</label> </li>
 		<li th:each="skill : ${skills}"><input type="checkbox"
-			name="ski" th:value="${skill.skillID}" th:field="*{selectedSkills}" /> <label
+			name="ski" th:value="${skill.skillName}" th:field="*{selectedSkills}" /> <label
 			th:text="${skill.skillName}"></label></li>
 	</ul>
 	<button type="submit">Apply Filters</button>

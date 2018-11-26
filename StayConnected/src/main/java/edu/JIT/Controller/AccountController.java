@@ -270,20 +270,17 @@ public class AccountController {
 	
 // ======================Private Functions================================================================	
 	private ArrayList<UserAccount> filterBySkill(ArrayList<String> skills , ArrayList<UserAccount> users) {
-		for(int i=0; i<users.size(); i++) {
-			boolean hasAnySkill = false;
-			ArrayList<String> userSkillNames = new ArrayList<String>();
-			for(int k=0; k<users.get(i).getSkill().size(); k++) {
-				userSkillNames.add(users.get(i).getSkill().get(k).getSkillName());
-			}
-			for(int j=0; j<skills.size(); j++) {
-				if(userSkillNames.contains(skills.get(j))) {
-					hasAnySkill = true;
-					break;
+		ArrayList<UserAccount> filtedUsers= new ArrayList<UserAccount>();
+		
+		for(UserAccount user : users) {
+			for(Skill userSkill : user.getSkill()) {
+				for(String skill : skills) {
+					if(skill.equals(userSkill.getSkillName()) && !filtedUsers.contains(user)) {
+						filtedUsers.add(user);
+					}
 				}
 			}
-			if(!hasAnySkill) users.remove(users.get(i));
 		}
-		return users;
+		return filtedUsers;
 	}
 }
