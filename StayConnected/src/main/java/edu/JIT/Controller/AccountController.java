@@ -212,6 +212,7 @@ public class AccountController {
 			UserAccount loggedInUser = dao.getAccountByRoyalID(name);
 			model.addAttribute("user" , loggedInUser);
 			model.addAttribute("updateform" , update);
+			model.addAttribute("error" , false);
 			}
 		    
 		    catch(DataAccessException e) {

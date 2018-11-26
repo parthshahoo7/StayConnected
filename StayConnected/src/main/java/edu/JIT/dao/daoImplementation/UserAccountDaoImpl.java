@@ -252,7 +252,7 @@ public class UserAccountDaoImpl implements UserAccountDao {
 			jdbcTemplate.update(SQL);
 		}
 		if(update.getPhoneNumber() != "") {
-			SQL = "UPDATE stayconnected.useraccount SET phone = " + "'" + update.getPhoneNumber() + "'" 
+			SQL = "UPDATE stayconnected.useraccount SET phone_number = " + "'" + update.getPhoneNumber() + "'" 
 					+ " WHERE rid = " + "'" + user.getName() + "'";
 			jdbcTemplate.update(SQL);
 		}
