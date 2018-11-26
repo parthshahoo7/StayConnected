@@ -28,6 +28,7 @@ import edu.JIT.Controller.form.BrowseUserForm;
 import edu.JIT.Controller.form.RegistrationForm;
 import edu.JIT.Controller.form.UpdateAccountForm;
 import edu.JIT.Controller.form.validator.RegistrationFormValidation;
+import edu.JIT.Controller.form.validator.updateFormValidation;
 import edu.JIT.dao.daoInterfaces.UserAccountDao;
 import edu.JIT.model.accountManagement.MailService;
 import edu.JIT.model.accountManagement.Skill;
@@ -42,6 +43,9 @@ public class AccountController {
 
 	@Autowired
 	private RegistrationFormValidation validation;
+	
+	@Autowired
+	private updateFormValidation updateValidation;
 
 	@Autowired
 	private MailService mailingService;
@@ -219,10 +223,19 @@ public class AccountController {
 	}
 	
 	@PostMapping("/updateAccount")
-	public String submitUpdateAccount(UpdateAccountForm update, Principal user) {
-		dao.update(update , user);
-		return "redirect:/home";
-		
+	public String submitUpdateAccount(UpdateAccountForm update, Principal user, final BindingResult result, Model model) {
+		updateValidation.validate(update, result);
+		if(!result.hasErrors()) { 
+			dao.update(update , user);
+			return "redirect:/home";
+		}
+		else {
+			model.addAttribute("error" , true);
+			UserAccount loggedInUser = dao.getAccountByRoyalID(user.getName());
+			model.addAttribute("user" , loggedInUser);
+			model.addAttribute("updateform" , update);
+			return "updateAccount";
+		}
 	}
 
 	private String encodePassword(String rawPassword) {

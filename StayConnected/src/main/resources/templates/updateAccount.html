@@ -51,5 +51,9 @@ new address: <input type="text" name="userAddress" th:field="*{address}">
 
 </form>
 
+<div th:if="error">
+<p> One or more fields are invalid!   </p>
+</div>
+
 </body>
 </html>
