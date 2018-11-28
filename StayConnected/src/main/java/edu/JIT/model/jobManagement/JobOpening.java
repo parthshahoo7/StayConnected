@@ -3,12 +3,17 @@ package edu.JIT.model.jobManagement;
 import java.util.ArrayList;
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import edu.JIT.model.accountManagement.Skill;
 
 public class JobOpening {
 
+	private int jobID;
 	private String position;
+	private String proficiancy;
 	private String location;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date startDate;
 	private String payrate;
 	private Company companyName;
@@ -17,12 +22,15 @@ public class JobOpening {
 
 	public JobOpening() {
 		super();
+		skills = new ArrayList<Skill>();
 	}
 
-	public JobOpening(String position, String location, Date startDate, String payrate, Company companyName,
-			String jobDescription, ArrayList<Skill> skills) {
+	public JobOpening(int jobID, String position, String proficiancy, String location, Date startDate, String payrate,
+			Company companyName, String jobDescription, ArrayList<Skill> skills) {
 		super();
+		this.jobID = jobID;
 		this.position = position;
+		this.proficiancy = proficiancy;
 		this.location = location;
 		this.startDate = startDate;
 		this.payrate = payrate;
@@ -86,4 +94,25 @@ public class JobOpening {
 	public void setSkills(ArrayList<Skill> skills) {
 		this.skills = skills;
 	}
+
+	public int getJobID() {
+		return jobID;
+	}
+
+	public void setJobID(int jobID) {
+		this.jobID = jobID;
+	}
+
+	public String getProficiancy() {
+		return proficiancy;
+	}
+
+	public void setProficiancy(String proficiancy) {
+		this.proficiancy = proficiancy;
+	}
+
+	public void addSkills(Skill skill) {
+		this.skills.add(skill);
+	}
+
 }

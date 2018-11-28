@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+<meta charset="ISO-8859-1">
+<title>Post Job Opening</title>
+<style>
+.error {
+	color: red;
+	font-style: italic;
+}
+</style>
+</head>
+<body>
+<body>
+	<form action="#" th:action="@{/postJobOpening}" th:object="${postjob}"
+		method="post">
+		<table>
+			<tr>
+				<td>Job ID</td>
+				<td><input type="text" required="required" th:field="*{jobID}" /></td>
+			</tr>
+			<tr>
+				<td>Position</td>
+				<td><input type="text" required="required"
+					th:field="*{position}" /></td>
+			</tr>
+			<tr>
+				<td>Proficiency</td>
+				<td><input type="text" required="required"
+					th:field="*{proficiancy}" /></td>
+			</tr>
+			<tr>
+				<td>Location</td>
+				<td><input type="text" required="required"
+					th:field="*{location}" /></td>
+			</tr>
+			<tr>
+				<td>Start Date</td>
+				<td><input type="date" th:field="*{startDate}"
+					th:text="${#dates.format(startDate, 'dd-MM-yyyy')}" /></td>
+			</tr>
+			<tr>
+				<td>End Date</td>
+				<td><input type="date" th:field="*{endDate}" th:text="${#dates.format(endDate, 'dd-MM-yyyy')}" /></td>
+			</tr>
+			<tr>
+				<td>Hours Per Week</td>
+				<td><input type="text" th:field="*{hoursPerWeek}" /></td>
+			</tr>
+			<tr>
+				<td>Pay Rate</td>
+				<td><input type="text" required="required"
+					th:field="*{payrate}" /></td>
+			</tr>
+			<tr>
+				<td>CompanyName</td>
+				<td><input type="text" required="required"
+					th:field="*{companyName.companyName}" /></td>
+			</tr>
+			<tr>
+				<td>Job Description</td>
+				<td><input type="text" required="required"
+					th:field="*{jobDescription}" /></td>
+			</tr>
+			<tr>
+				<td>
+					<h3>Skills</h3>
+					<ul>
+						<li th:each="skill : ${skills}"><input type="checkbox"
+							name="ski" th:value="${skill.skillID}" /> <label
+							th:text="${skill.skillName}"></label></li>
+					</ul>
+				</td>
+			</tr>
+			<tr>
+				<td><button type="submit">Submit</button></td>
+			</tr>
+		</table>
+	</form>
+</body>
+</body>
+</html>

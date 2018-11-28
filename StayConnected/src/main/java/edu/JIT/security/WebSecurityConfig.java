@@ -27,7 +27,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http
 			.authorizeRequests()
 				.antMatchers("/","/login", "/registration", "/home", "/activateAccount", "/Confirmation").permitAll()
-				.antMatchers("/updateAccount", "/manageAccount", "/browseUsers").hasAnyRole("ALUM", "CURR", "FACULTY")
+				.antMatchers("/updateAccount", "/manageAccount", "/browseUsers","/postJobOpening","/browsejobopenings").hasAnyRole("ALUM", "CURR", "FACULTY")
 				.and()
 			.exceptionHandling().accessDeniedPage("/403")
 				.and()

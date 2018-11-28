@@ -13,9 +13,9 @@ public class PartTimeJobOpening extends JobOpening {
 		super();
 	}
 
-	public PartTimeJobOpening(String position, String location, Date startDate, String payrate, Company companyName,
-			String jobDescription, ArrayList<Skill> skills, String hoursPerWeek) {
-		super(position, location, startDate, payrate, companyName, jobDescription, skills);
+	public PartTimeJobOpening(int jobID, String position, String location,String proficiancy, Date startDate, String payrate,
+			Company companyName, String jobDescription, ArrayList<Skill> skills, String hoursPerWeek) {
+		super(jobID, position, location, proficiancy, startDate, payrate, companyName, jobDescription, skills);
 		this.setHoursPerWeek(hoursPerWeek);
 	}
 
