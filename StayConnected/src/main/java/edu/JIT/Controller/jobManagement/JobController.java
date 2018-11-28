@@ -344,14 +344,14 @@ public class JobController {
 		return "jobManagement/browsejobopenings";
 	}
 
-	@GetMapping("/postJobOpening")
+	@GetMapping("/postJobOpenings")
 	public String postJobOpeningForm(InternshipJobOpening jobOpening, Model model) {
 		model.addAttribute("postjob", jobOpening);
 		model.addAttribute("skills", dao.getSkills());
 		return "jobManagement/postjobopening";
 	}
 
-	@PostMapping("/postJobOpening")
+	@PostMapping("/postJobOpenings")
 	public String postJobOpening(@RequestParam(value = "ski", required = false) int[] ski,
 			@Valid InternshipJobOpening jobOpening, final BindingResult result, Model model, Principal principal) {
 		if (result.hasErrors()) {

@@ -218,7 +218,7 @@ public class AccountController {
 		} else if (dbUserActivation.getRoyalID().equals(userActivation.getRoyalID())
 				&& dbUserActivation.getSpecialCode().equals(userActivation.getSpecialCode())) {
 			dao.activateAccountByRoyalID(userActivation.getRoyalID());
-			return "homePage";
+			return "redirect:/accountActivated";
 		} else { // Don't match
 			model.addAttribute("NoMatchSpecialCodeOrRoyal", true);
 			return "activateAccount";
