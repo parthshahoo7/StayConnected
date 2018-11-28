@@ -13,8 +13,10 @@
 </style>
 </head>
 <body>
+	<a href='/home'>Home</a>
+	<p sec:authorize="!hasRole('ROLE_FACULTY') && isAuthenticated()">You already have an Account!</p>
 	<form action="#" th:action="@{/registration}"
-		th:object="${accountForm}" method="post">
+		th:object="${accountForm}" method="post" sec:authorize="hasRole('ROLE_FACULTY') or !isAuthenticated()" >
 		<p th:if="${PasswordShort}" class="error">Password is not long
 			enough!</p>
 		<p th:if="${PasswordNoMatch}" class="error">Passwords do not

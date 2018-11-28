@@ -1,16 +1,21 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:th="http://www.thymeleaf.org"
-	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+      
 <head>
 <meta charset="UTF-8">
 <title>Homepage</title>
 </head>
 <body>
-	<a sec:authorize="isAnonymous()" href="login">Login</a>
-	<a sec:authorize="isAuthenticated()" href="/logout">Logout</a>
-	<a sec:authorize="isAuthenticated()" href="/browseUsers">Search For Students/Alumni</a>
-	<a sec:authorize="isAuthenticated()" href="/manageAccount">Manage Account</a>
-	<a sec:authorize="isAuthenticated()" href="/updateAccount">Update Account</a>
+	<ul>
+		<li sec:authorize="!isAuthenticated()"><a href="login">Login</a></li>
+		<li sec:authorize="!isAuthenticated()"><a href="/registration">Register</a></li>
+		<li sec:authorize="isAuthenticated()"><a href="/logout">Logout</a></li>
+		<li sec:authorize="isAuthenticated()"><a href="/browseUsers">Search For Students/Alumni</a></li>
+		<li sec:authorize="isAuthenticated()"><a href="/manageAccount">Manage Account</a></li>
+		<li sec:authorize="isAuthenticated()"><a href="/updateAccount">Update Account</a></li>
+	</ul>
 </body>
 </html>

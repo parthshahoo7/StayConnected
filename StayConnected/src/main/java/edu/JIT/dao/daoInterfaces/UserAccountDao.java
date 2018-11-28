@@ -34,4 +34,6 @@ public interface UserAccountDao {
 	public boolean activateAccountByRoyalID(String royalID);
 
 	public void update(UpdateAccountForm update, Principal user);
+	
+	public Boolean isAccountActivated(String royalID); 
 }

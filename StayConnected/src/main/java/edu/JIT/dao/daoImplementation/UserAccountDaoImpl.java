@@ -16,6 +16,7 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 import edu.JIT.Controller.form.RegistrationForm;
 import edu.JIT.Controller.form.UpdateAccountForm;
 import edu.JIT.dao.daoInterfaces.UserAccountDao;
+import edu.JIT.dao.mapper.UserAccountStatusMapper;
 import edu.JIT.dao.mapper.UserActivationMapper;
 import edu.JIT.dao.mapper.accountMapper;
 import edu.JIT.dao.mapper.authorityMapper;
@@ -262,5 +263,17 @@ public class UserAccountDaoImpl implements UserAccountDao {
 			jdbcTemplate.update(SQL);
 		}
 		
+	}
+	
+	@Override
+	public Boolean isAccountActivated(String royalID) {
+		try	{
+			String SQL = "select status from stayconnected.AccountStatus where RID = ?";
+			Boolean result = jdbcTemplate.queryForObject(SQL, new Object[] { royalID }, new UserAccountStatusMapper());
+			return result;
+		}
+		catch (DataAccessException e) {
+			return false;
+		}		
 	}
 }

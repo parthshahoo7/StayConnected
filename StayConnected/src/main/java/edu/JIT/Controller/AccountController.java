@@ -51,7 +51,13 @@ public class AccountController {
 	private MailService mailingService;
 
 	@GetMapping(value= {"/home" , "/"})
-	public String home() {
+	public String home(Principal principal) {
+		if(principal != null) {
+			boolean isActivated = dao.isAccountActivated(principal.getName());
+			if(!isActivated) {
+				return "redirect:/activateAccount";
+			}
+		}
 		return "homePage";
 	}
 
@@ -86,16 +92,7 @@ public class AccountController {
 		} else {
 			String generatedString = accountForm.createSpecialCode();
 			System.out.println("Special Code == " + generatedString);
-			try {
-				mailingService.sendEmail(accountForm.getAccount().getEmail(), "StayConnected Special Code",
-						"Your special code is: " + accountForm.getSpecialCode());
-			} catch (MailException e) {
-				model.addAttribute("accountForm", accountForm);
-				model.addAttribute("roles", dao.getRoles());
-				model.addAttribute("skills", dao.getSkills());
-				model.addAttribute("EmailNotValid", true);
-				return "registration";
-			}
+			
 			ArrayList<Skill> skills = (ArrayList<Skill>) dao.getSkills();
 			if (ski != null) {
 				Skill skill = null;
@@ -121,6 +118,7 @@ public class AccountController {
 									+ "You can sign in using your Royal ID and this password: " + rawPassword
 									+ "The system will " + "prompt you for a special code, your code is "
 									+ accountForm.getSpecialCode());
+					dao.createNewAccount(accountForm);
 					return "redirect:/manageAccount";
 				} catch (MailException e) {
 					model.addAttribute("accountForm", accountForm);
@@ -130,7 +128,19 @@ public class AccountController {
 					return "registration";
 				}
 			}
-			dao.createNewAccount(accountForm);
+			else {
+				try {
+					mailingService.sendEmail(accountForm.getAccount().getEmail(), "StayConnected Special Code",
+							"Your special code is: " + accountForm.getSpecialCode());
+					dao.createNewAccount(accountForm);
+				} catch (MailException e) {
+					model.addAttribute("accountForm", accountForm);
+					model.addAttribute("roles", dao.getRoles());
+					model.addAttribute("skills", dao.getSkills());
+					model.addAttribute("EmailNotValid", true);
+					return "registration";
+				}
+			}
 			System.out.println("RoyalID & Password:" + accountForm.getAccount().getRoyalID() + "-" + rawPassword);
 
 			autologin(accountForm);
@@ -220,17 +230,14 @@ public class AccountController {
 		String name;
 		name = user.getName();
 		    try {
-			UserAccount loggedInUser = dao.getAccountByRoyalID(name);
-			model.addAttribute("user" , loggedInUser);
-			model.addAttribute("updateform" , update);
-			model.addAttribute("error" , false);
+				UserAccount loggedInUser = dao.getAccountByRoyalID(name);
+				model.addAttribute("user" , loggedInUser);
+				model.addAttribute("updateform" , update);
+				model.addAttribute("error" , false);
 			}
-		    
 		    catch(DataAccessException e) {
 		    	System.out.print("couldnt get user!!");
 		    }
-		    
-		
 		return "updateAccount";
 	}
 	
@@ -248,6 +255,11 @@ public class AccountController {
 			model.addAttribute("updateform" , update);
 			return "updateAccount";
 		}
+	}
+	
+	@GetMapping("/manageAccount")
+	public String manageAccount() {
+		return "/manageAccount";
 	}
 
 	private String encodePassword(String rawPassword) {
