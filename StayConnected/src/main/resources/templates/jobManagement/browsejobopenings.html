@@ -4,9 +4,10 @@
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
 <meta charset="ISO-8859-1">
-<title>Insert title here</title>
+<title>Browse Job Openings</title>
 </head>
 <body>
+	<a href='/home'>Home</a>
 	<div th:unless="${#lists.isEmpty(jobopenings)}">
 		<table>
 			<thead>

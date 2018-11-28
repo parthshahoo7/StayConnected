@@ -26,8 +26,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http
 			.authorizeRequests()
-				.antMatchers("/","/login", "/registration", "/home", "/activateAccount", "/Confirmation").permitAll()
-				.antMatchers("/updateAccount", "/manageAccount", "/browseUsers","/postJobOpening","/browsejobopenings").hasAnyRole("ALUM", "CURR", "FACULTY")
+				.antMatchers("/","/login", "/registration", "/home", "/activateAccount", "/confirmation").permitAll()
+				.antMatchers("/updateAccount", "/manageAccount", "/browseUsers","/postJobOpening","/browsejobopenings", "/accountActivated").hasAnyRole("ALUM", "CURR", "FACULTY")
 				.and()
 			.exceptionHandling().accessDeniedPage("/403")
 				.and()
