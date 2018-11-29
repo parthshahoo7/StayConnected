@@ -23,6 +23,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import edu.JIT.Controller.form.BrowseUserForm;
 import edu.JIT.Controller.form.RegistrationForm;
@@ -61,6 +62,12 @@ public class AccountController {
 		return "homePage";
 	}
 
+	
+	@GetMapping("/confirmation")
+	public String confirmation(Model model) {
+		return "confirmation";
+	}
+	
 	@GetMapping("/registration")
 	public String registration(RegistrationForm accountForm, Model model) {
 		model.addAttribute("accountForm", accountForm);
@@ -242,11 +249,13 @@ public class AccountController {
 	}
 	
 	@PostMapping("/updateAccount")
-	public String submitUpdateAccount(UpdateAccountForm update, Principal user, final BindingResult result, Model model) {
+	public String submitUpdateAccount(UpdateAccountForm update, Principal user, final BindingResult result, Model model,
+			 final RedirectAttributes redirectAttributes) {
 		updateValidation.validate(update, result);
 		if(!result.hasErrors()) { 
 			dao.update(update , user);
-			return "redirect:/home";
+			redirectAttributes.addFlashAttribute("confirmationMessage" , "Account has been updated");
+			return "redirect:/confirmation";
 		}
 		else {
 			model.addAttribute("error" , true);
