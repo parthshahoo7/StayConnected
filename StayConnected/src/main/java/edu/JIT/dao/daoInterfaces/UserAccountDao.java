@@ -20,6 +20,8 @@ public interface UserAccountDao {
 	public UserAccount getAccountByRoyalID(String royalID);
 
 	public ArrayList<UserAccount> getAllAccounts();
+	
+	public UserAccount getFullUserProfileByRoyalID(String royalID);
 
 	public int deleteAccount(UserAccount account);
 

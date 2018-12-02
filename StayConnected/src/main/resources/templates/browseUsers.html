@@ -28,7 +28,11 @@
 	<td th:text="${user.email}">}</td>
 	<td th:text="${user.userAddress}">}</td>
 	<td th:text="${user.phoneNumber}">}</td>
-	<td> view profile </td>
+	<td>  
+		<a th:href="@{/viewProfile(royalID=${{user.royalID}})}">
+			View Details
+		</a> 
+	</td>
 	</tr>
 
 </table>

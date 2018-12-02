@@ -270,6 +270,13 @@ public class AccountController {
 	public String manageAccount() {
 		return "/manageAccount";
 	}
+	
+	@GetMapping("/viewProfile")
+    public String viewProfile(@RequestParam(name="royalID", required=true) String royalID, Model model) {
+		UserAccount profileOfUser = dao.getFullUserProfileByRoyalID(royalID);
+		model.addAttribute("user", profileOfUser);
+        return "viewProfile";
+    }
 
 	private String encodePassword(String rawPassword) {
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();

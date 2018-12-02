@@ -196,6 +196,72 @@ public class UserAccountDaoImpl implements UserAccountDao {
 		
 		return users;
 	}
+	
+	@Override 
+	public UserAccount getFullUserProfileByRoyalID(String royalID) {
+		String userSQL = "SELECT * from stayconnected.useraccount where rid = '" + royalID + "';";
+		UserAccount user = jdbcTemplate.queryForObject(userSQL, new accountMapper());
+		List<UserSkill> userskillResults;
+		try {
+			String skillSQL = "SELECT stayconnected.userskills.rid,"
+					+ "stayconnected.skills.skillname,"
+					+ "stayconnected.userskills.proficiency"
+					+ " FROM stayconnected.userskills,"
+					+ "stayconnected.skills  "
+					+ "WHERE userskills.skillid"
+					+ " = skills.skillid and userskills.rid = '" + royalID + "';";
+			userskillResults = jdbcTemplate.query(skillSQL, new userskillsMapper());
+		}
+		catch(DataAccessException e) {
+			//No user exists for ID
+			return user;
+		}
+		
+		List<JobHistory> jobhistoryResults = new ArrayList<>();
+		try {
+			String jobSQL = "SELECT * from stayconnected.jobhistory where rid = '" + royalID + "';";
+			jobhistoryResults = jdbcTemplate.query(jobSQL, new jobhistoryMapper());
+		}
+		catch(DataAccessException e) {
+			//JobHistory emptyJob = new JobHistory(null, null, null, null, null,
+				//	null);
+			//jobhistoryResults.add(emptyJob);
+		}
+		
+		List<Authority> authorityResults = new ArrayList<>();
+		try {
+			String authoritySQL = "SELECT stayconnected.authority.rid , "
+					+ "stayconnected.userroles.role "
+					+ " FROM stayconnected.authority , stayconnected.userroles "
+					+ "WHERE authority.userroleid = userroles.uid and "
+					+ "stayconnected.authority.rid = '" + royalID + "';";
+			authorityResults = jdbcTemplate.query(authoritySQL, new authorityMapper());
+		}
+		catch(DataAccessException e) {}
+		
+		for(int skill=0; skill<userskillResults.size(); skill++) {
+			if(user.getRoyalID().equals(userskillResults.get(skill).getRid())) {
+				Skill newSkill = new Skill(-1 , userskillResults.get(skill).getProficiency(),
+						userskillResults.get(skill).getSkillName());
+				user.addSkills(newSkill);
+			}
+		}
+		
+		for(JobHistory history : jobhistoryResults) {
+			//if(user.getRoyalID().equals(history.getRid())) {
+				user.addWorkHistory(history);
+			//}
+		}
+		
+		for(Authority authority : authorityResults) {
+			//if(user.getRoyalID().equals(authority.getRid())) {
+				authority.setRole(authority.getRole().replaceAll("ROLE_", ""));
+				user.addRole(authority);
+			//}
+		}
+		
+		return user;
+	}
 
 	@Override
 	public int deleteAccount(UserAccount account) {

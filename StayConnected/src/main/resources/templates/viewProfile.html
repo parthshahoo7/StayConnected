@@ -1,0 +1,57 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+<meta charset="UTF-8">
+<title>View Profile</title>
+</head>
+<body>
+<p><a href='/home'>Home</a></p>
+
+<h1>User Profile</h1>
+
+<p>
+	First Name: [[${user.firstName}]]
+	<br>
+	Last Name: [[${user.lastName}]]
+	<br>
+	Email: [[${user.email}]]
+	<br>
+	Address: [[${user.userAddress}]]
+	<br>
+	Phone Number: [[${user.phoneNumber}]]
+</p>
+
+<h2>User Type:</h2>
+<p th:each= "role: ${user.roles}">
+	[[${role}]]
+	<br>
+</p>
+
+<h2>Job History:</h2>
+<div th:switch="${user.workExperience.size()}">
+	<p th:case="'0'">No Job History Found</p>
+	<p th:case="*" th:each= "job: ${user.workExperience}">
+		Company Name: [[${job.companyName}]] 
+		<br>
+		Position: [[${job.position}]]
+		<br>
+		Start Date: [[${job.startDate}]]
+		<br>
+		End Date: [[${job.endDate}]]
+		<br>
+		Currently Employed: [[${job.currentlyEmployed}]]
+		<br>
+	</p>
+</div>
+
+<h2>Skills:</h2>
+<p th:each= "skill: ${user.skill}">
+	[[${skill.skillName}]]
+	<br>
+</p>
+
+<a href="/browseUsers"> Back To Searching For Students/Alumni</a>
+</body>
+</html>

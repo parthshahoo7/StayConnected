@@ -61,7 +61,7 @@ public class JobHistory {
 		return currentlyEmployed;
 	}
 
-	public void setCurrentlyEmployed(boolean currentlyEmployed) {
+	public void setCurrentlyEmployed(Boolean currentlyEmployed) {
 		this.currentlyEmployed = currentlyEmployed;
 	}
 
