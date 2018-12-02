@@ -31,19 +31,9 @@ public class JobController {
 	@GetMapping("/browsejobopenings")
 	public String browseJobOpenings(@Valid SortJobOpening sortJobOpening, Model model) {
 		List<InternshipJobOpening> jobs = jobOpenningDao.getAllJobOpenings();
-		SortJobOpening sortedOpenings = new SortJobOpening();
-		for (InternshipJobOpening internshipJobOpening : jobs) {
-			if (!sortedOpenings.getCompanyName().contains(internshipJobOpening.getCompanyName().getCompanyName()))
-				sortedOpenings.addCompanyName(internshipJobOpening.getCompanyName().getCompanyName());
-			if (!sortedOpenings.getHoursPerWeek().contains(internshipJobOpening.getHoursPerWeek()))
-				sortedOpenings.addHoursPerWeek(internshipJobOpening.getHoursPerWeek());
-			if (!sortedOpenings.getlocations().contains(internshipJobOpening.getLocation()))
-				sortedOpenings.addLocation(internshipJobOpening.getLocation());
-			if (!sortedOpenings.getPositions().contains(internshipJobOpening.getPosition()))
-				sortedOpenings.addPosition(internshipJobOpening.getPosition());
-			if (!sortedOpenings.getProficiency().contains(internshipJobOpening.getProficiancy()))
-				sortedOpenings.addProficency(internshipJobOpening.getProficiancy());
-		}
+		
+		SortJobOpening sortedOpenings = populateDropDownOptions(jobs);
+		
 		model.addAttribute("jobopenings", jobs);
 		model.addAttribute("companies", sortedOpenings.getCompanyName());
 		model.addAttribute("positions", sortedOpenings.getPositions());
@@ -56,23 +46,14 @@ public class JobController {
 	@PostMapping("/browsejobopenings")
 	public String browseJobOpeningsResult(@Valid SortJobOpening sortJobOpening, final BindingResult bindingResult,
 			Model model) {
-		List<InternshipJobOpening> jobs = jobOpenningDao.getAllJobOpenings();
-		SortJobOpening sortedOpenings = new SortJobOpening();
-		for (InternshipJobOpening internshipJobOpening : jobs) {
-			if (!sortedOpenings.getCompanyName().contains(internshipJobOpening.getCompanyName().getCompanyName()))
-				sortedOpenings.addCompanyName(internshipJobOpening.getCompanyName().getCompanyName());
-			if (!sortedOpenings.getHoursPerWeek().contains(internshipJobOpening.getHoursPerWeek()))
-				sortedOpenings.addHoursPerWeek(internshipJobOpening.getHoursPerWeek());
-			if (!sortedOpenings.getlocations().contains(internshipJobOpening.getLocation()))
-				sortedOpenings.addLocation(internshipJobOpening.getLocation());
-			if (!sortedOpenings.getPositions().contains(internshipJobOpening.getPosition()))
-				sortedOpenings.addPosition(internshipJobOpening.getPosition());
-			if (!sortedOpenings.getProficiency().contains(internshipJobOpening.getProficiancy()))
-				sortedOpenings.addProficency(internshipJobOpening.getProficiancy());
-		}
+		List<InternshipJobOpening> allJobs = jobOpenningDao.getAllJobOpenings();
+		List<InternshipJobOpening> trimmedJobs = new ArrayList<InternshipJobOpening>();
+		
+		SortJobOpening sortedOpenings = populateDropDownOptions(allJobs);
+		
 		if (bindingResult.hasErrors()) {
 			System.out.println(bindingResult.getFieldError());
-			model.addAttribute("jobopenings", jobs);
+			model.addAttribute("jobopenings", allJobs);
 			model.addAttribute("companies", sortedOpenings.getCompanyName());
 			/*
 			 * model.addAttribute("startDates", sortedOpenings.getStartDate());
@@ -84,263 +65,78 @@ public class JobController {
 			model.addAttribute("workhours", sortedOpenings.getHoursPerWeek());
 			return "jobManagement/browsejobopenings";
 		}
-		ArrayList<InternshipJobOpening> jobopenings = new ArrayList<>();
-		for (int i = 0; i < jobs.size(); i++) {
-			if (!(sortJobOpening.getJobOpening().getCompanyName().getCompanyName().equals("0"))
-					&& !(sortJobOpening.getJobOpening().getHoursPerWeek().equals("0"))
-					&& !(sortJobOpening.getJobOpening().getLocation().equals("0"))
-					&& !(sortJobOpening.getJobOpening().getPosition().equals("0"))
-					&& !(sortJobOpening.getJobOpening().getProficiancy().equals("0"))) {
-				if (sortJobOpening.getJobOpening().getCompanyName().getCompanyName()
-						.equals(jobs.get(i).getCompanyName().getCompanyName())
-						&& sortJobOpening.getJobOpening().getHoursPerWeek().equals(jobs.get(i).getHoursPerWeek())
-						&& sortJobOpening.getJobOpening().getLocation().equals(jobs.get(i).getLocation())
-						&& sortJobOpening.getJobOpening().getPosition().equals(jobs.get(i).getPosition())
-						&& sortJobOpening.getJobOpening().getProficiancy().equals(jobs.get(i).getProficiancy())) {
-					jobopenings.add(jobs.get(i));
-				}
-			} else if (!(sortJobOpening.getJobOpening().getCompanyName().getCompanyName().equals("0"))
-					&& !(sortJobOpening.getJobOpening().getHoursPerWeek().equals("0"))
-					&& !(sortJobOpening.getJobOpening().getLocation().equals("0"))
-					&& !(sortJobOpening.getJobOpening().getPosition().equals("0"))) {
-				if (sortJobOpening.getJobOpening().getCompanyName().getCompanyName()
-						.equals(jobs.get(i).getCompanyName().getCompanyName())
-						&& sortJobOpening.getJobOpening().getHoursPerWeek().equals(jobs.get(i).getHoursPerWeek())
-						&& sortJobOpening.getJobOpening().getLocation().equals(jobs.get(i).getLocation())
-						&& sortJobOpening.getJobOpening().getPosition().equals(jobs.get(i).getPosition())) {
-					System.out.println("child condition");
-					jobopenings.add(jobs.get(i));
-				}
-			} else if (!(sortJobOpening.getJobOpening().getCompanyName().getCompanyName().equals("0"))
-					&& !(sortJobOpening.getJobOpening().getHoursPerWeek().equals("0"))
-					&& !(sortJobOpening.getJobOpening().getLocation().equals("0"))
-					&& !(sortJobOpening.getJobOpening().getProficiancy().equals("0"))) {
-				if (sortJobOpening.getJobOpening().getCompanyName().getCompanyName()
-						.equals(jobs.get(i).getCompanyName().getCompanyName())
-						&& sortJobOpening.getJobOpening().getHoursPerWeek().equals(jobs.get(i).getHoursPerWeek())
-						&& sortJobOpening.getJobOpening().getLocation().equals(jobs.get(i).getLocation())
-						&& sortJobOpening.getJobOpening().getProficiancy().equals(jobs.get(i).getProficiancy())) {
-					jobopenings.add(jobs.get(i));
-				}
-			} else if (!(sortJobOpening.getJobOpening().getCompanyName().getCompanyName().equals("0"))
-					&& !(sortJobOpening.getJobOpening().getHoursPerWeek().equals("0"))
-					&& !(sortJobOpening.getJobOpening().getPosition().equals("0"))
-					&& !(sortJobOpening.getJobOpening().getProficiancy().equals("0"))) {
-				if (sortJobOpening.getJobOpening().getCompanyName().getCompanyName()
-						.equals(jobs.get(i).getCompanyName().getCompanyName())
-						&& sortJobOpening.getJobOpening().getHoursPerWeek().equals(jobs.get(i).getHoursPerWeek())
-						&& sortJobOpening.getJobOpening().getPosition().equals(jobs.get(i).getPosition())
-						&& sortJobOpening.getJobOpening().getProficiancy().equals(jobs.get(i).getProficiancy())) {
-					jobopenings.add(jobs.get(i));
-				}
-			} else if (!(sortJobOpening.getJobOpening().getCompanyName().getCompanyName().equals("0"))
-					&& !(sortJobOpening.getJobOpening().getLocation().equals("0"))
-					&& !(sortJobOpening.getJobOpening().getPosition().equals("0"))
-					&& !(sortJobOpening.getJobOpening().getProficiancy().equals("0"))) {
-				if (sortJobOpening.getJobOpening().getCompanyName().getCompanyName()
-						.equals(jobs.get(i).getCompanyName().getCompanyName())
-						&& sortJobOpening.getJobOpening().getLocation().equals(jobs.get(i).getLocation())
-						&& sortJobOpening.getJobOpening().getPosition().equals(jobs.get(i).getPosition())
-						&& sortJobOpening.getJobOpening().getProficiancy().equals(jobs.get(i).getProficiancy())) {
-					jobopenings.add(jobs.get(i));
-				}
-			} else if (!(sortJobOpening.getJobOpening().getHoursPerWeek().equals("0"))
-					&& !(sortJobOpening.getJobOpening().getLocation().equals("0"))
-					&& !(sortJobOpening.getJobOpening().getPosition().equals("0"))
-					&& !(sortJobOpening.getJobOpening().getProficiancy().equals("0"))) {
-				if (sortJobOpening.getJobOpening().getHoursPerWeek().equals(jobs.get(i).getHoursPerWeek())
-						&& sortJobOpening.getJobOpening().getLocation().equals(jobs.get(i).getLocation())
-						&& sortJobOpening.getJobOpening().getPosition().equals(jobs.get(i).getPosition())
-						&& sortJobOpening.getJobOpening().getProficiancy().equals(jobs.get(i).getProficiancy())) {
-					jobopenings.add(jobs.get(i));
-				}
-			} else if (!(sortJobOpening.getJobOpening().getCompanyName().getCompanyName().equals("0"))
-					&& !(sortJobOpening.getJobOpening().getHoursPerWeek().equals("0"))
-					&& !(sortJobOpening.getJobOpening().getLocation().equals("0"))) {
-				if (sortJobOpening.getJobOpening().getCompanyName().getCompanyName()
-						.equals(jobs.get(i).getCompanyName().getCompanyName())
-						&& sortJobOpening.getJobOpening().getHoursPerWeek().equals(jobs.get(i).getHoursPerWeek())
-						&& sortJobOpening.getJobOpening().getLocation().equals(jobs.get(i).getLocation())) {
-					jobopenings.add(jobs.get(i));
-				}
-			} else if (!(sortJobOpening.getJobOpening().getCompanyName().getCompanyName().equals("0"))
-					&& !(sortJobOpening.getJobOpening().getHoursPerWeek().equals("0"))
-					&& !(sortJobOpening.getJobOpening().getPosition().equals("0"))) {
-				if (sortJobOpening.getJobOpening().getCompanyName().getCompanyName()
-						.equals(jobs.get(i).getCompanyName().getCompanyName())
-						&& sortJobOpening.getJobOpening().getHoursPerWeek().equals(jobs.get(i).getHoursPerWeek())
-						&& sortJobOpening.getJobOpening().getPosition().equals(jobs.get(i).getPosition())) {
-					jobopenings.add(jobs.get(i));
-				}
-			} else if (!(sortJobOpening.getJobOpening().getCompanyName().getCompanyName().equals("0"))
-					&& !(sortJobOpening.getJobOpening().getLocation().equals("0"))
-					&& !(sortJobOpening.getJobOpening().getPosition().equals("0"))) {
-				if (sortJobOpening.getJobOpening().getCompanyName().getCompanyName()
-						.equals(jobs.get(i).getCompanyName().getCompanyName())
-						&& sortJobOpening.getJobOpening().getLocation().equals(jobs.get(i).getLocation())
-						&& sortJobOpening.getJobOpening().getPosition().equals(jobs.get(i).getPosition())) {
-					jobopenings.add(jobs.get(i));
-				}
-			} else if (!(sortJobOpening.getJobOpening().getHoursPerWeek().equals("0"))
-					&& !(sortJobOpening.getJobOpening().getLocation().equals("0"))
-					&& !(sortJobOpening.getJobOpening().getPosition().equals("0"))) {
-				if (sortJobOpening.getJobOpening().getHoursPerWeek().equals(jobs.get(i).getHoursPerWeek())
-						&& sortJobOpening.getJobOpening().getLocation().equals(jobs.get(i).getLocation())
-						&& sortJobOpening.getJobOpening().getPosition().equals(jobs.get(i).getPosition())) {
-					jobopenings.add(jobs.get(i));
-				}
-			} else if (!(sortJobOpening.getJobOpening().getCompanyName().getCompanyName().equals("0"))
-					&& !(sortJobOpening.getJobOpening().getHoursPerWeek().equals("0"))
-					&& !(sortJobOpening.getJobOpening().getProficiancy().equals("0"))) {
-				if (sortJobOpening.getJobOpening().getCompanyName().getCompanyName()
-						.equals(jobs.get(i).getCompanyName().getCompanyName())
-						&& sortJobOpening.getJobOpening().getHoursPerWeek().equals(jobs.get(i).getHoursPerWeek())
-						&& sortJobOpening.getJobOpening().getProficiancy().equals(jobs.get(i).getProficiancy())) {
-					jobopenings.add(jobs.get(i));
-				}
-			} else if (!(sortJobOpening.getJobOpening().getCompanyName().getCompanyName().equals("0"))
-					&& !(sortJobOpening.getJobOpening().getLocation().equals("0"))
-					&& !(sortJobOpening.getJobOpening().getProficiancy().equals("0"))) {
-				if (sortJobOpening.getJobOpening().getCompanyName().getCompanyName()
-						.equals(jobs.get(i).getCompanyName().getCompanyName())
-						&& sortJobOpening.getJobOpening().getLocation().equals(jobs.get(i).getLocation())
-						&& sortJobOpening.getJobOpening().getProficiancy().equals(jobs.get(i).getProficiancy())) {
-					jobopenings.add(jobs.get(i));
-				}
-			} else if (!(sortJobOpening.getJobOpening().getHoursPerWeek().equals("0"))
-					&& !(sortJobOpening.getJobOpening().getLocation().equals("0"))
-					&& !(sortJobOpening.getJobOpening().getProficiancy().equals("0"))) {
-				if (sortJobOpening.getJobOpening().getHoursPerWeek().equals(jobs.get(i).getHoursPerWeek())
-						&& sortJobOpening.getJobOpening().getLocation().equals(jobs.get(i).getLocation())
-						&& sortJobOpening.getJobOpening().getProficiancy().equals(jobs.get(i).getProficiancy())) {
-					jobopenings.add(jobs.get(i));
-				}
-			} else if (!(sortJobOpening.getJobOpening().getCompanyName().getCompanyName().equals("0"))
-					&& !(sortJobOpening.getJobOpening().getPosition().equals("0"))
-					&& !(sortJobOpening.getJobOpening().getProficiancy().equals("0"))) {
-				if (sortJobOpening.getJobOpening().getCompanyName().getCompanyName()
-						.equals(jobs.get(i).getCompanyName().getCompanyName())
-						&& sortJobOpening.getJobOpening().getPosition().equals(jobs.get(i).getPosition())
-						&& sortJobOpening.getJobOpening().getProficiancy().equals(jobs.get(i).getProficiancy())) {
-					jobopenings.add(jobs.get(i));
-				}
-			} else if (!(sortJobOpening.getJobOpening().getHoursPerWeek().equals("0"))
-					&& !(sortJobOpening.getJobOpening().getPosition().equals("0"))
-					&& !(sortJobOpening.getJobOpening().getProficiancy().equals("0"))) {
-				if (sortJobOpening.getJobOpening().getHoursPerWeek().equals(jobs.get(i).getHoursPerWeek())
-						&& sortJobOpening.getJobOpening().getPosition().equals(jobs.get(i).getPosition())
-						&& sortJobOpening.getJobOpening().getProficiancy().equals(jobs.get(i).getProficiancy())) {
-					jobopenings.add(jobs.get(i));
-				}
-			} else if (!(sortJobOpening.getJobOpening().getLocation().equals("0"))
-					&& !(sortJobOpening.getJobOpening().getPosition().equals("0"))
-					&& !(sortJobOpening.getJobOpening().getProficiancy().equals("0"))) {
-				if (sortJobOpening.getJobOpening().getLocation().equals(jobs.get(i).getLocation())
-						&& sortJobOpening.getJobOpening().getPosition().equals(jobs.get(i).getPosition())
-						&& sortJobOpening.getJobOpening().getProficiancy().equals(jobs.get(i).getProficiancy())) {
-					jobopenings.add(jobs.get(i));
-				}
-			} else if (!(sortJobOpening.getJobOpening().getCompanyName().getCompanyName().equals("0"))
-					&& !(sortJobOpening.getJobOpening().getHoursPerWeek().equals("0"))) {
-				if (sortJobOpening.getJobOpening().getCompanyName().getCompanyName()
-						.equals(jobs.get(i).getCompanyName().getCompanyName())
-						&& sortJobOpening.getJobOpening().getHoursPerWeek().equals(jobs.get(i).getHoursPerWeek())) {
-					jobopenings.add(jobs.get(i));
-				}
-			} else if (!(sortJobOpening.getJobOpening().getCompanyName().getCompanyName().equals("0"))
-					&& !(sortJobOpening.getJobOpening().getLocation().equals("0"))) {
-				if (sortJobOpening.getJobOpening().getCompanyName().getCompanyName()
-						.equals(jobs.get(i).getCompanyName().getCompanyName())
-						&& sortJobOpening.getJobOpening().getLocation().equals(jobs.get(i).getLocation())) {
-					jobopenings.add(jobs.get(i));
-				}
-			} else if (!(sortJobOpening.getJobOpening().getCompanyName().getCompanyName().equals("0"))
-					&& !(sortJobOpening.getJobOpening().getPosition().equals("0"))) {
-				if (sortJobOpening.getJobOpening().getCompanyName().getCompanyName()
-						.equals(jobs.get(i).getCompanyName().getCompanyName())
-						&& sortJobOpening.getJobOpening().getPosition().equals(jobs.get(i).getPosition())) {
-					jobopenings.add(jobs.get(i));
-				}
-			} else if (!(sortJobOpening.getJobOpening().getCompanyName().getCompanyName().equals("0"))
-					&& !(sortJobOpening.getJobOpening().getProficiancy().equals("0"))) {
-				if (sortJobOpening.getJobOpening().getCompanyName().getCompanyName()
-						.equals(jobs.get(i).getCompanyName().getCompanyName())
-						&& sortJobOpening.getJobOpening().getProficiancy().equals(jobs.get(i).getProficiancy())) {
-					jobopenings.add(jobs.get(i));
-				}
-			} else if (!(sortJobOpening.getJobOpening().getHoursPerWeek().equals("0"))
-					&& !(sortJobOpening.getJobOpening().getLocation().equals("0"))) {
-				if (sortJobOpening.getJobOpening().getHoursPerWeek().equals(jobs.get(i).getHoursPerWeek())
-						&& sortJobOpening.getJobOpening().getLocation().equals(jobs.get(i).getLocation())) {
-					jobopenings.add(jobs.get(i));
-				}
-			} else if (!(sortJobOpening.getJobOpening().getHoursPerWeek().equals("0"))
-					&& !(sortJobOpening.getJobOpening().getPosition().equals("0"))) {
-				if (sortJobOpening.getJobOpening().getHoursPerWeek().equals(jobs.get(i).getHoursPerWeek())
-						&& sortJobOpening.getJobOpening().getPosition().equals(jobs.get(i).getPosition())) {
-					jobopenings.add(jobs.get(i));
-				}
-			} else if (!(sortJobOpening.getJobOpening().getHoursPerWeek().equals("0"))
-					&& !(sortJobOpening.getJobOpening().getProficiancy().equals("0"))) {
-				if (sortJobOpening.getJobOpening().getHoursPerWeek().equals(jobs.get(i).getHoursPerWeek())
-						&& sortJobOpening.getJobOpening().getProficiancy().equals(jobs.get(i).getProficiancy())) {
-					jobopenings.add(jobs.get(i));
-				}
-			} else if (!(sortJobOpening.getJobOpening().getLocation().equals("0"))
-					&& !(sortJobOpening.getJobOpening().getPosition().equals("0"))) {
-				if (sortJobOpening.getJobOpening().getLocation().equals(jobs.get(i).getLocation())
-						&& sortJobOpening.getJobOpening().getPosition().equals(jobs.get(i).getPosition())) {
-					jobopenings.add(jobs.get(i));
-				}
-			} else if (!(sortJobOpening.getJobOpening().getLocation().equals("0"))
-					&& !(sortJobOpening.getJobOpening().getProficiancy().equals("0"))) {
-				if (sortJobOpening.getJobOpening().getLocation().equals(jobs.get(i).getLocation())
-						&& sortJobOpening.getJobOpening().getProficiancy().equals(jobs.get(i).getProficiancy())) {
-					jobopenings.add(jobs.get(i));
-				}
-			} else if (!(sortJobOpening.getJobOpening().getPosition().equals("0"))
-					&& !(sortJobOpening.getJobOpening().getProficiancy().equals("0"))) {
-				if (sortJobOpening.getJobOpening().getPosition().equals(jobs.get(i).getPosition())
-						&& sortJobOpening.getJobOpening().getProficiancy().equals(jobs.get(i).getProficiancy())) {
-					jobopenings.add(jobs.get(i));
+		
+		//Pruning List by Company Name
+		if(!sortJobOpening.getJobOpening().getCompanyName().getCompanyName().equals("0")) {
+			for(int i = 0; i < allJobs.size(); i++) {
+				if(allJobs.get(i).getCompanyName().getCompanyName().equals(
+						sortJobOpening.getJobOpening().getCompanyName().getCompanyName())) {
+					trimmedJobs.add(allJobs.get(i));
 				}
 			}
+			allJobs.clear();
+			allJobs.addAll(trimmedJobs);
+		} 
 
-			else if (!sortJobOpening.getJobOpening().getCompanyName().getCompanyName().equals("0")) {
-				if (sortJobOpening.getJobOpening().getCompanyName().getCompanyName()
-						.equals(jobs.get(i).getCompanyName().getCompanyName())) {
-					jobopenings.add(jobs.get(i));
+		//Pruning List by Position
+		if(!sortJobOpening.getJobOpening().getPosition().equals("0")) {
+			trimmedJobs.clear();
+			for(int i = 0; i < allJobs.size(); i++) {
+				if(allJobs.get(i).getPosition().equals(
+						sortJobOpening.getJobOpening().getPosition())) {
+					trimmedJobs.add(allJobs.get(i));
 				}
-			} else if (!sortJobOpening.getJobOpening().getHoursPerWeek().equals("0")) {
-				if (sortJobOpening.getJobOpening().getHoursPerWeek().equals(jobs.get(i).getHoursPerWeek())) {
-					jobopenings.add(jobs.get(i));
-				}
-			} else if (!sortJobOpening.getJobOpening().getLocation().equals("0")) {
-				if (sortJobOpening.getJobOpening().getLocation().equals(jobs.get(i).getLocation())) {
-					jobopenings.add(jobs.get(i));
-				}
-			} else if (!sortJobOpening.getJobOpening().getPosition().equals("0")) {
-				if (sortJobOpening.getJobOpening().getPosition().equals(jobs.get(i).getPosition())) {
-					jobopenings.add(jobs.get(i));
-				}
-			} else if (!sortJobOpening.getJobOpening().getProficiancy().equals("0")) {
-				if (sortJobOpening.getJobOpening().getProficiancy().equals(jobs.get(i).getProficiancy())) {
-					jobopenings.add(jobs.get(i));
-				}
-			} else if (sortJobOpening.getJobOpening().getCompanyName().getCompanyName().equals("0")
-					&& sortJobOpening.getJobOpening().getHoursPerWeek().equals("0")
-					&& sortJobOpening.getJobOpening().getLocation().equals("0")
-					&& sortJobOpening.getJobOpening().getPosition().equals("0")
-					&& sortJobOpening.getJobOpening().getProficiancy().equals("0")) {
-				jobopenings.add(jobs.get(i));
 			}
+			allJobs.clear();
+			allJobs.addAll(trimmedJobs);
 		}
-		model.addAttribute("jobopenings", jobopenings);
+		
+		//Pruning List by Proficiancy
+		if(!sortJobOpening.getJobOpening().getProficiancy().equals("0")) {
+			trimmedJobs.clear();
+			for(int i = 0; i < allJobs.size(); i++) {
+				if(allJobs.get(i).getProficiancy().equals(
+						sortJobOpening.getJobOpening().getProficiancy())) {
+					trimmedJobs.add(allJobs.get(i));
+				}
+			}
+			allJobs.clear();
+			allJobs.addAll(trimmedJobs);
+		}
+		
+		//Pruning List by Location
+		if(!sortJobOpening.getJobOpening().getLocation().equals("0")) {
+			trimmedJobs.clear();
+			for(int i = 0; i < allJobs.size(); i++) {
+				if(allJobs.get(i).getLocation().equals(
+						sortJobOpening.getJobOpening().getLocation())) {
+					trimmedJobs.add(allJobs.get(i));
+				}
+			}
+			allJobs.clear();
+			allJobs.addAll(trimmedJobs);
+		}
+		
+		//Pruning List by hoursPerWeek
+		if(!sortJobOpening.getJobOpening().getHoursPerWeek().equals("0")) {
+			trimmedJobs.clear();
+			for(int i = 0; i < allJobs.size(); i++) {
+				if(allJobs.get(i).getHoursPerWeek().equals(
+						sortJobOpening.getJobOpening().getHoursPerWeek())) {
+					trimmedJobs.add(allJobs.get(i));
+				}
+			}
+			allJobs.clear();
+			allJobs.addAll(trimmedJobs);
+		}
+
+		model.addAttribute("jobopenings", allJobs);
 		model.addAttribute("companies", sortedOpenings.getCompanyName());
 		model.addAttribute("positions", sortedOpenings.getPositions());
 		model.addAttribute("proficiencies", sortedOpenings.getProficiency());
 		model.addAttribute("locations", sortedOpenings.getlocations());
 		model.addAttribute("workhours", sortedOpenings.getHoursPerWeek());
+
 		return "jobManagement/browsejobopenings";
 	}
 
@@ -377,6 +173,22 @@ public class JobController {
 		return "redirect:/browsejobopenings";
 	}
 	
+	private SortJobOpening populateDropDownOptions(List<InternshipJobOpening> jobs) {
+		SortJobOpening sortedOpenings = new SortJobOpening();
+		for (InternshipJobOpening internshipJobOpening : jobs) {
+			if (!sortedOpenings.getCompanyName().contains(internshipJobOpening.getCompanyName().getCompanyName()))
+				sortedOpenings.addCompanyName(internshipJobOpening.getCompanyName().getCompanyName());
+			if (!sortedOpenings.getHoursPerWeek().contains(internshipJobOpening.getHoursPerWeek()))
+				sortedOpenings.addHoursPerWeek(internshipJobOpening.getHoursPerWeek());
+			if (!sortedOpenings.getlocations().contains(internshipJobOpening.getLocation()))
+				sortedOpenings.addLocation(internshipJobOpening.getLocation());
+			if (!sortedOpenings.getPositions().contains(internshipJobOpening.getPosition()))
+				sortedOpenings.addPosition(internshipJobOpening.getPosition());
+			if (!sortedOpenings.getProficiency().contains(internshipJobOpening.getProficiancy()))
+				sortedOpenings.addProficency(internshipJobOpening.getProficiancy());
+		}
+		return sortedOpenings;
+	}
 /*	@InitBinder
 	public void initBinder(WebDataBinder binder) 
 	{
