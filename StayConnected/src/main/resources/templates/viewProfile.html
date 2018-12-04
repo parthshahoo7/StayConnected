@@ -5,53 +5,60 @@
 <head>
 <meta charset="UTF-8">
 <title>View Profile</title>
+<style>
+.error {
+	color: red;
+	font-style: italic;
+}
+</style>
 </head>
 <body>
 <p><a href='/home'>Home</a></p>
-
-<h1>User Profile</h1>
-
-<p>
-	First Name: [[${user.firstName}]]
-	<br>
-	Last Name: [[${user.lastName}]]
-	<br>
-	Email: [[${user.email}]]
-	<br>
-	Address: [[${user.userAddress}]]
-	<br>
-	Phone Number: [[${user.phoneNumber}]]
-</p>
-
-<h2>User Type:</h2>
-<p th:each= "role: ${user.roles}">
-	[[${role}]]
-	<br>
-</p>
-
-<h2>Job History:</h2>
-<div th:switch="${user.workExperience.size()}">
-	<p th:case="'0'">No Job History Found</p>
-	<p th:case="*" th:each= "job: ${user.workExperience}">
-		Company Name: [[${job.companyName}]] 
+<p th:if="${notFound}" class="error">User Account not Found</p>
+<div th:if="${!notFound}">
+	<h1>User Profile</h1>
+	
+	<p>
+		First Name: [[${user.firstName}]]
 		<br>
-		Position: [[${job.position}]]
+		Last Name: [[${user.lastName}]]
 		<br>
-		Start Date: [[${job.startDate}]]
+		Email: [[${user.email}]]
 		<br>
-		End Date: [[${job.endDate}]]
+		Address: [[${user.userAddress}]]
 		<br>
-		Currently Employed: [[${job.currentlyEmployed}]]
+		Phone Number: [[${user.phoneNumber}]]
+	</p>
+	
+	<h2>User Type:</h2>
+	<p th:each= "role: ${user.roles}">
+		[[${role}]]
+		<br>
+	</p>
+	
+	<h2>Job History:</h2>
+	<div th:switch="${user.workExperience.size()}">
+		<p th:case="'0'">No Job History Found</p>
+		<p th:case="*" th:each= "job: ${user.workExperience}">
+			Company Name: [[${job.companyName}]] 
+			<br>
+			Position: [[${job.position}]]
+			<br>
+			Start Date: [[${job.startDate}]]
+			<br>
+			End Date: [[${job.endDate}]]
+			<br>
+			Currently Employed: [[${job.currentlyEmployed}]]
+			<br>
+		</p>
+	</div>
+	
+	<h2>Skills:</h2>
+	<p th:each= "skill: ${user.skill}">
+		[[${skill.skillName}]]
 		<br>
 	</p>
 </div>
-
-<h2>Skills:</h2>
-<p th:each= "skill: ${user.skill}">
-	[[${skill.skillName}]]
-	<br>
-</p>
-
 <a href="/browseUsers"> Back To Searching For Students/Alumni</a>
 </body>
 </html>

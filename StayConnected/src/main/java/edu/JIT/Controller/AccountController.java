@@ -274,6 +274,10 @@ public class AccountController {
 	@GetMapping("/viewProfile")
     public String viewProfile(@RequestParam(name="royalID", required=true) String royalID, Model model) {
 		UserAccount profileOfUser = dao.getFullUserProfileByRoyalID(royalID);
+		if(profileOfUser.getRoyalID().equals("-1")) {
+			model.addAttribute("notFound", true);
+			return "viewProfile";
+		}
 		model.addAttribute("user", profileOfUser);
         return "viewProfile";
     }

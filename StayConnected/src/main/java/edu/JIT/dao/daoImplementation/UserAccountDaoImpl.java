@@ -199,9 +199,18 @@ public class UserAccountDaoImpl implements UserAccountDao {
 	
 	@Override 
 	public UserAccount getFullUserProfileByRoyalID(String royalID) {
-		String userSQL = "SELECT * from stayconnected.useraccount where rid = '" + royalID + "';";
-		UserAccount user = jdbcTemplate.queryForObject(userSQL, new accountMapper());
-		List<UserSkill> userskillResults;
+		UserAccount user = new UserAccount();
+		user.setRoyalID("-1");
+		try {
+			String userSQL = "SELECT * from stayconnected.useraccount where rid = '" + royalID + "';";
+			user = jdbcTemplate.queryForObject(userSQL, new accountMapper());
+		}
+		catch(DataAccessException e) {
+			//No user exists for ID
+			return user;
+		}
+		
+		List<UserSkill> userskillResults = new ArrayList<>();
 		try {
 			String skillSQL = "SELECT stayconnected.userskills.rid,"
 					+ "stayconnected.skills.skillname,"
@@ -213,8 +222,7 @@ public class UserAccountDaoImpl implements UserAccountDao {
 			userskillResults = jdbcTemplate.query(skillSQL, new userskillsMapper());
 		}
 		catch(DataAccessException e) {
-			//No user exists for ID
-			return user;
+			System.out.println("No Skills found");
 		}
 		
 		List<JobHistory> jobhistoryResults = new ArrayList<>();
@@ -223,9 +231,7 @@ public class UserAccountDaoImpl implements UserAccountDao {
 			jobhistoryResults = jdbcTemplate.query(jobSQL, new jobhistoryMapper());
 		}
 		catch(DataAccessException e) {
-			//JobHistory emptyJob = new JobHistory(null, null, null, null, null,
-				//	null);
-			//jobhistoryResults.add(emptyJob);
+			System.out.println("NO JOB HISTORY FOUND");
 		}
 		
 		List<Authority> authorityResults = new ArrayList<>();
@@ -237,7 +243,9 @@ public class UserAccountDaoImpl implements UserAccountDao {
 					+ "stayconnected.authority.rid = '" + royalID + "';";
 			authorityResults = jdbcTemplate.query(authoritySQL, new authorityMapper());
 		}
-		catch(DataAccessException e) {}
+		catch(DataAccessException e) {
+			System.out.println("NO Authorities Found");
+		}
 		
 		for(int skill=0; skill<userskillResults.size(); skill++) {
 			if(user.getRoyalID().equals(userskillResults.get(skill).getRid())) {
@@ -248,16 +256,12 @@ public class UserAccountDaoImpl implements UserAccountDao {
 		}
 		
 		for(JobHistory history : jobhistoryResults) {
-			//if(user.getRoyalID().equals(history.getRid())) {
-				user.addWorkHistory(history);
-			//}
+			user.addWorkHistory(history);
 		}
 		
 		for(Authority authority : authorityResults) {
-			//if(user.getRoyalID().equals(authority.getRid())) {
-				authority.setRole(authority.getRole().replaceAll("ROLE_", ""));
-				user.addRole(authority);
-			//}
+			authority.setRole(authority.getRole().replaceAll("ROLE_", ""));
+			user.addRole(authority);
 		}
 		
 		return user;
