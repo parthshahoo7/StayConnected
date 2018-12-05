@@ -1,17 +1,30 @@
 package edu.JIT.test;
 
+import static org.hamcrest.CoreMatchers.any;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+
 import java.util.ArrayList;
-import java.util.List;
 
 import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import edu.JIT.Controller.AccountController;
+import edu.JIT.Controller.form.validator.RegistrationFormValidation;
+import edu.JIT.Controller.form.validator.updateFormValidation;
+import edu.JIT.dao.daoInterfaces.UserAccountDao;
 import edu.JIT.model.accountManagement.JobHistory;
+import edu.JIT.model.accountManagement.MailService;
 import edu.JIT.model.accountManagement.Skill;
 import edu.JIT.model.accountManagement.UserAccount;
 
@@ -57,8 +70,21 @@ public class AccountControllerTest {
 	@Autowired
 	private MockMvc mockMvc;
 	
+	@MockBean
+	private UserAccountDao userAccountDao;
+	
+	@MockBean
+	private RegistrationFormValidation registrationFormValidation;
+	
+	@MockBean
+	private updateFormValidation updateformValidation;
+	
+	@MockBean
+	private MailService mailingService;
+	
 	@Before
 	public void setUp() {
+		testAccount = new UserAccount();
 		testAccount.setCompany(company);
 		testAccount.setEmail(email);
 		testAccount.setFirstName(firstName);
@@ -69,5 +95,21 @@ public class AccountControllerTest {
 		testAccount.setSkill(skill);
 		testAccount.setUserAddress(userAddress);
 		testAccount.setWorkExperience(workExperience);
+	}
+	
+	@Test
+	public void testViewProfile() throws Exception {
+		when(userAccountDao.getFullUserProfileByRoyalID("")).thenReturn(testAccount);
+		
+		ResultActions resultActions = mockMvc.perform(get("/viewProfile?royalID=" + testAccount.getRoyalID())
+		.accept(MediaType.TEXT_PLAIN)
+		.sessionAttr("royalID", testAccount));
+		
+		resultActions.andDo(print())
+		.andExpect(MockMvcResultMatchers.status().isOk())
+		.andExpect(MockMvcResultMatchers.view().name("viewProfile"));
+		//.andExpect(MockMvcResultMatchers.model().attributeExists("user"))
+		//.andExpect(MockMvcResultMatchers.model().attribute("user", Matchers.instanceOf(UserAccount.class)));
+		
 	}
 }
