@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Account Deletion</title>
+</head>
+<body>
+
+<h2> Use this page to delete an account</h2>
+
+<form action="#" th:action="@{/accountDeletion}"
+		th:object="${form}" method="post">
+
+<label> Enter the RID of the user you wish to delete</label>
+<input type="text" name="RID" th:field="*{RID}">
+
+<button type="submit">Delete</button>
+</form>
+
+<div th:if="requestConfirmation">
+
+<table>
+<tr>
+<th> Selected Account</th>
+<td th:text="${user.firstName}"></td>
+	<td th:text="${user.lastName}"></td>
+	<td th:text="${user.email}">}</td>
+	<td th:text="${user.userAddress}">}</td>
+	<td th:text="${user.phoneNumber}">}</td>
+</tr>
+</table>
+
+<form action="#" th:action="@{/accountDeletion}"
+	   method="post">
+<label> Are you sure you want to delete this account?</label>
+<button type="submit" name="yes" value="YES"> YES </button>
+<button type="submit" name="no" value="NO">   NO</button>
+
+</form>
+
+</div>
+
+</body>
+</html>
