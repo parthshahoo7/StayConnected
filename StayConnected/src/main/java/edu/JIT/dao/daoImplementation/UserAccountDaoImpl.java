@@ -268,7 +268,7 @@ public class UserAccountDaoImpl implements UserAccountDao {
 	}
 
 	@Override
-	public int deleteAccount(UserAccount account) {
+	public int deleteAccount(String RID) {
 		// TODO Auto-generated method stub
 		return 0;
 	}

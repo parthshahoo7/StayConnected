@@ -22,9 +22,12 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import edu.JIT.Controller.form.AcctDeletionForm;
 import edu.JIT.Controller.form.BrowseUserForm;
 import edu.JIT.Controller.form.RegistrationForm;
 import edu.JIT.Controller.form.UpdateAccountForm;
@@ -282,6 +285,37 @@ public class AccountController {
 		model.addAttribute("user", profileOfUser);
         return "viewProfile";
     }
+	
+	@GetMapping("/accountDeletion")
+	public String getAccountDeletion(Model model, AcctDeletionForm deletion) {
+		model.addAttribute("formSelection", 1);
+		model.addAttribute("form" , deletion);
+		return "accountDeletion";
+	}
+	
+	@RequestMapping(value = "/accountDeletion", params= {"firstForm"}, method = RequestMethod.POST) 
+	public String postAccountDeletion(Model model, AcctDeletionForm deletion) {
+		String choice = "NO";
+		model.addAttribute("user" , dao.getAccountByRoyalID(deletion.getRID()));
+		model.addAttribute("confirmation", choice);
+		model.addAttribute("formSelection" , 2);
+		return "accountDeletion";
+		
+		
+	}
+	
+	@RequestMapping(value = "/accountDeletion", params= {"secondForm"}, method = RequestMethod.POST)
+	public String confirmDeletion(Model model, String choice, AcctDeletionForm deletion) {
+		if(choice.equals("YES")) {
+			dao.deleteAccount(deletion.getRID());
+			model.addAttribute("success" , "The user with RID " + deletion.getRID() + " has been deleted.");
+			return "accountDeletion";
+		}
+		else {
+			return "redirect:/accountDeletion";
+		}
+	}
+	
 
 	private String encodePassword(String rawPassword) {
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
