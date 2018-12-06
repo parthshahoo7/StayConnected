@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -29,6 +30,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import edu.JIT.Controller.form.AcctDeletionForm;
 import edu.JIT.Controller.form.BrowseUserForm;
+import edu.JIT.Controller.form.DeleteConfirmationForm;
 import edu.JIT.Controller.form.RegistrationForm;
 import edu.JIT.Controller.form.UpdateAccountForm;
 import edu.JIT.Controller.form.validator.RegistrationFormValidation;
@@ -53,6 +55,8 @@ public class AccountController {
 
 	@Autowired
 	private MailService mailingService;
+	
+	String myRid = "";
 
 	@GetMapping(value= {"/home" , "/"})
 	public String home(Principal principal) {
@@ -289,30 +293,45 @@ public class AccountController {
 	@GetMapping("/accountDeletion")
 	public String getAccountDeletion(Model model, AcctDeletionForm deletion) {
 		model.addAttribute("formSelection", 1);
-		model.addAttribute("form" , deletion);
+		model.addAttribute("formA" , deletion);
 		return "accountDeletion";
 	}
 	
-	@RequestMapping(value = "/accountDeletion", params= {"firstForm"}, method = RequestMethod.POST) 
-	public String postAccountDeletion(Model model, AcctDeletionForm deletion) {
-		String choice = "NO";
-		model.addAttribute("user" , dao.getAccountByRoyalID(deletion.getRID()));
-		model.addAttribute("confirmation", choice);
+	@RequestMapping(value = "/accountDeletion/formA", method = RequestMethod.POST) 
+	public String postAccountDeletion(Model model, AcctDeletionForm deletion, DeleteConfirmationForm choice) {
+		UserAccount user = dao.getAccountByRoyalID(deletion.getRID());
+		if(user != null) {
+		model.addAttribute("user" , user);
 		model.addAttribute("formSelection" , 2);
-		return "accountDeletion";
-		
-		
-	}
-	
-	@RequestMapping(value = "/accountDeletion", params= {"secondForm"}, method = RequestMethod.POST)
-	public String confirmDeletion(Model model, String choice, AcctDeletionForm deletion) {
-		if(choice.equals("YES")) {
-			dao.deleteAccount(deletion.getRID());
-			model.addAttribute("success" , "The user with RID " + deletion.getRID() + " has been deleted.");
-			return "accountDeletion";
+		model.addAttribute("choice" , choice);
+		myRid = deletion.getRID();
+	    return "accountDeletion";
 		}
 		else {
+			model.addAttribute("error" , "No user with RID " + deletion.getRID() + " exists.");
+			model.addAttribute("formSelection", 1);
+			model.addAttribute("formA" , deletion);
+			return "accountDeletion";
+		}
+		
+		
+		
+	}
+	
+	@RequestMapping(value = "/accountDeletion/formB", method = RequestMethod.POST)
+	public String confirmDeletion(Model model, DeleteConfirmationForm choice, AcctDeletionForm deletion, RedirectAttributes redirect) {
+		System.out.println("here is the rid we want to delete: " + myRid);
+		if(choice.getSelection().equals("YES") && !myRid.isEmpty()) {
+			dao.deleteAccount(myRid);
+			redirect.addFlashAttribute("success" , "The user with RID " + myRid + " has been deleted.");
 			return "redirect:/accountDeletion";
+		}
+		else {
+			model.addAttribute("formSelection", 1);
+			model.addAttribute("formA" , deletion);
+			model.addAttribute("error" , "");
+			return "redirect:/accountDeletion";
+			
 		}
 	}
 	

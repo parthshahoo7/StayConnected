@@ -5,6 +5,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import javax.sql.DataSource;
+
+import org.postgresql.util.PSQLException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -137,8 +139,13 @@ public class UserAccountDaoImpl implements UserAccountDao {
 		String SQL = "SELECT * from stayconnected.useraccount WHERE rid= '" +
 		 royalID + "';" ;
 		
+		try {
 		user = jdbcTemplate.queryForObject(SQL, new Object[] {}, new accountMapper());
-		return user;
+		return user; }
+		
+		catch(DataAccessException e) {
+			return null;
+		}
 	}
 
 	@Override
@@ -269,7 +276,15 @@ public class UserAccountDaoImpl implements UserAccountDao {
 
 	@Override
 	public int deleteAccount(String RID) {
-		// TODO Auto-generated method stub
+		String SQL = "DELETE FROM stayconnected.useraccount WHERE useraccount.rid = ?";
+		jdbcTemplate.update(SQL , RID);
+		try {
+		jdbcTemplate.execute(SQL); 
+		}
+		
+		catch(DataAccessException e){ 
+			
+		}
 		return 0;
 	}
 
