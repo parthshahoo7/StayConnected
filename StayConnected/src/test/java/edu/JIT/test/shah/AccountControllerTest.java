@@ -1,6 +1,5 @@
 package edu.JIT.test.shah;
 
-import static org.hamcrest.CoreMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;

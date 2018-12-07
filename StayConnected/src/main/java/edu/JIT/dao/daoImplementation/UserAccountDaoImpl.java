@@ -5,7 +5,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
 import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
+
 import edu.JIT.Controller.form.RegistrationForm;
 import edu.JIT.Controller.form.UpdateAccountForm;
 import edu.JIT.dao.daoInterfaces.UserAccountDao;
@@ -137,6 +140,7 @@ public class UserAccountDaoImpl implements UserAccountDao {
 		UserAccount user = new UserAccount();
 		String SQL = "SELECT * from stayconnected.useraccount WHERE rid= '" + royalID + "';";
 
+		try {
 		user = jdbcTemplate.queryForObject(SQL, new Object[] {}, new accountMapper());
 		SQL = "select q.role as role from stayconnected.authority as p,stayconnected.userroles as q where p.rid=? and p.userroleid=q.uid";
 		List<String> assignedRoles;
@@ -150,7 +154,11 @@ public class UserAccountDaoImpl implements UserAccountDao {
 		for (int i = 0; i < JobHistories.size(); i++) {
 			user.addWorkHistory(JobHistories.get(i));
 		}
-		return user;
+		return user; }
+		
+		catch(DataAccessException e) {
+			return null;
+		}
 	}
 
 	@Override
@@ -267,8 +275,16 @@ public class UserAccountDaoImpl implements UserAccountDao {
 	}
 
 	@Override
-	public int deleteAccount(UserAccount account) {
-		// TODO Auto-generated method stub
+	public int deleteAccount(String RID) {
+		String SQL = "DELETE FROM stayconnected.useraccount WHERE useraccount.rid = ?";
+		jdbcTemplate.update(SQL , RID);
+		try {
+		jdbcTemplate.execute(SQL); 
+		}
+		
+		catch(DataAccessException e){ 
+			
+		}
 		return 0;
 	}
 

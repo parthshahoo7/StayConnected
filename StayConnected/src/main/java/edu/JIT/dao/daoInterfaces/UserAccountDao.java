@@ -24,7 +24,7 @@ public interface UserAccountDao {
 	
 	public UserAccount getFullUserProfileByRoyalID(String royalID);
 
-	public int deleteAccount(UserAccount account);
+	public int deleteAccount(String royalID);
 
 	public int update(RegistrationForm webAccount);
 
