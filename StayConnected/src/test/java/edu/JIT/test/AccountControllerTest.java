@@ -129,4 +129,6 @@ public class AccountControllerTest {
 		.andExpect(MockMvcResultMatchers.model().attribute("userActivation", Matchers.instanceOf(UserActivation.class)));
 	}
 	
+	
+	
 }
