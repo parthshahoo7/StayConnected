@@ -243,15 +243,15 @@ public class AccountController {
 	public String updateAccount(Model model, UpdateAccountForm update, Principal user) {
 		String name;
 		name = user.getName();
-		    try {
-				UserAccount loggedInUser = dao.getAccountByRoyalID(name);
-				model.addAttribute("user" , loggedInUser);
-				model.addAttribute("updateform" , update);
-				model.addAttribute("error" , false);
-			}
-		    catch(DataAccessException e) {
-		    	System.out.print("couldnt get user!!");
-		    }
+	    try {
+			UserAccount loggedInUser = dao.getAccountByRoyalID(name);
+			model.addAttribute("user" , loggedInUser);
+			model.addAttribute("updateform" , update);
+			model.addAttribute("error" , false);
+		}
+	    catch(DataAccessException e) {
+	    	System.out.print("couldnt get user!!");
+	    }
 		return "updateAccount";
 	}
 	

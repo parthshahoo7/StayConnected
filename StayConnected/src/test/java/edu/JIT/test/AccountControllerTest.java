@@ -1,12 +1,12 @@
 package edu.JIT.test;
 
-import static org.hamcrest.CoreMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 import java.util.ArrayList;
 
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,6 +27,7 @@ import edu.JIT.model.accountManagement.JobHistory;
 import edu.JIT.model.accountManagement.MailService;
 import edu.JIT.model.accountManagement.Skill;
 import edu.JIT.model.accountManagement.UserAccount;
+import edu.JIT.model.accountManagement.UserActivation;
 
 @SuppressWarnings("serial")
 
@@ -55,7 +56,7 @@ public class AccountControllerTest {
 		testSkill.setSkillID(-1);
 		testSkill.setSkillName("test");
 	    add(testSkill);
-	}};;
+	}};
 	private ArrayList<JobHistory> workExperience = new ArrayList<JobHistory>() {{
 	    JobHistory testJob = new JobHistory();
 	    testJob.setCompanyName("testCompany");
@@ -65,6 +66,7 @@ public class AccountControllerTest {
 	    testJob.setStartDate("01/01/2017");
 	    testJob.setPosition("tester");
 	    testJob.setRid("r012345678910");
+	    add(testJob);
 	}};
 	
 	@Autowired
@@ -99,7 +101,7 @@ public class AccountControllerTest {
 	
 	@Test
 	public void testViewProfile() throws Exception {
-		when(userAccountDao.getFullUserProfileByRoyalID("")).thenReturn(testAccount);
+		when(userAccountDao.getFullUserProfileByRoyalID(testAccount.getRoyalID())).thenReturn(testAccount);
 		
 		ResultActions resultActions = mockMvc.perform(get("/viewProfile?royalID=" + testAccount.getRoyalID())
 		.accept(MediaType.TEXT_PLAIN)
@@ -107,9 +109,24 @@ public class AccountControllerTest {
 		
 		resultActions.andDo(print())
 		.andExpect(MockMvcResultMatchers.status().isOk())
-		.andExpect(MockMvcResultMatchers.view().name("viewProfile"));
-		//.andExpect(MockMvcResultMatchers.model().attributeExists("user"))
-		//.andExpect(MockMvcResultMatchers.model().attribute("user", Matchers.instanceOf(UserAccount.class)));
-		
+		.andExpect(MockMvcResultMatchers.view().name("viewProfile"))
+		.andExpect(MockMvcResultMatchers.model().attributeExists("user"))
+		.andExpect(MockMvcResultMatchers.model().attribute("user", Matchers.instanceOf(UserAccount.class)));	
 	}
+	
+	@Test
+	public void testActivateAccount() throws Exception {
+		UserActivation userActivation = new UserActivation();
+		
+		ResultActions resultActions = mockMvc.perform(get("/activateAccount")
+				.accept(MediaType.TEXT_PLAIN)
+				.sessionAttr("userActivation", userActivation));
+		
+		resultActions.andDo(print())
+		.andExpect(MockMvcResultMatchers.status().isOk())
+		.andExpect(MockMvcResultMatchers.view().name("activateAccount"))
+		.andExpect(MockMvcResultMatchers.model().attributeExists("userActivation"))
+		.andExpect(MockMvcResultMatchers.model().attribute("userActivation", Matchers.instanceOf(UserActivation.class)));
+	}
+	
 }
