@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import edu.JIT.Controller.form.RegistrationForm;
 import edu.JIT.Controller.form.UpdateAccountForm;
+import edu.JIT.model.accountManagement.JobHistory;
 import edu.JIT.model.accountManagement.Skill;
 import edu.JIT.model.accountManagement.UserAccount;
 import edu.JIT.model.accountManagement.UserActivation;
@@ -37,5 +38,13 @@ public interface UserAccountDao {
 
 	public void update(UpdateAccountForm update, Principal user);
 	
-	public Boolean isAccountActivated(String royalID); 
+	public Boolean isAccountActivated(String royalID);
+
+	public ArrayList<String> getRolesByID(String royalID);
+
+	public List<Skill> getSkillsByID(String royalID);
+
+	public List<JobHistory> getJobHistoryByID(String royalID);
+
+	public void updateUserAccount(UserAccount userAccount); 
 }

@@ -6,6 +6,7 @@ public class BrowseUserForm {
 	private String userType;
 	private ArrayList<String> criteria;
 	private ArrayList<String> selectedSkills;
+	private String searchName;
 	
 	public String getUserType() {
 		return userType;
@@ -24,5 +25,11 @@ public class BrowseUserForm {
 	}
 	public void setSelectedSkills(ArrayList<String> selectedSkills) {
 		this.selectedSkills = selectedSkills;
+	}
+	public String getSearchName() {
+		return searchName;
+	}
+	public void setSearchName(String searchName) {
+		this.searchName = searchName;
 	}
 }

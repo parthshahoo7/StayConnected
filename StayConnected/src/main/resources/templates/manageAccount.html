@@ -9,5 +9,6 @@
 <body>
 	<p><a href='/home'>Home</a></p>
 	<p><a href="/registration" sec:authorize="hasRole('ROLE_FACULTY')">Create a New Account for Someone else</a></p>
+	<p><a href="/browseUsers" sec:authorize="hasRole('ROLE_FACULTY')">Update a Existing Account for someone else</a></p>
 </body>
 </html>

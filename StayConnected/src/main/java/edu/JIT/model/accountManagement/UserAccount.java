@@ -17,6 +17,7 @@ public class UserAccount {
 	private ArrayList<String> company;
 	private ArrayList<Skill> skill;
 	private ArrayList<JobHistory> workExperience;
+	private String specialCode;
 
 	public UserAccount() {
 		super();
@@ -136,5 +137,16 @@ public class UserAccount {
 	
 	public void clearSkills() {
 		this.skill.clear();
+	}
+
+	public String getSpecialCode() {
+		return specialCode;
+	}
+
+	public void setSpecialCode(String specialCode) {
+		this.specialCode = specialCode;
+	}
+	public void addRoles(String arrayList) {
+		this.roles.add(arrayList);
 	}
 }
