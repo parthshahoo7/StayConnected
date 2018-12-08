@@ -1,12 +1,16 @@
 package edu.JIT.test;
 
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.ArrayList;
 
 import org.hamcrest.Matchers;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,6 +24,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import edu.JIT.Controller.AccountController;
+import edu.JIT.Controller.form.RegistrationForm;
 import edu.JIT.Controller.form.validator.RegistrationFormValidation;
 import edu.JIT.Controller.form.validator.updateFormValidation;
 import edu.JIT.dao.daoInterfaces.UserAccountDao;
@@ -43,6 +48,8 @@ public class AccountControllerTest {
 	private String royalID = "r012345678910";
 	private String phoneNumber = "123456789";
 	private String userAddress = "8 Jane Street, Scranton PA";
+	private String password = "123456789";
+	private String specialCode = "987654321";
 	
 	private ArrayList<String> roles = new ArrayList<String>() {{
 	    add("ROLE_CURR");
@@ -129,4 +136,31 @@ public class AccountControllerTest {
 		.andExpect(MockMvcResultMatchers.model().attribute("userActivation", Matchers.instanceOf(UserActivation.class)));
 	}
 	
+	@Test 
+	public void testVerifyAccount() throws Exception {
+		RegistrationForm form = new RegistrationForm();
+		form.setAccount(testAccount);
+		form.setPassword(password);
+		form.setConfirmPassword(password);
+		form.setSpecialCode(specialCode);
+		
+		userAccountDao.createNewAccount(form);
+		userAccountDao.activateAccountByRoyalID(testAccount.getRoyalID());
+		
+		boolean wasActivated = userAccountDao.isAccountActivated(testAccount.getRoyalID());
+		assert(wasActivated);
+		
+		ResultActions resultActions = mockMvc.perform(
+				post("/activate").accept(MediaType.APPLICATION_FORM_URLENCODED)
+				.sessionAttr("UserActivation", form)
+				);
+		resultActions.andDo(print())
+			.andExpect(status().isOk())
+			.andExpect(MockMvcResultMatchers.view().name("home"));				
+	}
+	
+	@After
+	public void tearDown() throws Exception {
+		userAccountDao.deleteAccount(testAccount.getRoyalID());
+	}
 }
