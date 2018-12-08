@@ -138,10 +138,9 @@ public class UserAccountDaoImpl implements UserAccountDao {
 	@Override
 	public UserAccount getAccountByRoyalID(String royalID) {
 		UserAccount user = new UserAccount();
-		String SQL = "SELECT * from stayconnected.useraccount WHERE rid= '" + royalID + "';";
+		String SQL = "SELECT * from stayconnected.useraccount WHERE rid= ?";
 
-		try {
-		user = jdbcTemplate.queryForObject(SQL, new Object[] {}, new accountMapper());
+		user = jdbcTemplate.queryForObject(SQL, new Object[] {royalID}, new accountMapper());
 		SQL = "select q.role as role from stayconnected.authority as p,stayconnected.userroles as q where p.rid=? and p.userroleid=q.uid";
 		List<String> assignedRoles;
 		assignedRoles = jdbcTemplate.query(SQL, new Object[] { royalID }, new roleMapper());
@@ -149,16 +148,12 @@ public class UserAccountDaoImpl implements UserAccountDao {
 			user.addRoles(assignedRoles.get(i));
 		}
 		SQL = " select * from stayconnected.jobhistory where rid=?";
-		List<JobHistory> JobHistories;		
+		List<JobHistory> JobHistories;
 		JobHistories = jdbcTemplate.query(SQL, new Object[] { royalID }, new jobhistoryMapper());
 		for (int i = 0; i < JobHistories.size(); i++) {
 			user.addWorkHistory(JobHistories.get(i));
 		}
-		return user; }
-		
-		catch(DataAccessException e) {
-			return null;
-		}
+		return user;
 	}
 
 	@Override
@@ -277,13 +272,13 @@ public class UserAccountDaoImpl implements UserAccountDao {
 	@Override
 	public int deleteAccount(String RID) {
 		String SQL = "DELETE FROM stayconnected.useraccount WHERE useraccount.rid = ?";
-		jdbcTemplate.update(SQL , RID);
+		jdbcTemplate.update(SQL, RID);
 		try {
-		jdbcTemplate.execute(SQL); 
+			jdbcTemplate.execute(SQL);
 		}
-		
-		catch(DataAccessException e){ 
-			
+
+		catch (DataAccessException e) {
+
 		}
 		return 0;
 	}
@@ -388,7 +383,7 @@ public class UserAccountDaoImpl implements UserAccountDao {
 	}
 
 	@Override
-	public void updateUserAccount(UserAccount userAccount) {
+	public int updateUserAccount(UserAccount userAccount) {
 		UserAccount matchedAccount = new UserAccount();
 		matchedAccount = getAccountByRoyalID(userAccount.getRoyalID());
 		if (!userAccount.getFirstName().equals(matchedAccount.getFirstName())) {
@@ -438,7 +433,7 @@ public class UserAccountDaoImpl implements UserAccountDao {
 			ArrayList<JobHistory> usersWorkExp = userAccount.getWorkExperience();
 			SQL = "insert into stayconnected.jobHistory(position,companyName,address,startDate,endDate,currentlyemplyed,RID) values(?,?,?,?,?,?,?)";
 			for (int i = 0; i < usersWorkExp.size(); i++) {
-				if (!usersWorkExp.get(i).getPosition().equals("")) {
+				if (usersWorkExp.get(i)!=null) {
 					jdbcTemplate.update(SQL, usersWorkExp.get(i).getPosition(), usersWorkExp.get(i).getCompanyName(),
 							usersWorkExp.get(i).getAddress(), usersWorkExp.get(i).getStartDate(),
 							usersWorkExp.get(i).getEndDate(), usersWorkExp.get(i).isCurrentlyEmployed(),
@@ -474,6 +469,7 @@ public class UserAccountDaoImpl implements UserAccountDao {
 				jdbcTemplate.update(SQL, userAccount.getRoyalID(), userRoleId);
 			}
 		}
+		return 1;
 	}
 
 	@Override

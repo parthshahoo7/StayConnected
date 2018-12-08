@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.mail.MailException;
@@ -36,7 +37,6 @@ import edu.JIT.Controller.form.UpdateAccountForm;
 import edu.JIT.Controller.form.validator.RegistrationFormValidation;
 import edu.JIT.Controller.form.validator.updateFormValidation;
 import edu.JIT.dao.daoInterfaces.UserAccountDao;
-import edu.JIT.model.accountManagement.JobHistory;
 import edu.JIT.model.accountManagement.MailService;
 import edu.JIT.model.accountManagement.Skill;
 import edu.JIT.model.accountManagement.UserAccount;
@@ -56,10 +56,8 @@ public class AccountController {
 
 	@Autowired
 	private MailService mailingService;
-	
-	String myRid = "";
 
-	private String royalID;
+	String myRid = "";
 
 	@GetMapping(value = { "/home", "/" })
 	public String home(Principal principal) {
@@ -88,6 +86,8 @@ public class AccountController {
 	@PostMapping(value = "/registration")
 	public String addAccount(@RequestParam(value = "ski", required = false) int[] ski,
 			@Valid RegistrationForm accountForm, final BindingResult result, Model model, Principal principal) {
+		;
+		System.out.println(accountForm.getAccount().getEmail());
 		validation.validate(accountForm, result);
 		if (result.hasErrors()) {
 			System.out.println(result.getFieldError());
@@ -175,7 +175,7 @@ public class AccountController {
 
 	@PostMapping("/browseUsers")
 	public String applyFilters(Model model, BrowseUserForm filters) {
-		ArrayList<UserAccount> users = dao.getAllAccounts();			
+		ArrayList<UserAccount> users = dao.getAllAccounts();
 		if (filters.getUserType() == null || filters.getUserType().equals("All")) {
 
 		} else if (filters.getUserType().equals("student")) {
@@ -286,52 +286,48 @@ public class AccountController {
 		model.addAttribute("user", profileOfUser);
 		return "viewProfile";
 	}
-	
+
 	@GetMapping("/accountDeletion")
 	public String getAccountDeletion(Model model, AcctDeletionForm deletion) {
 		model.addAttribute("formSelection", 1);
-		model.addAttribute("formA" , deletion);
+		model.addAttribute("formA", deletion);
 		return "accountDeletion";
 	}
-	
-	@RequestMapping(value = "/accountDeletion/formA", method = RequestMethod.POST) 
+
+	@RequestMapping(value = "/accountDeletion/formA", method = RequestMethod.POST)
 	public String postAccountDeletion(Model model, AcctDeletionForm deletion, DeleteConfirmationForm choice) {
 		UserAccount user = dao.getAccountByRoyalID(deletion.getRID());
-		if(user != null) {
-		model.addAttribute("user" , user);
-		model.addAttribute("formSelection" , 2);
-		model.addAttribute("choice" , choice);
-		myRid = deletion.getRID();
-	    return "accountDeletion";
-		}
-		else {
-			model.addAttribute("error" , "No user with RID " + deletion.getRID() + " exists.");
+		if (user != null) {
+			model.addAttribute("user", user);
+			model.addAttribute("formSelection", 2);
+			model.addAttribute("choice", choice);
+			myRid = deletion.getRID();
+			return "accountDeletion";
+		} else {
+			model.addAttribute("error", "No user with RID " + deletion.getRID() + " exists.");
 			model.addAttribute("formSelection", 1);
-			model.addAttribute("formA" , deletion);
+			model.addAttribute("formA", deletion);
 			return "accountDeletion";
 		}
-		
-		
-		
+
 	}
-	
+
 	@RequestMapping(value = "/accountDeletion/formB", method = RequestMethod.POST)
-	public String confirmDeletion(Model model, DeleteConfirmationForm choice, AcctDeletionForm deletion, RedirectAttributes redirect) {
+	public String confirmDeletion(Model model, DeleteConfirmationForm choice, AcctDeletionForm deletion,
+			RedirectAttributes redirect) {
 		System.out.println("here is the rid we want to delete: " + myRid);
-		if(choice.getSelection().equals("YES") && !myRid.isEmpty()) {
+		if (choice.getSelection().equals("YES") && !myRid.isEmpty()) {
 			dao.deleteAccount(myRid);
-			redirect.addFlashAttribute("success" , "The user with RID " + myRid + " has been deleted.");
+			redirect.addFlashAttribute("success", "The user with RID " + myRid + " has been deleted.");
 			return "redirect:/accountDeletion";
-		}
-		else {
+		} else {
 			model.addAttribute("formSelection", 1);
-			model.addAttribute("formA" , deletion);
-			model.addAttribute("error" , "");
+			model.addAttribute("formA", deletion);
+			model.addAttribute("error", "");
 			return "redirect:/accountDeletion";
-			
+
 		}
 	}
-	
 
 	private String encodePassword(String rawPassword) {
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -343,7 +339,9 @@ public class AccountController {
 	@GetMapping("/updateUserAccount")
 	public String updateUserAccount(@RequestParam(value = "royalID", required = true) String royalID, Model model) {
 		UserAccount accountForm = dao.getAccountByRoyalID(royalID);
-		this.royalID = royalID;
+		if (accountForm == null || accountForm.getRoyalID().equals("-1")) {
+			return "updateUserAccount";
+		}
 		model.addAttribute("accountForm", accountForm);
 		model.addAttribute("royalID", royalID);
 		model.addAttribute("roles", dao.getRoles());
@@ -351,27 +349,18 @@ public class AccountController {
 	}
 
 	@PostMapping("/updateUserAccount")
-	public String resultUserUpdateAccount(@Valid UserAccount userAccount, final BindingResult result, Model model,
+	public String resultUpdateUserAccount(@Valid UserAccount userAccount, final BindingResult result, Model model,
 			final RedirectAttributes redirectAttributes) {
-		userAccount.setRoyalID(royalID);
+		System.out.println(userAccount.getRoyalID());
 		if (result.hasErrors()) {
-			userAccount = dao.getAccountByRoyalID(this.royalID);
-			JobHistory jobHistory = new JobHistory();
-			for (int i = 0; i < dao.getJobHistoryByID(this.royalID).size(); i++) {
-				jobHistory.setAddress(dao.getJobHistoryByID(this.royalID).get(i).getAddress());
-				jobHistory.setCompanyName(dao.getJobHistoryByID(this.royalID).get(i).getCompanyName());
-				jobHistory.setEndDate(dao.getJobHistoryByID(this.royalID).get(i).getEndDate());
-				jobHistory.setPosition(dao.getJobHistoryByID(this.royalID).get(i).getPosition());
-				jobHistory.setRid(dao.getJobHistoryByID(this.royalID).get(i).getRid());
-				jobHistory.setStartDate(dao.getJobHistoryByID(this.royalID).get(i).getStartDate());
-			}
+			userAccount = dao.getAccountByRoyalID(userAccount.getRoyalID());
 			model.addAttribute("accountForm", userAccount);
-			model.addAttribute("royalID", royalID);
+			model.addAttribute("royalID", userAccount.getRoyalID());
 			model.addAttribute("roles", dao.getRoles());
 			return "updateUserAccount";
 		} else {
 			try {
-				if (!userAccount.getEmail().equals(dao.getAccountByRoyalID(royalID).getEmail())) {
+				if (!userAccount.getEmail().equals(dao.getAccountByRoyalID(userAccount.getRoyalID()).getEmail())) {
 					RegistrationForm form = new RegistrationForm();
 					String specialCode = form.createSpecialCode();
 					userAccount.setSpecialCode(specialCode);
@@ -387,25 +376,19 @@ public class AccountController {
 				}
 				return "redirect:/viewProfile?royalID=" + userAccount.getRoyalID();
 			} catch (MailException e) {
-				userAccount = dao.getAccountByRoyalID(this.royalID);
-				userAccount.setRoles(dao.getRolesByID(this.royalID));
-				JobHistory jobHistory = new JobHistory();
-				for (int i = 0; i < dao.getJobHistoryByID(this.royalID).size(); i++) {
-					jobHistory.setAddress(dao.getJobHistoryByID(this.royalID).get(i).getAddress());
-					jobHistory.setCompanyName(dao.getJobHistoryByID(this.royalID).get(i).getCompanyName());
-					jobHistory.setEndDate(dao.getJobHistoryByID(this.royalID).get(i).getEndDate());
-					jobHistory.setPosition(dao.getJobHistoryByID(this.royalID).get(i).getPosition());
-					jobHistory.setRid(dao.getJobHistoryByID(this.royalID).get(i).getRid());
-					jobHistory.setStartDate(dao.getJobHistoryByID(this.royalID).get(i).getStartDate());
-				}
-				userAccount.setWorkExperience((ArrayList<JobHistory>) dao.getJobHistoryByID(royalID));
+				userAccount = dao.getAccountByRoyalID(userAccount.getRoyalID());
 				model.addAttribute("accountForm", userAccount);
-				model.addAttribute("workExperience", userAccount.getWorkExperience());
+				model.addAttribute("royalID", userAccount.getRoyalID());
 				model.addAttribute("roles", dao.getRoles());
 				return "updateUserAccount";
 			}
 		}
+	}
 
+// ==========================RequestMapping for "/403"=====================================
+	@RequestMapping(value = "/403", method = RequestMethod.GET)
+	public String accessDenied(Model model, Principal principal) {
+		return "error/403";
 	}
 
 // =====================Auto Login Feature============================================

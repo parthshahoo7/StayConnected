@@ -21,7 +21,7 @@
 			<th>Address</th>
 			<th>Phone</th>
 			<th>Profile</th>
-			<th>Update Account</th>
+			<th sec:authorize="hasRole('ROLE_FACULTY')">Update Account</th>
 
 		</tr>
 

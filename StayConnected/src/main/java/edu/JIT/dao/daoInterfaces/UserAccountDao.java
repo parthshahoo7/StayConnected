@@ -46,5 +46,5 @@ public interface UserAccountDao {
 
 	public List<JobHistory> getJobHistoryByID(String royalID);
 
-	public void updateUserAccount(UserAccount userAccount); 
+	public int updateUserAccount(UserAccount userAccount); 
 }

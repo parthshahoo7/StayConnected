@@ -13,7 +13,7 @@ public class RegistrationForm {
 
 	public RegistrationForm() {
 		super();
-		account = new UserAccount();
+		this.account = new UserAccount();
 	}
 
 	public RegistrationForm(UserAccount account, String password, String confirmPassword, String specialCode) {
@@ -55,7 +55,7 @@ public class RegistrationForm {
 	public void setSpecialCode(String specialCode) {
 		this.specialCode = specialCode;
 	}
-	
+
 	public String createSpecialCode() {
 		int leftLimit = 97; // letter 'a'
 		int rightLimit = 122; // letter 'z'

@@ -24,12 +24,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
+		http.exceptionHandling().accessDeniedPage("/403");
 		http
 			.authorizeRequests()
 				.antMatchers("/","/login", "/registration", "/home", "/activateAccount", "/confirmation").permitAll()
 				.antMatchers("/updateAccount","/updateUserAccount/**", "/manageAccount", "/browseUsers","/postJobOpenings","/browsejobopenings", "/accountActivated", "/viewProfile/**").hasAnyRole("ALUM", "CURR", "FACULTY")
-				.and()
-			.exceptionHandling().accessDeniedPage("/403")
+				.antMatchers("/403").permitAll().anyRequest().authenticated()			
 				.and()
 			.formLogin().failureUrl("/login?error")
 				.defaultSuccessUrl("/home")
