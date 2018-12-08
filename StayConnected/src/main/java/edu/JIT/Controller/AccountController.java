@@ -282,6 +282,7 @@ public class AccountController {
 			model.addAttribute("notFound", true);
 			return "viewProfile";
 		}
+		profileOfUser.setRoles(makeRolesPretty(profileOfUser.getRoles()));
 		model.addAttribute("notFound", false);
 		model.addAttribute("user", profileOfUser);
 		return "viewProfile";
@@ -429,4 +430,23 @@ public class AccountController {
 		}
 		return filteredUsers;
 	}
+	
+	private ArrayList<String> makeRolesPretty(ArrayList<String> roles) {
+		ArrayList<String> result = new ArrayList<String>();
+		for(String role: roles) {
+			switch (role) {
+	            case "CURR":
+	            	result.add("Current Student");
+	            	break;
+	            case "ALUM":
+	            	result.add("Alumni");
+	            	break;
+	            case "FACULTY":
+	            	result.add("Faculty");
+	            	break;
+			}
+		}
+		return result;
+	}
+	
 }
