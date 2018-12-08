@@ -1,6 +1,5 @@
 package edu.JIT.test;
 
-import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -163,4 +162,5 @@ public class AccountControllerTest {
 	public void tearDown() throws Exception {
 		userAccountDao.deleteAccount(testAccount.getRoyalID());
 	}
+	
 }
