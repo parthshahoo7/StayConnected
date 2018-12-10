@@ -51,8 +51,13 @@ new address: <input type="text" name="userAddress" th:field="*{address}">
 
 </form>
 
+<br>
 <div th:if="${error}">
-<p> One or more fields are invalid!   </p>
+<table>
+<tr th:each="formerror: ${formErrors}" >
+	<td th:text="${formerror}"></td>
+</tr>
+</table>
 </div>
 
 </body>

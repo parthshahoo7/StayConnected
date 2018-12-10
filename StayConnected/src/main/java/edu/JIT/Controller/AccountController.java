@@ -256,6 +256,7 @@ public class AccountController {
 	@PostMapping("/updateAccount")
 	public String submitUpdateAccount(UpdateAccountForm update, Principal user, final BindingResult result, Model model,
 			final RedirectAttributes redirectAttributes) {
+		ArrayList<String> formErrors = new ArrayList<String>();
 		updateValidation.validate(update, result);
 		if (!result.hasErrors()) {
 			dao.update(update, user);
@@ -263,6 +264,10 @@ public class AccountController {
 			return "redirect:/confirmation";
 		} else {
 			model.addAttribute("error", true);
+			for(int i=0; i<result.getFieldErrors().size(); i++) {
+				formErrors.add(result.getFieldErrors().get(i).getField() + " is invalid!");
+			}
+			model.addAttribute("formErrors", formErrors);
 			UserAccount loggedInUser = dao.getAccountByRoyalID(user.getName());
 			model.addAttribute("user", loggedInUser);
 			model.addAttribute("updateform", update);

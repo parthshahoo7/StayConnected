@@ -32,7 +32,7 @@ public class updateFormValidation implements Validator {
 		}
 		
 		if((!updatedInfo.getPhoneNumber().matches(phoneNumber)) && (!updatedInfo.getPhoneNumber().equals(""))) {
-			errors.rejectValue("phoneNumber", "badly formed phone #");
+			errors.rejectValue("phoneNumber", "badly formed phone #. Try without slashes.");
 		}
 	}
 }
