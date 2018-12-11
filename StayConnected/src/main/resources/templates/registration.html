@@ -3,7 +3,15 @@
 	xmlns:th="http://www.thymeleaf.org"
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
-<meta charset="UTF-8">
+<meta charset="ISO-8859-1">
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="keywords"
+	content="Bootstrap, Landing page, Template, Registration, Landing">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="author" content="Grayrids">
 <title>Account Registration</title>
 <style>
 .error {
@@ -11,121 +19,137 @@
 	font-style: italic;
 }
 </style>
+<link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+<link rel="stylesheet" href="/assets/css/line-icons.css">
+<link rel="stylesheet" href="/assets/css/owl.carousel.min.css">
+<link rel="stylesheet" href="/assets/css/owl.theme.default.css">
+<link rel="stylesheet" href="/assets/css/slicknav.min.css">
+<link rel="stylesheet" href="/assets/css/animate.css">
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="stylesheet" href="/assets/css/responsive.css">
 </head>
 <body>
-	<a href='/home'>Home</a>
-	<p sec:authorize="!hasRole('ROLE_FACULTY') && isAuthenticated()">You already have an Account!</p>
-	<form action="#" th:action="@{/registration}"
-		th:object="${accountForm}" method="post" sec:authorize="hasRole('ROLE_FACULTY') or !isAuthenticated()" >
-		<p th:if="${PasswordShort}" class="error">Password is not long
-			enough!</p>
-		<p th:if="${PasswordNoMatch}" class="error">Passwords do not
-			match!</p>
-		<p th:if="${NoRole}" class="error">You must Select at least 1 Role.</p>
-		<p th:if="${EmailNotValid}" class="error">The email you entered is not valid.</p>
-		<table>
-			<tr>
-				<td>Royal ID</td>
-				<td><input type="text" required="required"
-					th:field="*{account.royalID}" /></td>
-			</tr>
-			<tr>
-				<td>First Name</td>
-				<td><input type="text" required="required"
-					th:field="*{account.firstName}" /></td>
-			</tr>
-			<tr>
-				<td>Last Name</td>
-				<td><input type="text" required="required"
-					th:field="*{account.lastName}" /></td>
-			</tr>
-			<tr>
-				<td>Email</td>
-				<td><input type="text" required="required"
-					th:field="*{account.email}" /></td>
-			</tr>
-			<tr>
-				<td>Address</td>
-				<td><input type="text" required="required"
-					th:field="*{account.userAddress}" /></td>
-			</tr>
-			<tr>
-				<td>Phone Number</td>
-				<td><input type="text" required="required"
-					th:field="*{account.phoneNumber}" /></td>
-			</tr>
-			<tr>
-				<td>Password</td>
-				<td><input type="password" required="required"
-					th:field="*{password}" /></td>
-			</tr>
-			<tr>
-				<td>Re-type Password</td>
-				<td><input type="password" required="required"
-					th:field="*{confirmPassword}" /></td>
-			</tr>
+	<div th:insert="~{Fragments/defaultFragment :: header}"></div>
+	<section id="content" class="section-padding">
+		<p sec:authorize="!hasRole('ROLE_FACULTY') && isAuthenticated()">You
+			already have an Account!</p>
+		<form action="#" th:action="@{/registration}"
+			th:object="${accountForm}" method="post"
+			sec:authorize="hasRole('ROLE_FACULTY') or !isAuthenticated()">
+			<p th:if="${PasswordShort}" class="error">Password is not long
+				enough!</p>
+			<p th:if="${PasswordNoMatch}" class="error">Passwords do not
+				match!</p>
+			<p th:if="${NoRole}" class="error">You must Select at least 1
+				Role.</p>
+			<p th:if="${EmailNotValid}" class="error">The email you entered
+				is not valid.</p>
+			<table>
+				<tr>
+					<td>Royal ID</td>
+					<td><input type="text" required="required"
+						th:field="*{account.royalID}" /></td>
+				</tr>
+				<tr>
+					<td>First Name</td>
+					<td><input type="text" required="required"
+						th:field="*{account.firstName}" /></td>
+				</tr>
+				<tr>
+					<td>Last Name</td>
+					<td><input type="text" required="required"
+						th:field="*{account.lastName}" /></td>
+				</tr>
+				<tr>
+					<td>Email</td>
+					<td><input type="text" required="required"
+						th:field="*{account.email}" /></td>
+				</tr>
+				<tr>
+					<td>Address</td>
+					<td><input type="text" required="required"
+						th:field="*{account.userAddress}" /></td>
+				</tr>
+				<tr>
+					<td>Phone Number</td>
+					<td><input type="text" required="required"
+						th:field="*{account.phoneNumber}" /></td>
+				</tr>
+				<tr>
+					<td>Password</td>
+					<td><input type="password" required="required"
+						th:field="*{password}" /></td>
+				</tr>
+				<tr>
+					<td>Re-type Password</td>
+					<td><input type="password" required="required"
+						th:field="*{confirmPassword}" /></td>
+				</tr>
 
-			<tr>
-				<td>
-					<h3>User Roles</h3>
-					<ul>
-						<li th:each="aType : ${roles}"><input type="checkbox"
-							th:field="*{account.roles}" th:value="${aType}" /> <label
-							th:for="${#ids.prev('account.roles')}" th:text="${aType}"></label>
-						</li>
-					</ul>
-				</td>
-			</tr>
-
-			<tr>
-				<td>
-					<h3>Skills</h3>
-					<ul>
-						<li th:each="skill : ${skills}"><input type="checkbox"
-							name="ski" th:value="${skill.skillID}" /> <label
-							th:text="${skill.skillName}"></label></li>
-					</ul>
-				</td>
-			</tr>
-
-			<tr>
-				<td>
-					<button onclick="showJobHistory();return false;" class="test">Click
-						here to add your job</button>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<div id="jobhistory" style="display: none">
-						<label>Work-Experience</label>
+				<tr>
+					<td>
+						<h3>User Roles</h3>
 						<ul>
-							<li><label>Company Name: </label> <input type="text"
-								th:field="*{account.workExperience[0].companyName}" /></li>
-
-							<li><label>Position: </label> <input type="text"
-								th:field="*{account.workExperience[0].position}" /></li>
-
-							<li><label>Start Date: </label> <input type="text"
-								th:field="*{account.workExperience[0].startDate}" /></li>
-
-							<li><label>End Date: </label> <input type="text"
-								th:field="*{account.workExperience[0].endDate}" /></li>
-							<li><label> Currently Employed at this Company?</label> <br>
-								<input type="radio" value="true"
-								th:field="*{account.workExperience[0].currentlyEmployed}" />Yes
-								<br> <input type="radio" value="false"
-								th:field="*{account.workExperience[0].currentlyEmployed}" /> No
-								<br></li>
+							<li th:each="aType : ${roles}"><input type="checkbox"
+								th:field="*{account.roles}" th:value="${aType}" /> <label
+								th:for="${#ids.prev('account.roles')}" th:text="${aType}"></label>
+							</li>
 						</ul>
-					</div>
-				</td>
-			</tr>
-			<tr>
-				<td><button type="submit">Submit</button></td>
-				<td><input type="button" onclick="location.href='/home';" value="Cancel" /></td>
-			</tr>
-		</table>
-	</form>
+					</td>
+				</tr>
+
+				<tr>
+					<td>
+						<h3>Skills</h3>
+						<ul>
+							<li th:each="skill : ${skills}"><input type="checkbox"
+								name="ski" th:value="${skill.skillID}" /> <label
+								th:text="${skill.skillName}"></label></li>
+						</ul>
+					</td>
+				</tr>
+
+				<tr>
+					<td>
+						<button onclick="showJobHistory();return false;" class="test">Click
+							here to add your job</button>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div id="jobhistory" style="display: none">
+							<label>Work-Experience</label>
+							<ul>
+								<li><label>Company Name: </label> <input type="text"
+									th:field="*{account.workExperience[0].companyName}" /></li>
+
+								<li><label>Position: </label> <input type="text"
+									th:field="*{account.workExperience[0].position}" /></li>
+
+								<li><label>Start Date: </label> <input type="text"
+									th:field="*{account.workExperience[0].startDate}" /></li>
+
+								<li><label>End Date: </label> <input type="text"
+									th:field="*{account.workExperience[0].endDate}" /></li>
+								<li><label> Currently Employed at this Company?</label> <br>
+									<input type="radio" value="true"
+									th:field="*{account.workExperience[0].currentlyEmployed}" />Yes
+									<br> <input type="radio" value="false"
+									th:field="*{account.workExperience[0].currentlyEmployed}" />
+									No <br></li>
+							</ul>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td><button type="submit">Submit</button></td>
+					<td><input type="button" onclick="location.href='/home';"
+						value="Cancel" /></td>
+				</tr>
+			</table>
+		</form>
+	</section>
+	<div th:insert="~{Fragments/defaultFragment :: footer}"></div>
 	<script>
 		function showJobHistory() {
 			var x = document.getElementById("jobhistory");

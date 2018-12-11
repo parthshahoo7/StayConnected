@@ -154,7 +154,7 @@ public class JobController {
 			System.out.println(result.getFieldError());
 			model.addAttribute("postjob", jobOpening);
 			model.addAttribute("skills", dao.getSkills());
-			return "jobManagement/postjobopenings";
+			return "jobManagement/postjobopening";
 		}ArrayList<Skill> skills = (ArrayList<Skill>) dao.getSkills();
 		if (ski != null) {
 			Skill skill = null;

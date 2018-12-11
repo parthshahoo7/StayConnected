@@ -4,6 +4,14 @@
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
 <meta charset="ISO-8859-1">
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="keywords"
+	content="Bootstrap, Landing page, Template, Registration, Landing">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="author" content="Grayrids">
 <title>Post Job Opening</title>
 <style>
 .error {
@@ -11,12 +19,21 @@
 	font-style: italic;
 }
 </style>
+<link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+<link rel="stylesheet" href="/assets/css/line-icons.css">
+<link rel="stylesheet" href="/assets/css/owl.carousel.min.css">
+<link rel="stylesheet" href="/assets/css/owl.theme.default.css">
+<link rel="stylesheet" href="/assets/css/slicknav.min.css">
+<link rel="stylesheet" href="/assets/css/animate.css">
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="stylesheet" href="/assets/css/responsive.css">
 </head>
 <body>
 <body>
-	<a href='/home'>Home</a>
-	<form action="#" th:action="@{/postJobOpening}" th:object="${postjob}"
-		method="post">
+	<div th:insert="~{Fragments/defaultFragment :: header}"></div>
+	<section class="job-browse section">
+	<form action="#" th:action="@{/postJobOpenings}" th:object="${postjob}"
+		method="post" style="padding-left: 350px">
 		<table>
 			<tr>
 				<td>Job ID</td>
@@ -44,7 +61,8 @@
 			</tr>
 			<tr>
 				<td>End Date</td>
-				<td><input type="date" th:field="*{endDate}" th:text="${#dates.format(endDate, 'dd-MM-yyyy')}" /></td>
+				<td><input type="date" th:field="*{endDate}"
+					th:text="${#dates.format(endDate, 'dd-MM-yyyy')}" /></td>
 			</tr>
 			<tr>
 				<td>Hours Per Week</td>
@@ -59,6 +77,10 @@
 				<td>CompanyName</td>
 				<td><input type="text" required="required"
 					th:field="*{companyName.companyName}" /></td>
+			</tr>
+			<tr>
+				<td>Contact Number</td>
+				<td><input type="text" th:field="*{companyName.phoneNumber}" /></td>
 			</tr>
 			<tr>
 				<td>Job Description</td>
@@ -76,10 +98,12 @@
 				</td>
 			</tr>
 			<tr>
-				<td><button type="submit">Submit</button></td>
+				<td><button class="btn btn-common log-btn mt-3" type="submit">Submit</button></td>
 			</tr>
 		</table>
 	</form>
+	</section>
+	<div th:insert="~{Fragments/defaultFragment :: footer}"></div>
 </body>
 </body>
 </html>

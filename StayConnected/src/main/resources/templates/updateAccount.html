@@ -2,63 +2,101 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
+<meta charset="ISO-8859-1">
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="keywords"
+	content="Bootstrap, Landing page, Template, Registration, Landing">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="author" content="Grayrids">
 <title>Update Account</title>
+<link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+<link rel="stylesheet" href="/assets/css/line-icons.css">
+<link rel="stylesheet" href="/assets/css/owl.carousel.min.css">
+<link rel="stylesheet" href="/assets/css/owl.theme.default.css">
+<link rel="stylesheet" href="/assets/css/slicknav.min.css">
+<link rel="stylesheet" href="/assets/css/animate.css">
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="stylesheet" href="/assets/css/responsive.css">
 </head>
 <body>
-<a href='/home'>Home</a>
-<h3 th:inline="text"> Hello, [[${#httpServletRequest.remoteUser}]]! Update your account below,</h3>
+	<div th:insert="~{Fragments/defaultFragment :: header}"></div>
+	<section id="content" class="section-padding">
+		<div class="page-header">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="inner-header">
+							<h3 th:inline="text">Hello,
+								[[${#httpServletRequest.remoteUser}]]! Update your account
+								below,</h3>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 
-<form action="#" th:action="@{/updateAccount}"
-		th:object="${updateform}" method="post">
+		<form action="#" th:action="@{/updateAccount}"
+			th:object="${updateform}" method="post">
 
-<div>
-<label th:inline="text">  Your first name is: [[${user.firstName}]]</label>
-<div>
-new first name: <input type="text" name="firstname" th:field="*{firstName}"> 
-</div>
-</div>
+			<div>
+				<label th:inline="text"> Your first name is:
+					[[${user.firstName}]]</label>
+				<div>
+					new first name: <input type="text" name="firstname"
+						th:field="*{firstName}">
+				</div>
+			</div>
 
-<div>
-<label th:inline="text">  Your last name is: [[${user.lastName}]]</label>
-<div>
-new last name: <input type="text" name="lastname" th:field="*{lastName}"> 
-</div>
-</div>
+			<div>
+				<label th:inline="text"> Your last name is:
+					[[${user.lastName}]]</label>
+				<div>
+					new last name: <input type="text" name="lastname"
+						th:field="*{lastName}">
+				</div>
+			</div>
 
-<div>
-<label th:inline="text">  Your email is: [[${user.email}]]</label>
-<div>
-new email: <input type="text" name="email" th:field="*{email}"> 
-</div>
-</div>
+			<div>
+				<label th:inline="text"> Your email is: [[${user.email}]]</label>
+				<div>
+					new email: <input type="text" name="email" th:field="*{email}">
+				</div>
+			</div>
 
-<div>
-<label th:inline="text">  Your phone number is: [[${user.phoneNumber}]]</label>
-<div>
-new phone number: <input type="text" name="phoneNumber" th:field="*{phoneNumber}"> 
-</div>
-</div>
+			<div>
+				<label th:inline="text"> Your phone number is:
+					[[${user.phoneNumber}]]</label>
+				<div>
+					new phone number: <input type="text" name="phoneNumber"
+						th:field="*{phoneNumber}">
+				</div>
+			</div>
 
-<div>
-<label th:inline="text">  Your address is: [[${user.userAddress}]]</label>
-<div>
-new address: <input type="text" name="userAddress" th:field="*{address}"> 
-</div>
-</div>
+			<div>
+				<label th:inline="text"> Your address is:
+					[[${user.userAddress}]]</label>
+				<div>
+					new address: <input type="text" name="userAddress"
+						th:field="*{address}">
+				</div>
+			</div>
 
-<button type="submit">Update</button>
+			<button type="submit">Update</button>
 
-</form>
+		</form>
 
-<br>
-<div th:if="${error}">
-<table>
-<tr th:each="formerror: ${formErrors}" >
-	<td th:text="${formerror}"></td>
-</tr>
-</table>
-</div>
-
+		<br>
+		<div th:if="${error}">
+			<table>
+				<tr th:each="formerror: ${formErrors}">
+					<td th:text="${formerror}"></td>
+				</tr>
+			</table>
+		</div>
+	</section>
+	<div th:insert="~{Fragments/defaultFragment :: footer}"></div>
 </body>
 </html>

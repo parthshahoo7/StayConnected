@@ -3,7 +3,15 @@
 	xmlns:th="http://www.thymeleaf.org"
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
-<meta charset="UTF-8">
+<meta charset="ISO-8859-1">
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="keywords"
+	content="Bootstrap, Landing page, Template, Registration, Landing">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="author" content="Grayrids">
 <title>View Profile</title>
 <style>
 .error {
@@ -11,54 +19,55 @@
 	font-style: italic;
 }
 </style>
+<link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+<link rel="stylesheet" href="/assets/css/line-icons.css">
+<link rel="stylesheet" href="/assets/css/owl.carousel.min.css">
+<link rel="stylesheet" href="/assets/css/owl.theme.default.css">
+<link rel="stylesheet" href="/assets/css/slicknav.min.css">
+<link rel="stylesheet" href="/assets/css/animate.css">
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="stylesheet" href="/assets/css/responsive.css">
 </head>
 <body>
-<p><a href='/home'>Home</a></p>
-<p th:if="${notFound}" class="error">User Account not Found</p>
-<div th:if="${!notFound}">
-	<h1>User Profile</h1>
-	
-	<p>
-		First Name: [[${user.firstName}]]
-		<br>
-		Last Name: [[${user.lastName}]]
-		<br>
-		Email: [[${user.email}]]
-		<br>
-		Address: [[${user.userAddress}]]
-		<br>
-		Phone Number: [[${user.phoneNumber}]]
-	</p>
-	
-	<h2>User Type:</h2>
-	<p th:each= "role: ${user.roles}">
-		[[${role}]]
-		<br>
-	</p>
-	
-	<h2>Job History:</h2>
-	<div th:switch="${user.workExperience.size()}">
-		<p th:case="'0'">No Job History Found</p>
-		<p th:case="*" th:each= "job: ${user.workExperience}">
-			Company Name: [[${job.companyName}]] 
-			<br>
-			Position: [[${job.position}]]
-			<br>
-			Start Date: [[${job.startDate}]]
-			<br>
-			End Date: [[${job.endDate}]]
-			<br>
-			Currently Employed: [[${job.currentlyEmployed}]]
-			<br>
+	<div th:insert="~{Fragments/defaultFragment :: header}"></div>
+	<section id="content" class="section-padding">
+		<p>
+			<a href='/home'>Home</a>
 		</p>
-	</div>
-	
-	<h2>Skills:</h2>
-	<p th:each= "skill: ${user.skill}">
-		[[${skill.skillName}]]
-		<br>
-	</p>
-</div>
-<a href="/browseUsers"> Back To Searching For Students/Alumni</a>
+		<p th:if="${notFound}" class="error">User Account not Found</p>
+		<div th:if="${!notFound}">
+			<h1>User Profile</h1>
+
+			<p>
+				First Name: [[${user.firstName}]] <br> Last Name:
+				[[${user.lastName}]] <br> Email: [[${user.email}]] <br>
+				Address: [[${user.userAddress}]] <br> Phone Number:
+				[[${user.phoneNumber}]]
+			</p>
+
+			<h2>User Type:</h2>
+			<p th:each="role: ${user.roles}">
+				[[${role}]] <br>
+			</p>
+
+			<h2>Job History:</h2>
+			<div th:switch="${user.workExperience.size()}">
+				<p th:case="'0'">No Job History Found</p>
+				<p th:case="*" th:each="job: ${user.workExperience}">
+					Company Name: [[${job.companyName}]] <br> Position:
+					[[${job.position}]] <br> Start Date: [[${job.startDate}]] <br>
+					End Date: [[${job.endDate}]] <br> Currently Employed:
+					[[${job.currentlyEmployed}]] <br>
+				</p>
+			</div>
+
+			<h2>Skills:</h2>
+			<p th:each="skill: ${user.skill}">
+				[[${skill.skillName}]] <br>
+			</p>
+		</div>
+		<a href="/browseUsers"> Back To Searching For Students/Alumni</a>
+	</section>
+	<div th:insert="~{Fragments/defaultFragment :: footer}"></div>
 </body>
 </html>

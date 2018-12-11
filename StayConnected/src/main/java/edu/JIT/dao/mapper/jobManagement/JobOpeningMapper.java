@@ -25,6 +25,7 @@ public class JobOpeningMapper implements RowMapper<InternshipJobOpening> {
 		jobOpening.setEndDate(rs.getDate("enddate"));
 		Company company=new Company();
 		company.setCompanyName(rs.getString("companyname"));
+		company.setPhoneNumber(rs.getString("phone_number"));
 		jobOpening.setCompanyName(company);
 		return jobOpening;
 	}

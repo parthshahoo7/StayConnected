@@ -4,6 +4,14 @@
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
 <meta charset="ISO-8859-1">
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="keywords"
+	content="Bootstrap, Landing page, Template, Registration, Landing">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="author" content="Grayrids">
 <title>Update User Account</title>
 <style>
 .error {
@@ -11,98 +19,112 @@
 	font-style: italic;
 }
 </style>
+<link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+<link rel="stylesheet" href="/assets/css/line-icons.css">
+<link rel="stylesheet" href="/assets/css/owl.carousel.min.css">
+<link rel="stylesheet" href="/assets/css/owl.theme.default.css">
+<link rel="stylesheet" href="/assets/css/slicknav.min.css">
+<link rel="stylesheet" href="/assets/css/animate.css">
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="stylesheet" href="/assets/css/responsive.css">
 </head>
 <body>
-	<p sec:authorize="!hasRole('ROLE_FACULTY')" class="error">You Are
-		Not Authorized to Access This Page !!!!</p>
-	<a href='/home'>Home</a>
-	<div sec:authorize="hasRole('ROLE_FACULTY')">
-		<a href="/logout">Logout</a><br><br> Royal ID: [[${royalID}]]
-		<form action="#" th:action="@{/updateUserAccount}"
-			th:object="${accountForm}" method="post">
-			<p th:if="${PasswordShort}" class="error">Password is not long
-				enough!</p>
-			<p th:if="${PasswordNoMatch}" class="error">Passwords do not
-				match!</p>
-			<p th:if="${NoRole}" class="error">You must Select at least 1
-				Role.</p>
-			<p th:if="${EmailNotValid}" class="error">The email you entered
-				is not valid.</p>
-			<p></p>
-			<table>
-				<tr>
-					<td><input type="hidden" th:field="*{royalID}" /></td>
-				</tr>
-				<tr>
-					<td>First Name</td>
-					<td><input type="text" required="required"
-						th:field="*{firstName}" /></td>
-				</tr>
-				<tr>
-					<td>Last Name</td>
-					<td><input type="text" required="required"
-						th:field="*{lastName}" /></td>
-				</tr>
-				<tr>
-					<td>Email</td>
-					<td><input type="text" required="required" th:field="*{email}" /></td>
-				</tr>
-				<tr>
-					<td>Address</td>
-					<td><input type="text" required="required"
-						th:field="*{userAddress}" /></td>
-				</tr>
-				<tr>
-					<td>Phone Number</td>
-					<td><input type="text" required="required"
-						th:field="*{phoneNumber}" /></td>
-				</tr>
-				<tr>
-					<td>
-						<h3>User Roles</h3>
-						<ul>
-							<li th:each="aType : ${roles}"><input type="checkbox"
-								th:field="*{roles}" th:value="${aType}" /> <label
-								th:for="${#ids.prev('roles')}" th:text="${aType}"></label></li>
-						</ul>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<div>
-							<label>Work-Experience</label>
+	<div th:insert="~{Fragments/defaultFragment :: header}"></div>
+	<section id="content" class="section-padding">
+		<p sec:authorize="!hasRole('ROLE_FACULTY')" class="error">You Are
+			Not Authorized to Access This Page !!!!</p>
+		<a href='/home'>Home</a>
+		<div sec:authorize="hasRole('ROLE_FACULTY')">
+			<a href="/logout">Logout</a><br> <br> Royal ID:
+			[[${royalID}]]
+			<form action="#" th:action="@{/updateUserAccount}"
+				th:object="${accountForm}" method="post">
+				<p th:if="${PasswordShort}" class="error">Password is not long
+					enough!</p>
+				<p th:if="${PasswordNoMatch}" class="error">Passwords do not
+					match!</p>
+				<p th:if="${NoRole}" class="error">You must Select at least 1
+					Role.</p>
+				<p th:if="${EmailNotValid}" class="error">The email you entered
+					is not valid.</p>
+				<p></p>
+				<table>
+					<tr>
+						<td><input type="hidden" th:field="*{royalID}" /></td>
+					</tr>
+					<tr>
+						<td>First Name</td>
+						<td><input type="text" required="required"
+							th:field="*{firstName}" /></td>
+					</tr>
+					<tr>
+						<td>Last Name</td>
+						<td><input type="text" required="required"
+							th:field="*{lastName}" /></td>
+					</tr>
+					<tr>
+						<td>Email</td>
+						<td><input type="text" required="required"
+							th:field="*{email}" /></td>
+					</tr>
+					<tr>
+						<td>Address</td>
+						<td><input type="text" required="required"
+							th:field="*{userAddress}" /></td>
+					</tr>
+					<tr>
+						<td>Phone Number</td>
+						<td><input type="text" required="required"
+							th:field="*{phoneNumber}" /></td>
+					</tr>
+					<tr>
+						<td>
+							<h3>User Roles</h3>
 							<ul>
-								<li><label>Company Name: </label> <input type="text"
-									th:field="*{workExperience[0].companyName}" /></li>
-
-								<li><label>Position: </label> <input type="text"
-									th:field="*{workExperience[0].position}" /></li>
-
-								<li><label>Start Date: </label> <input type="date"
-									th:field="*{workExperience[0].startDate}" /></li>
-
-								<li><label>End Date: </label> <input type="date"
-									th:field="*{workExperience[0].endDate}" /></li>
-								<li><label>Address: </label> <input type="text"
-									th:field="*{workExperience[0].address}" /></li>
-								<li><label> Currently Employed at this Company?</label> <br>
-									<input type="radio" value="true"
-									th:field="*{workExperience[0].currentlyEmployed}" />Yes <br>
-									<input type="radio" value="false"
-									th:field="*{workExperience[0].currentlyEmployed}" /> No <br></li>
+								<li th:each="aType : ${roles}"><input type="checkbox"
+									th:field="*{roles}" th:value="${aType}" /> <label
+									th:for="${#ids.prev('roles')}" th:text="${aType}"></label></li>
 							</ul>
-						</div>
-					</td>
-				</tr>
-				<tr>
-					<td><button type="submit">Submit</button></td>
-					<td><input type="button" onclick="location.href='/home';"
-						value="Cancel" /></td>
-				</tr>
-			</table>
-		</form>
-		<a href="/browseUsers"> Back To Search Page to Select
-			CurrentStudent/Alumni</a>
-	</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div>
+								<label>Work-Experience</label>
+								<ul>
+									<li><label>Company Name: </label> <input type="text"
+										th:field="*{workExperience[0].companyName}" /></li>
+
+									<li><label>Position: </label> <input type="text"
+										th:field="*{workExperience[0].position}" /></li>
+
+									<li><label>Start Date: </label> <input type="date"
+										th:field="*{workExperience[0].startDate}" /></li>
+
+									<li><label>End Date: </label> <input type="date"
+										th:field="*{workExperience[0].endDate}" /></li>
+									<li><label>Address: </label> <input type="text"
+										th:field="*{workExperience[0].address}" /></li>
+									<li><label> Currently Employed at this Company?</label> <br>
+										<input type="radio" value="true"
+										th:field="*{workExperience[0].currentlyEmployed}" />Yes <br>
+										<input type="radio" value="false"
+										th:field="*{workExperience[0].currentlyEmployed}" /> No <br></li>
+								</ul>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td><button type="submit">Submit</button></td>
+						<td><input type="button" onclick="location.href='/home';"
+							value="Cancel" /></td>
+					</tr>
+				</table>
+			</form>
+			<a href="/browseUsers"> Back To Search Page to Select
+				CurrentStudent/Alumni</a>
+		</div>
+	</section>
+	<div th:insert="~{Fragments/defaultFragment :: footer}"></div>
 </body>
 </html>
