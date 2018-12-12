@@ -19,7 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import edu.JIT.Controller.form.RegistrationForm;
+import edu.JIT.Controller.accountManagement.form.RegistrationForm;
 import edu.JIT.model.accountManagement.JobHistory;
 import edu.JIT.model.accountManagement.Skill;
 import edu.JIT.model.accountManagement.UserAccount;

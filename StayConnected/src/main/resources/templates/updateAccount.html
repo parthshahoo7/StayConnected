@@ -23,78 +23,87 @@
 </head>
 <body>
 	<div th:insert="~{Fragments/defaultFragment :: header}"></div>
-	<section id="content" class="section-padding">
-		<div class="page-header">
-			<div class="container">
-				<div class="row">
-					<div class="col-lg-12">
-						<div class="inner-header">
-							<h3 th:inline="text">Hello,
-								[[${#httpServletRequest.remoteUser}]]! Update your account
-								below,</h3>
-						</div>
+	<div class="page-header">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="inner-header">
+						<h3 th:inline="text">Hello,
+							[[${#httpServletRequest.remoteUser}]]! Update your account below,</h3>
 					</div>
 				</div>
 			</div>
 		</div>
+	</div>
+	<section id="content" class="section-padding">
+	<a href="/home"> Home </a>
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-lg-5 col-md-6 col-xs-12">
+					<div class="page-login-form box">
+						<form action="#" th:action="@{/updateAccount}"
+							th:object="${updateform}" method="post">
 
-		<form action="#" th:action="@{/updateAccount}"
-			th:object="${updateform}" method="post">
+							<div class="form-group">
+								<h6 th:inline="text"> Your first name is:
+									[[${user.firstName}]]</h6>
+								<div>
+									new first name: <input type="text" class="form-control"
+										name="firstname" th:field="*{firstName}">
+								</div>
+							</div>
 
-			<div>
-				<label th:inline="text"> Your first name is:
-					[[${user.firstName}]]</label>
-				<div>
-					new first name: <input type="text" name="firstname"
-						th:field="*{firstName}">
+							<div class="form-group">
+								<h6 th:inline="text"> Your last name is:
+									[[${user.lastName}]]</h6>
+								<div>
+									new last name: <input type="text" class="form-control"
+										name="lastname" th:field="*{lastName}">
+								</div>
+							</div>
+
+							<div class="form-group">
+								<h6 th:inline="text"> Your email is:
+									[[${user.email}]]</h6>
+								<div>
+									new email: <input type="text" class="form-control" name="email"
+										th:field="*{email}">
+								</div>
+							</div>
+
+							<div class="form-group">
+								<h6 th:inline="text"> Your phone number is:
+									[[${user.phoneNumber}]]</h6>
+								<div>
+									new phone number: <input type="text" class="form-control"
+										name="phoneNumber" th:field="*{phoneNumber}">
+								</div>
+							</div>
+
+							<div class="form-group">
+								<h6 th:inline="text"> Your address is:
+									[[${user.userAddress}]]</h6>
+								<div>
+									new address: <input type="text" class="form-control"
+										name="userAddress" th:field="*{address}">
+								</div>
+							</div>
+
+							<button class="btn btn-common log-btn mt-3" type="submit">Update</button>
+
+						</form>
+
+						<br>
+						<div th:if="${error}">
+							<table>
+								<tr th:each="formerror: ${formErrors}">
+									<td th:text="${formerror}"></td>
+								</tr>
+							</table>
+						</div>
+					</div>
 				</div>
 			</div>
-
-			<div>
-				<label th:inline="text"> Your last name is:
-					[[${user.lastName}]]</label>
-				<div>
-					new last name: <input type="text" name="lastname"
-						th:field="*{lastName}">
-				</div>
-			</div>
-
-			<div>
-				<label th:inline="text"> Your email is: [[${user.email}]]</label>
-				<div>
-					new email: <input type="text" name="email" th:field="*{email}">
-				</div>
-			</div>
-
-			<div>
-				<label th:inline="text"> Your phone number is:
-					[[${user.phoneNumber}]]</label>
-				<div>
-					new phone number: <input type="text" name="phoneNumber"
-						th:field="*{phoneNumber}">
-				</div>
-			</div>
-
-			<div>
-				<label th:inline="text"> Your address is:
-					[[${user.userAddress}]]</label>
-				<div>
-					new address: <input type="text" name="userAddress"
-						th:field="*{address}">
-				</div>
-			</div>
-
-			<button type="submit">Update</button>
-
-		</form>
-
-		<br>
-		<div th:if="${error}">
-			<table>
-				<tr th:each="formerror: ${formErrors}">
-					<td th:text="${formerror}"></td>
-				</tr>
-			</table>
 		</div>
 	</section>
 	<div th:insert="~{Fragments/defaultFragment :: footer}"></div>

@@ -12,7 +12,7 @@ public class CompanyListMapper implements RowMapper<Company> {
 	@Override
 	public Company mapRow(ResultSet rs, int rowNum) throws SQLException {
 		// TODO Auto-generated method stub
-		Company company=new Company();
+		Company company = new Company();
 		company.setCompanyName(rs.getString("name"));
 		company.setPhoneNumber(rs.getString("phone_number"));
 		return company;

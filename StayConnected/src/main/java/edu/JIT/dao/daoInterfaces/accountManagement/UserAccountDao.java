@@ -1,4 +1,4 @@
-package edu.JIT.dao.daoInterfaces;
+package edu.JIT.dao.daoInterfaces.accountManagement;
 
 import java.security.Principal;
 import java.util.ArrayList;
@@ -6,8 +6,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import edu.JIT.Controller.form.RegistrationForm;
-import edu.JIT.Controller.form.UpdateAccountForm;
+import edu.JIT.Controller.accountManagement.form.RegistrationForm;
+import edu.JIT.Controller.accountManagement.form.UpdateAccountForm;
 import edu.JIT.model.accountManagement.JobHistory;
 import edu.JIT.model.accountManagement.Skill;
 import edu.JIT.model.accountManagement.UserAccount;
@@ -21,7 +21,7 @@ public interface UserAccountDao {
 	public UserAccount getAccountByRoyalID(String royalID);
 
 	public ArrayList<UserAccount> getAllAccounts();
-	
+
 	public UserAccount getFullUserProfileByRoyalID(String royalID);
 
 	public int deleteAccount(String royalID);
@@ -31,13 +31,13 @@ public interface UserAccountDao {
 	public List<String> getRoles();
 
 	public List<Skill> getSkills();
-	
+
 	public UserActivation getSpecialCodeByRoyalID(String royalID);
-	
+
 	public boolean activateAccountByRoyalID(String royalID);
 
 	public void update(UpdateAccountForm update, Principal user);
-	
+
 	public Boolean isAccountActivated(String royalID);
 
 	public ArrayList<String> getRolesByID(String royalID);
@@ -46,5 +46,5 @@ public interface UserAccountDao {
 
 	public List<JobHistory> getJobHistoryByID(String royalID);
 
-	public int updateUserAccount(UserAccount userAccount); 
+	public int updateUserAccount(UserAccount userAccount);
 }

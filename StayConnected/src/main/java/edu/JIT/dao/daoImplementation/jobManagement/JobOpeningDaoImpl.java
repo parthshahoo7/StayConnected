@@ -1,4 +1,4 @@
-package edu.JIT.dao.daoImplementation;
+package edu.JIT.dao.daoImplementation.jobManagement;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,7 +6,6 @@ import java.util.List;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Repository;
@@ -14,7 +13,7 @@ import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
-import edu.JIT.dao.daoInterfaces.JobOpeningDao;
+import edu.JIT.dao.daoInterfaces.jobManagement.JobOpeningDao;
 import edu.JIT.dao.mapper.jobManagement.CompanyListMapper;
 import edu.JIT.dao.mapper.jobManagement.JobOpeningMapper;
 import edu.JIT.model.jobManagement.Company;
@@ -41,16 +40,16 @@ public class JobOpeningDaoImpl implements JobOpeningDao {
 		DefaultTransactionDefinition def = new DefaultTransactionDefinition();
 		def.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
 		TransactionStatus status = transactionManager.getTransaction(def);
-		ArrayList<String>companiesName=new ArrayList<>();
-		for(int i=0;i<getAllCompany().size();i++) {
+		ArrayList<String> companiesName = new ArrayList<>();
+		for (int i = 0; i < getAllCompany().size(); i++) {
 			companiesName.add(getAllCompany().get(i).getCompanyName());
 		}
 		try {
 			String postJobSql = "insert into stayconnected.jobopening(jobid,position,location,startdate,payrate,jobdescription,hoursperweek,enddate,companyname,phone_number) values(?,?,?,?,?,?,?,?,?,?)";
 			String insertCompanySql = "insert into stayconnected.company(name,address,phone_number) values(?,?,?)";
-			if(!(companiesName.contains(newJob.getCompanyName().getCompanyName()))) {
-				jdbcTemplate.update(insertCompanySql, newJob.getCompanyName().getCompanyName(),
-						newJob.getLocation(), newJob.getCompanyName().getPhoneNumber());
+			if (!(companiesName.contains(newJob.getCompanyName().getCompanyName()))) {
+				jdbcTemplate.update(insertCompanySql, newJob.getCompanyName().getCompanyName(), newJob.getLocation(),
+						newJob.getCompanyName().getPhoneNumber());
 			}
 			if (!newJob.getHoursPerWeek().equals("")) {
 				jdbcTemplate.update(postJobSql, newJob.getJobID(), newJob.getPosition(), newJob.getLocation(),
@@ -60,7 +59,8 @@ public class JobOpeningDaoImpl implements JobOpeningDao {
 			} else {
 				jdbcTemplate.update(postJobSql, newJob.getJobID(), newJob.getPosition(), newJob.getLocation(),
 						newJob.getStartDate(), newJob.getPayrate(), newJob.getJobDescription(), null,
-						newJob.getEndDate(), newJob.getCompanyName().getCompanyName(),newJob.getCompanyName().getPhoneNumber());
+						newJob.getEndDate(), newJob.getCompanyName().getCompanyName(),
+						newJob.getCompanyName().getPhoneNumber());
 			}
 			String jobQualificationSql = "insert into stayconnected.jobqualification(proficiancy,jobid,skillid) values(?,?,?)";
 			for (int i = 0; i < newJob.getSkills().size(); i++) {
@@ -68,10 +68,10 @@ public class JobOpeningDaoImpl implements JobOpeningDao {
 						newJob.getSkills().get(i).getSkillID());
 			}
 			transactionManager.commit(status);
-		} catch (DataAccessException e) {
+		} catch (Exception e) {
 			System.out.println("Error in posting Job, rolling back");
 			transactionManager.rollback(status);
-			throw (e);
+			return null;
 		}
 		return newJob;
 	}
@@ -107,5 +107,4 @@ public class JobOpeningDaoImpl implements JobOpeningDao {
 		// TODO Auto-generated method stub
 		return false;
 	}
-
 }

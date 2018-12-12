@@ -13,7 +13,7 @@ public class JobOpeningMapper implements RowMapper<InternshipJobOpening> {
 	@Override
 	public InternshipJobOpening mapRow(ResultSet rs, int rowNum) throws SQLException {
 		// TODO Auto-generated method stub
-		InternshipJobOpening jobOpening=new InternshipJobOpening();
+		InternshipJobOpening jobOpening = new InternshipJobOpening();
 		jobOpening.setJobID(rs.getInt("jobid"));
 		jobOpening.setPosition(rs.getString("position"));
 		jobOpening.setLocation(rs.getString("location"));
@@ -23,7 +23,7 @@ public class JobOpeningMapper implements RowMapper<InternshipJobOpening> {
 		jobOpening.setJobDescription(rs.getString("jobdescription"));
 		jobOpening.setHoursPerWeek(rs.getString("hoursperweek"));
 		jobOpening.setEndDate(rs.getDate("enddate"));
-		Company company=new Company();
+		Company company = new Company();
 		company.setCompanyName(rs.getString("companyname"));
 		company.setPhoneNumber(rs.getString("phone_number"));
 		jobOpening.setCompanyName(company);

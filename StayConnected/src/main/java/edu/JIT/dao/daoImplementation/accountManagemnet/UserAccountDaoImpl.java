@@ -1,4 +1,4 @@
-package edu.JIT.dao.daoImplementation;
+package edu.JIT.dao.daoImplementation.accountManagemnet;
 
 import java.security.Principal;
 import java.time.LocalDate;
@@ -17,17 +17,17 @@ import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
-import edu.JIT.Controller.form.RegistrationForm;
-import edu.JIT.Controller.form.UpdateAccountForm;
-import edu.JIT.dao.daoInterfaces.UserAccountDao;
-import edu.JIT.dao.mapper.UserAccountStatusMapper;
-import edu.JIT.dao.mapper.UserActivationMapper;
-import edu.JIT.dao.mapper.accountMapper;
-import edu.JIT.dao.mapper.authorityMapper;
-import edu.JIT.dao.mapper.jobhistoryMapper;
-import edu.JIT.dao.mapper.roleMapper;
-import edu.JIT.dao.mapper.skillMapper;
-import edu.JIT.dao.mapper.userskillsMapper;
+import edu.JIT.Controller.accountManagement.form.RegistrationForm;
+import edu.JIT.Controller.accountManagement.form.UpdateAccountForm;
+import edu.JIT.dao.daoInterfaces.accountManagement.UserAccountDao;
+import edu.JIT.dao.mapper.accountManagement.UserAccountStatusMapper;
+import edu.JIT.dao.mapper.accountManagement.UserActivationMapper;
+import edu.JIT.dao.mapper.accountManagement.accountMapper;
+import edu.JIT.dao.mapper.accountManagement.authorityMapper;
+import edu.JIT.dao.mapper.accountManagement.jobhistoryMapper;
+import edu.JIT.dao.mapper.accountManagement.roleMapper;
+import edu.JIT.dao.mapper.accountManagement.skillMapper;
+import edu.JIT.dao.mapper.accountManagement.userskillsMapper;
 import edu.JIT.model.accountManagement.JobHistory;
 import edu.JIT.model.accountManagement.Skill;
 import edu.JIT.model.accountManagement.UserAccount;
@@ -52,6 +52,7 @@ public class UserAccountDaoImpl implements UserAccountDao {
 
 	@Override
 	public UserAccount createNewAccount(final RegistrationForm account) {
+		UserAccount accountForm = new UserAccount();
 		DefaultTransactionDefinition def = new DefaultTransactionDefinition();
 		def.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
 		TransactionStatus status = transactionManager.getTransaction(def);
@@ -97,12 +98,13 @@ public class UserAccountDaoImpl implements UserAccountDao {
 			String userLoginSQL = "INSERT INTO stayconnected.UserLogin(RID,password) values(?,?)";
 			jdbcTemplate.update(userLoginSQL, account.getAccount().getRoyalID(), account.getPassword());
 			transactionManager.commit(status);
+			return accountForm;
 		} catch (DataAccessException e) {
 			System.out.println("Error in creating product record, rolling back");
 			transactionManager.rollback(status);
-			throw e;
+			return null;
 		}
-		return null;
+
 	}
 
 	@Override
@@ -138,22 +140,26 @@ public class UserAccountDaoImpl implements UserAccountDao {
 	@Override
 	public UserAccount getAccountByRoyalID(String royalID) {
 		UserAccount user = new UserAccount();
-		String SQL = "SELECT * from stayconnected.useraccount WHERE rid= ?";
+		try {
+			String SQL = "SELECT * from stayconnected.useraccount WHERE rid= ?";
 
-		user = jdbcTemplate.queryForObject(SQL, new Object[] {royalID}, new accountMapper());
-		SQL = "select q.role as role from stayconnected.authority as p,stayconnected.userroles as q where p.rid=? and p.userroleid=q.uid";
-		List<String> assignedRoles;
-		assignedRoles = jdbcTemplate.query(SQL, new Object[] { royalID }, new roleMapper());
-		for (int i = 0; i < assignedRoles.size(); i++) {
-			user.addRoles(assignedRoles.get(i));
+			user = jdbcTemplate.queryForObject(SQL, new Object[] { royalID }, new accountMapper());
+			SQL = "select q.role as role from stayconnected.authority as p,stayconnected.userroles as q where p.rid=? and p.userroleid=q.uid";
+			List<String> assignedRoles;
+			assignedRoles = jdbcTemplate.query(SQL, new Object[] { royalID }, new roleMapper());
+			for (int i = 0; i < assignedRoles.size(); i++) {
+				user.addRoles(assignedRoles.get(i));
+			}
+			SQL = " select * from stayconnected.jobhistory where rid=?";
+			List<JobHistory> JobHistories;
+			JobHistories = jdbcTemplate.query(SQL, new Object[] { royalID }, new jobhistoryMapper());
+			for (int i = 0; i < JobHistories.size(); i++) {
+				user.addWorkHistory(JobHistories.get(i));
+			}
+			return user;
+		} catch (DataAccessException e) {
+			return null;
 		}
-		SQL = " select * from stayconnected.jobhistory where rid=?";
-		List<JobHistory> JobHistories;
-		JobHistories = jdbcTemplate.query(SQL, new Object[] { royalID }, new jobhistoryMapper());
-		for (int i = 0; i < JobHistories.size(); i++) {
-			user.addWorkHistory(JobHistories.get(i));
-		}
-		return user;
 	}
 
 	@Override
@@ -433,7 +439,7 @@ public class UserAccountDaoImpl implements UserAccountDao {
 			ArrayList<JobHistory> usersWorkExp = userAccount.getWorkExperience();
 			SQL = "insert into stayconnected.jobHistory(position,companyName,address,startDate,endDate,currentlyemplyed,RID) values(?,?,?,?,?,?,?)";
 			for (int i = 0; i < usersWorkExp.size(); i++) {
-				if (usersWorkExp.get(i)!=null) {
+				if (usersWorkExp.get(i) != null) {
 					jdbcTemplate.update(SQL, usersWorkExp.get(i).getPosition(), usersWorkExp.get(i).getCompanyName(),
 							usersWorkExp.get(i).getAddress(), usersWorkExp.get(i).getStartDate(),
 							usersWorkExp.get(i).getEndDate(), usersWorkExp.get(i).isCurrentlyEmployed(),

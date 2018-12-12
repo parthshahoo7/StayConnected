@@ -1,4 +1,4 @@
-package edu.JIT.dao.mapper;
+package edu.JIT.dao.mapper.accountManagement;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,5 +18,5 @@ public class UserActivationMapper implements RowMapper<UserActivation> {
 		user.setSpecialCode(rs.getString("code"));
 		return user;
 	}
-	
+
 }

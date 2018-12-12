@@ -21,10 +21,10 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import edu.JIT.Controller.form.RegistrationForm;
-import edu.JIT.Controller.form.validator.RegistrationFormValidation;
-import edu.JIT.Controller.form.validator.updateFormValidation;
-import edu.JIT.dao.daoInterfaces.UserAccountDao;
+import edu.JIT.Controller.accountManagement.form.RegistrationForm;
+import edu.JIT.Controller.accountManagement.form.validator.RegistrationFormValidation;
+import edu.JIT.Controller.accountManagement.form.validator.updateFormValidation;
+import edu.JIT.dao.daoInterfaces.accountManagement.UserAccountDao;
 import edu.JIT.model.accountManagement.JobHistory;
 import edu.JIT.model.accountManagement.MailService;
 import edu.JIT.model.accountManagement.Skill;

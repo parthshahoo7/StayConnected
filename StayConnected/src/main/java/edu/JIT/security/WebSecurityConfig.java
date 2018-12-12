@@ -25,38 +25,30 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.exceptionHandling().accessDeniedPage("/403");
-		http
-			.authorizeRequests()
-				.antMatchers("/","/login", "/registration", "/home", "/activateAccount", "/confirmation").permitAll()
-				.antMatchers("/static/**").permitAll().antMatchers("/assets/**").permitAll()
-				.antMatchers("/css/**").permitAll().antMatchers("/font/**").permitAll().antMatchers("/fonts/**").permitAll()
-				.antMatchers("/img/**").permitAll().antMatchers("/about/**").permitAll()
-				.antMatchers("/blog/**").permitAll()
-				.antMatchers("/catagories/**").permitAll().antMatchers("/features/**").permitAll()
-				.antMatchers("/jobs/**").permitAll().antMatchers("/product/**").permitAll()
-				.antMatchers("/resume/**").permitAll()
-				.antMatchers("/slider/**").permitAll()
-				.antMatchers("/testimonial/**").permitAll()
+		http.authorizeRequests()
+				.antMatchers("/", "/login", "/registration", "/home", "/activateAccount", "/confirmation").permitAll()
+				.antMatchers("/static/**").permitAll().antMatchers("/assets/**").permitAll().antMatchers("/css/**")
+				.permitAll().antMatchers("/font/**").permitAll().antMatchers("/fonts/**").permitAll()
+				.antMatchers("/img/**").permitAll().antMatchers("/about/**").permitAll().antMatchers("/blog/**")
+				.permitAll().antMatchers("/catagories/**").permitAll().antMatchers("/features/**").permitAll()
+				.antMatchers("/jobs/**").permitAll().antMatchers("/product/**").permitAll().antMatchers("/resume/**")
+				.permitAll().antMatchers("/slider/**").permitAll().antMatchers("/testimonial/**").permitAll()
 				.antMatchers("/js/**").permitAll()
-				.antMatchers("/updateAccount","/updateUserAccount/**", "/manageAccount", "/browseUsers","/postJobOpenings","/browsejobopenings", "/accountActivated", "/viewProfile/**").hasAnyRole("ALUM", "CURR", "FACULTY")
-				.antMatchers("/403").permitAll().anyRequest().authenticated()			
-				.and()
-			.formLogin().failureUrl("/login?error")
-				.defaultSuccessUrl("/home")
-				.loginPage("/login").permitAll()
-				.and()
-			.logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+				.antMatchers("/updateAccount", "/updateUserAccount/**", "/manageAccount", "/browseUsers",
+						"/postJobOpenings", "/browsejobopenings", "/accountActivated", "/viewProfile/**")
+				.hasAnyRole("ALUM", "CURR", "FACULTY").antMatchers("/403").permitAll().anyRequest().authenticated()
+				.and().formLogin().failureUrl("/login?error").defaultSuccessUrl("/home").loginPage("/login").permitAll()
+				.and().logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
 				.logoutSuccessUrl("/login?Logout").permitAll();
 	}
 
 	@Override
 	public void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.jdbcAuthentication().dataSource(dataSource).passwordEncoder(passwordEncoder)
-				.usersByUsernameQuery(
-						"select rid, password, true as active from stayconnected.userlogin where rid=?")
+				.usersByUsernameQuery("select rid, password, true as active from stayconnected.userlogin where rid=?")
 				.authoritiesByUsernameQuery("SELECT stayconnected.authority.rid, stayconnected.userroles.role "
-				+ "FROM stayconnected.authority, stayconnected.userroles "
-				+ "WHERE authority.userroleid = userroles.uid and stayconnected.authority.rid = ?");
+						+ "FROM stayconnected.authority, stayconnected.userroles "
+						+ "WHERE authority.userroleid = userroles.uid and stayconnected.authority.rid = ?");
 	}
 
 	@Bean(name = "passwordEncoder")

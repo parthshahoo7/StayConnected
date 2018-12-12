@@ -24,20 +24,48 @@
 </head>
 <body>
 	<div th:insert="~{Fragments/defaultFragment :: header}"></div>
-	<section class="job-browse section">
-		<p>
-			<a href="/registration" sec:authorize="hasRole('ROLE_FACULTY')">Create
-				a New Account for Someone else</a>
-		</p>
-		<p>
-			<a href="/browseUsers" sec:authorize="hasRole('ROLE_FACULTY')">Update
-				Existing Account for someone else</a>
-		</p>
-		<p>
-			<a href="/accountDeletion" sec:authorize="hasRole('ROLE_FACULTY')">Delete
-				a user's account</a>
-		</p>
-	</section>
+	<div class="page-header">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="inner-header">
+						<h3>Manage Accounts</h3>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="content">
+		<div class="container">
+		<a href="/home"> Home </a>
+			<div class="row">
+				<div class="col-lg-9 col-md-12 col-xs-12">
+					<div class="job-alerts-item">
+						<p sec:authorize="!hasRole('ROLE_FACULTY')" class="error">
+							You Are Not Authorized to Access This Page !!!!<br> <a
+								href="/home"> Go Back TO Home</a>
+						</p>
+						<div sec:authorize="hasRole('ROLE_FACULTY')">
+							<h6>Choose one of the link to perform task.</h6>
+							<p>
+								<a href="/registration" sec:authorize="hasRole('ROLE_FACULTY')">Create
+									a New Account for Someone else</a>
+							</p>
+							<p>
+								<a href="/browseUsers" sec:authorize="hasRole('ROLE_FACULTY')">Update
+									Existing Account for someone else</a>
+							</p>
+							<p>
+								<a href="/accountDeletion"
+									sec:authorize="hasRole('ROLE_FACULTY')">Delete a user's
+									account</a>
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 	<div th:insert="~{Fragments/defaultFragment :: footer}"></div>
 </body>
 </html>

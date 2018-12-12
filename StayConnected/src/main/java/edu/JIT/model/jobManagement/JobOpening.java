@@ -114,5 +114,4 @@ public class JobOpening {
 	public void addSkills(Skill skill) {
 		this.skills.add(skill);
 	}
-
 }

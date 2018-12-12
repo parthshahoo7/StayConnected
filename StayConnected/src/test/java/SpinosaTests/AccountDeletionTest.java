@@ -21,11 +21,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import edu.JIT.Controller.AccountController;
-import edu.JIT.Controller.form.AcctDeletionForm;
-import edu.JIT.Controller.form.DeleteConfirmationForm;
-import edu.JIT.dao.daoImplementation.UserAccountDaoImpl;
-import edu.JIT.dao.daoInterfaces.UserAccountDao;
+import edu.JIT.Controller.accountManagement.AccountController;
+import edu.JIT.Controller.accountManagement.form.AcctDeletionForm;
+import edu.JIT.Controller.accountManagement.form.DeleteConfirmationForm;
+import edu.JIT.dao.daoImplementation.accountManagemnet.UserAccountDaoImpl;
+import edu.JIT.dao.daoInterfaces.accountManagement.UserAccountDao;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(value=AccountController.class, secure=false)

@@ -1,4 +1,4 @@
-package edu.JIT.Controller.form;
+package edu.JIT.Controller.accountManagement.form;
 
 public class DeleteConfirmationForm {
 	private String selection;
@@ -10,6 +10,4 @@ public class DeleteConfirmationForm {
 	public void setSelection(String selection) {
 		this.selection = selection;
 	}
-
-	
 }

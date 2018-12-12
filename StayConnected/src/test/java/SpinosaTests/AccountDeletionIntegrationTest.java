@@ -15,11 +15,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import edu.JIT.Controller.AccountController;
-import edu.JIT.Controller.form.AcctDeletionForm;
-import edu.JIT.Controller.form.DeleteConfirmationForm;
-import edu.JIT.Controller.form.RegistrationForm;
-import edu.JIT.dao.daoImplementation.UserAccountDaoImpl;
+import edu.JIT.Controller.accountManagement.AccountController;
+import edu.JIT.Controller.accountManagement.form.AcctDeletionForm;
+import edu.JIT.Controller.accountManagement.form.DeleteConfirmationForm;
+import edu.JIT.Controller.accountManagement.form.RegistrationForm;
+import edu.JIT.dao.daoImplementation.accountManagemnet.UserAccountDaoImpl;
 import edu.JIT.model.accountManagement.UserAccount;
 
 @RunWith(SpringRunner.class)

@@ -1,11 +1,11 @@
-package edu.JIT.dao.mapper;
+package edu.JIT.dao.mapper.accountManagement;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import org.springframework.jdbc.core.RowMapper;
 
-import edu.JIT.dao.daoImplementation.Authority;
+import edu.JIT.dao.daoImplementation.accountManagemnet.Authority;
 
 public class authorityMapper implements RowMapper<Authority> {
 

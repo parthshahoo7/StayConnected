@@ -5,11 +5,6 @@ import java.util.ArrayList;
 import edu.JIT.model.jobManagement.InternshipJobOpening;
 
 public class SortJobOpening {
-	/*
-	 * private String position; private String location; private String startDate;
-	 * private String hoursPerWeek; private String endDate; private String
-	 * companyName; private String proficiancy;
-	 */
 	private InternshipJobOpening jobOpening;
 	private ArrayList<String> positions;
 	private ArrayList<String> locations;
@@ -19,7 +14,6 @@ public class SortJobOpening {
 
 	public SortJobOpening() {
 		super();
-		// TODO Auto-generated constructor stub
 		jobOpening = new InternshipJobOpening();
 		positions = new ArrayList<String>();
 		locations = new ArrayList<String>();

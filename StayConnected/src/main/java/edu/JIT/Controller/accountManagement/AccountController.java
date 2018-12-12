@@ -1,4 +1,4 @@
-package edu.JIT.Controller;
+package edu.JIT.Controller.accountManagement;
 
 import java.security.Principal;
 import java.time.Period;
@@ -29,14 +29,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import edu.JIT.Controller.form.AcctDeletionForm;
-import edu.JIT.Controller.form.BrowseUserForm;
-import edu.JIT.Controller.form.DeleteConfirmationForm;
-import edu.JIT.Controller.form.RegistrationForm;
-import edu.JIT.Controller.form.UpdateAccountForm;
-import edu.JIT.Controller.form.validator.RegistrationFormValidation;
-import edu.JIT.Controller.form.validator.updateFormValidation;
-import edu.JIT.dao.daoInterfaces.UserAccountDao;
+import edu.JIT.Controller.accountManagement.form.AcctDeletionForm;
+import edu.JIT.Controller.accountManagement.form.BrowseUserForm;
+import edu.JIT.Controller.accountManagement.form.DeleteConfirmationForm;
+import edu.JIT.Controller.accountManagement.form.RegistrationForm;
+import edu.JIT.Controller.accountManagement.form.UpdateAccountForm;
+import edu.JIT.Controller.accountManagement.form.validator.RegistrationFormValidation;
+import edu.JIT.Controller.accountManagement.form.validator.updateFormValidation;
+import edu.JIT.dao.daoInterfaces.accountManagement.UserAccountDao;
 import edu.JIT.model.accountManagement.MailService;
 import edu.JIT.model.accountManagement.Skill;
 import edu.JIT.model.accountManagement.UserAccount;
@@ -134,25 +134,43 @@ public class AccountController {
 									+ "You can sign in using your Royal ID and this password: " + rawPassword
 									+ "The system will " + "prompt you for a special code, your code is "
 									+ accountForm.getSpecialCode());
-					dao.createNewAccount(accountForm);
+					UserAccount account = dao.createNewAccount(accountForm);
+					if (account == null) {
+						model.addAttribute("accountForm", accountForm);
+						model.addAttribute("roles", dao.getRoles());
+						model.addAttribute("skills", dao.getSkills());
+						model.addAttribute("RoyalIDNotValid", true);
+						model.addAttribute("EmailNotValid", false);
+						return "registration";
+					}
 					return "redirect:/manageAccount";
 				} catch (MailException e) {
 					model.addAttribute("accountForm", accountForm);
 					model.addAttribute("roles", dao.getRoles());
 					model.addAttribute("skills", dao.getSkills());
 					model.addAttribute("EmailNotValid", true);
+					model.addAttribute("RoyalIDNotValid", false);
 					return "registration";
 				}
 			} else {
 				try {
 					mailingService.sendEmail(accountForm.getAccount().getEmail(), "StayConnected Special Code",
 							"Your special code is: " + accountForm.getSpecialCode());
-					dao.createNewAccount(accountForm);
+					UserAccount account = dao.createNewAccount(accountForm);
+					if (account == null) {
+						model.addAttribute("accountForm", accountForm);
+						model.addAttribute("roles", dao.getRoles());
+						model.addAttribute("skills", dao.getSkills());
+						model.addAttribute("RoyalIDNotValid", true);
+						model.addAttribute("EmailNotValid", false);
+						return "registration";
+					}
 				} catch (MailException e) {
 					model.addAttribute("accountForm", accountForm);
 					model.addAttribute("roles", dao.getRoles());
 					model.addAttribute("skills", dao.getSkills());
 					model.addAttribute("EmailNotValid", true);
+					model.addAttribute("RoyalIDNotValid", false);
 					return "registration";
 				}
 			}
@@ -184,16 +202,13 @@ public class AccountController {
 					users.remove(i);
 				}
 			}
-		}
-
-		else {
+		} else {
 			for (int i = 0; i < users.size(); i++) {
 				if (users.get(i).getRoles().contains("ROLE_CURR")) {
 					users.remove(i);
 				}
 			}
 		}
-
 		if (!filters.getSelectedSkills().isEmpty()) {
 			users = filterBySkill(filters.getSelectedSkills(), users);
 		}
@@ -264,7 +279,7 @@ public class AccountController {
 			return "redirect:/confirmation";
 		} else {
 			model.addAttribute("error", true);
-			for(int i=0; i<result.getFieldErrors().size(); i++) {
+			for (int i = 0; i < result.getFieldErrors().size(); i++) {
 				formErrors.add(result.getFieldErrors().get(i).getField() + " is invalid!");
 			}
 			model.addAttribute("formErrors", formErrors);
@@ -359,6 +374,7 @@ public class AccountController {
 			final RedirectAttributes redirectAttributes) {
 		System.out.println(userAccount.getRoyalID());
 		if (result.hasErrors()) {
+			System.out.println(result.getFieldError());
 			userAccount = dao.getAccountByRoyalID(userAccount.getRoyalID());
 			model.addAttribute("accountForm", userAccount);
 			model.addAttribute("royalID", userAccount.getRoyalID());
@@ -384,6 +400,7 @@ public class AccountController {
 			} catch (MailException e) {
 				userAccount = dao.getAccountByRoyalID(userAccount.getRoyalID());
 				model.addAttribute("accountForm", userAccount);
+				model.addAttribute("emailerror", true);
 				model.addAttribute("royalID", userAccount.getRoyalID());
 				model.addAttribute("roles", dao.getRoles());
 				return "updateUserAccount";
@@ -392,8 +409,8 @@ public class AccountController {
 	}
 
 // ==========================RequestMapping for "/403"=====================================
-	@RequestMapping(value = "/403", method = RequestMethod.GET)
-	public String accessDenied(Model model, Principal principal) {
+	@RequestMapping(value = "/403")
+	public String accessDenied() {
 		return "error/403";
 	}
 
@@ -435,23 +452,22 @@ public class AccountController {
 		}
 		return filteredUsers;
 	}
-	
+
 	private ArrayList<String> makeRolesPretty(ArrayList<String> roles) {
 		ArrayList<String> result = new ArrayList<String>();
-		for(String role: roles) {
+		for (String role : roles) {
 			switch (role) {
-	            case "CURR":
-	            	result.add("Current Student");
-	            	break;
-	            case "ALUM":
-	            	result.add("Alumni");
-	            	break;
-	            case "FACULTY":
-	            	result.add("Faculty");
-	            	break;
+			case "CURR":
+				result.add("Current Student");
+				break;
+			case "ALUM":
+				result.add("Alumni");
+				break;
+			case "FACULTY":
+				result.add("Faculty");
+				break;
 			}
 		}
 		return result;
 	}
-	
 }

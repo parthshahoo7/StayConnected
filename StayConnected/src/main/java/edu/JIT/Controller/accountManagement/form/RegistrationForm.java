@@ -1,4 +1,4 @@
-package edu.JIT.Controller.form;
+package edu.JIT.Controller.accountManagement.form;
 
 import java.util.Random;
 

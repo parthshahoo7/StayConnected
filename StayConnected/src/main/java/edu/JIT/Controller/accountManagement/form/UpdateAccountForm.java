@@ -1,8 +1,8 @@
-package edu.JIT.Controller.form;
+package edu.JIT.Controller.accountManagement.form;
 
 import java.util.ArrayList;
 
-import edu.JIT.dao.daoImplementation.Authority;
+import edu.JIT.dao.daoImplementation.accountManagemnet.Authority;
 import edu.JIT.model.accountManagement.JobHistory;
 import edu.JIT.model.accountManagement.Skill;
 

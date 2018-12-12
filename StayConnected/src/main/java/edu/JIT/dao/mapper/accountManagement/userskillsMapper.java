@@ -1,8 +1,10 @@
-package edu.JIT.dao.mapper;
+package edu.JIT.dao.mapper.accountManagement;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import org.springframework.jdbc.core.RowMapper;
-import edu.JIT.dao.daoImplementation.UserSkill;
+
+import edu.JIT.dao.daoImplementation.accountManagemnet.UserSkill;
 
 public class userskillsMapper implements RowMapper<UserSkill> {
 

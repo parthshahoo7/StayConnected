@@ -1,4 +1,4 @@
-package edu.JIT.dao.daoImplementation;
+package edu.JIT.dao.daoImplementation.accountManagemnet;
 
 /*
  *  The purpose of this class is to map rid,role pairs 
@@ -8,15 +8,19 @@ package edu.JIT.dao.daoImplementation;
 public class Authority {
 	private String rid;
 	private String role;
+
 	public String getRid() {
 		return rid;
 	}
+
 	public void setRid(String rid) {
 		this.rid = rid;
 	}
+
 	public String getRole() {
 		return role;
 	}
+
 	public void setRole(String role) {
 		this.role = role;
 	}

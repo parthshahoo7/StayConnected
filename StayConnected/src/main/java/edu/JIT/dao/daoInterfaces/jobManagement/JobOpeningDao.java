@@ -1,4 +1,4 @@
-package edu.JIT.dao.daoInterfaces;
+package edu.JIT.dao.daoInterfaces.jobManagement;
 
 import java.util.List;
 
