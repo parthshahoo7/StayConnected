@@ -20,6 +20,12 @@
 <link rel="stylesheet" href="/assets/css/animate.css">
 <link rel="stylesheet" href="/assets/css/main.css">
 <link rel="stylesheet" href="/assets/css/responsive.css">
+<style>
+.error {
+	color: red;
+	font-style: italic;
+}
+</style>
 </head>
 <body>
 	<div th:insert="~{Fragments/defaultFragment :: header}"></div>
@@ -94,7 +100,7 @@
 						</form>
 
 						<br>
-						<div th:if="${error}">
+						<div th:if="${error}" class="error">
 							<table>
 								<tr th:each="formerror: ${formErrors}">
 									<td th:text="${formerror}"></td>
