@@ -318,6 +318,7 @@ public class AccountController {
 	@RequestMapping(value = "/accountDeletion/formA", method = RequestMethod.POST)
 	public String postAccountDeletion(Model model, AcctDeletionForm deletion, DeleteConfirmationForm choice) {
 		UserAccount user = dao.getAccountByRoyalID(deletion.getRID());
+		choice.setSelection("NO");
 		if (user != null) {
 			model.addAttribute("user", user);
 			model.addAttribute("formSelection", 2);
