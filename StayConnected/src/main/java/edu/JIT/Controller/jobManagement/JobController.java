@@ -3,6 +3,7 @@ package edu.JIT.Controller.jobManagement;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -115,8 +116,11 @@ public class JobController {
 		if (!sortJobOpening.getJobOpening().getHoursPerWeek().equals("0")) {
 			trimmedJobs.clear();
 			for (int i = 0; i < allJobs.size(); i++) {
-				if (allJobs.get(i).getHoursPerWeek().equals(sortJobOpening.getJobOpening().getHoursPerWeek())) {
-					trimmedJobs.add(allJobs.get(i));
+				System.out.println("hours:" + allJobs.get(i).getHoursPerWeek());
+				if (allJobs.get(i).getHoursPerWeek() != null) {
+					if (allJobs.get(i).getHoursPerWeek().equals(sortJobOpening.getJobOpening().getHoursPerWeek())) {
+						trimmedJobs.add(allJobs.get(i));
+					}
 				}
 			}
 			allJobs.clear();
@@ -186,7 +190,9 @@ public class JobController {
 			if (!sortedOpenings.getCompanyName().contains(internshipJobOpening.getCompanyName().getCompanyName()))
 				sortedOpenings.addCompanyName(internshipJobOpening.getCompanyName().getCompanyName());
 			if (!sortedOpenings.getHoursPerWeek().contains(internshipJobOpening.getHoursPerWeek()))
-				sortedOpenings.addHoursPerWeek(internshipJobOpening.getHoursPerWeek());
+				if (internshipJobOpening.getHoursPerWeek() != "" && internshipJobOpening.getHoursPerWeek() != null) {
+					sortedOpenings.addHoursPerWeek(internshipJobOpening.getHoursPerWeek());
+				}
 			if (!sortedOpenings.getlocations().contains(internshipJobOpening.getLocation()))
 				sortedOpenings.addLocation(internshipJobOpening.getLocation());
 			if (!sortedOpenings.getPositions().contains(internshipJobOpening.getPosition()))

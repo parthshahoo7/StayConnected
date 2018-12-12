@@ -79,7 +79,6 @@ public class JobOpeningDaoImpl implements JobOpeningDao {
 	@Override
 	public List<InternshipJobOpening> getAllJobOpenings() {
 		// TODO Auto-generated method stub
-
 		String jobOpeningSQL = "select p.*, q.proficiancy as proficiancy from stayconnected.jobopening as p, stayconnected.jobqualification as q where p.jobid=q.jobid group by p.jobid,q.proficiancy order by p.jobid";
 		List<InternshipJobOpening> jobOpenings = jdbcTemplate.query(jobOpeningSQL, new JobOpeningMapper());
 		return jobOpenings;
