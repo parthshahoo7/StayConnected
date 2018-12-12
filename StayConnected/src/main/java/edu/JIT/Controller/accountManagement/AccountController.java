@@ -361,8 +361,10 @@ public class AccountController {
 	public String updateUserAccount(@RequestParam(value = "royalID", required = true) String royalID, Model model) {
 		UserAccount accountForm = dao.getAccountByRoyalID(royalID);
 		if (accountForm == null || accountForm.getRoyalID().equals("-1")) {
+			model.addAttribute("RoyalIDError",true);
 			return "updateUserAccount";
 		}
+		model.addAttribute("RoyalIDError",false);
 		model.addAttribute("accountForm", accountForm);
 		model.addAttribute("royalID", royalID);
 		model.addAttribute("roles", dao.getRoles());
